@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Julian Arenfors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Roligare mörk palett - Teal/Mint/Korall */
+    --bg: #0d1111; 
+    --text: #e0f2f1;
+    --accent: #4db6ac; 
+    --accent-alt: #ff8a65;
+    --menu-bg: #1a2222;
+    --radius: 40px;
+    --gap: 20px;
+    --serif: 'EB Garamond', serif;
+  }
+
+  [data-theme="light"] {
+    --bg: #f8faf9;
+    --text: #1a2b2b;
+    --menu-bg: #ffffff;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    transition: background 0.4s ease;
+  }
+
+  /* --- LOGGA --- */
+  header {
+    padding: 80px 24px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .logo {
+    font-family: var(--serif);
+    font-size: 3.5rem;
+    font-style: italic;
+    text-decoration: none;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    transition: transform 0.1s ease;
+    cursor: pointer;
+  }
+  .logo:active { transform: scale(0.95); }
+
+  /* --- DROP DOWN MENY (Fixad) --- */
+  .nav-wrapper { 
+    position: relative; 
+    display: inline-block;
+  }
+
+  .dropdown-trigger {
+    background: var(--menu-bg);
+    border: 2px solid var(--accent);
+    padding: 12px 32px;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+
+  .dropdown-content {
+    display: none; /* Dold som standard */
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--menu-bg);
+    min-width: 200px;
+    border-radius: 24px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.5);
+    margin-top: 12px;
+    padding: 10px;
+    z-index: 1000;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  /* Visas när JS lägger till klassen 'show' */
+  .dropdown-content.show {
+    display: block;
+    animation: popIn 0.2s ease-out;
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  .dropdown-content button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    background: none;
+    text-align: center;
+    color: var(--text);
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 16px;
+    transition: 0.2s;
+  }
+  .dropdown-content button:hover { 
+    background: var(--accent); 
+    color: #000; 
+  }
+
+  /* --- PUSSEL-LAYOUT --- */
+  main {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 0 20px 100px;
+  }
+
+  .masonry-puzzle {
+    column-count: 1;
+    column-gap: var(--gap);
+  }
+
+  @media (min-width: 700px) { .masonry-puzzle { column-count: 3; } }
+  @media (min-width: 1200px) { .masonry-puzzle { column-count: 4; } }
+  @media (min-width: 1600px) { .masonry-puzzle { column-count: 5; } }
+
+  .item {
+    break-inside: avoid;
+    margin-bottom: var(--gap);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.6s forwards;
+  }
+
+  @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+  .item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius);
+    transition: transform 0.3s ease;
+    cursor: zoom-in;
+  }
+
+  .item img:hover {
+    transform: scale(1.015);
+  }
+
+  /* --- THEME TOGGLE --- */
+  .theme-toggle {
+    position: fixed; top: 20px; right: 20px;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--menu-bg); border: 2px solid var(--accent);
+    cursor: pointer; z-index: 1100; color: var(--text);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .lightbox {
+    position: fixed; inset: 0; background: var(--bg);
+    display: none; align-items: center; justify-content: center; z-index: 2000;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 95vw; max-height: 95vh; border-radius: 20px; }
+
+  footer { text-align: center; padding: 60px; opacity: 0.3; font-family: var(--serif); font-style: italic; }
+
+  @media (max-width: 600px) {
+    .logo { font-size: 2.5rem; }
+    .masonry-puzzle { column-count: 1; }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle">🌓</button>
+
+<header>
+  <a href="#hem" class="logo" id="mainLogo">Julian Arenfors</a>
+  
+  <div class="nav-wrapper">
+    <button class="dropdown-trigger" id="dropBtn">Album ▾</button>
+    <div class="dropdown-content" id="dropMenu"></div>
+  </div>
+</header>
+
+<main>
+  <div id="gallery" class="masonry-puzzle"></div>
+</main>
+
+<footer>Julian Arenfors — <span id="year"></span></footer>
+
+<div class="lightbox" id="lightbox">
+  <img id="lbImg" src="">
+</div>
+
+<script>
+  const GARAGE = [
+    "bild (27).jpg", "bild (28).jpg", "bild (29).jpg", "bild (30).jpg", "bild (31).jpg",
+    "bild (2).jpg", "bild (3).jpg", "bild (4).jpg", "bild (5).jpg", "bild (6).jpg", "bild (7).jpg", 
+    "bild (8).jpg", "bild (9).jpg", "bild (10).jpg", "bild (11).jpg", "bild (12).jpg", 
+    "bild (13).jpg", "bild (14).jpg", "bild (15).jpg", "bild (16).jpg", "bild (17).jpg", "bild (18).jpg",
+    "bild (19).jpg", "bild (20).jpg", "bild (21).jpg", "bild (22).jpg"
+  ];
+  const STROVTAG = [
+    "bild (23).jpg", "bild (24).jpg", "bild (25).jpg", "bild (26).jpg",
+    "bild (37).jpg", "bild (36).jpg", "bild (1).jpg"
+  ];
+  const NOCTURNE = ["bild (32).jpg", "bild (33).jpg", "bild (34).jpg", "bild (35).jpg"];
+
+  const ALBUMS = {
+    hem: { label: "Hem", files: [...GARAGE, ...STROVTAG, ...NOCTURNE] },
+    garage: { label: "Garage", files: GARAGE },
+    strovtag: { label: "Strövtåg", files: STROVTAG },
+    nocturne: { label: "Nocturne", files: NOCTURNE }
+  };
+
+  const gallery = document.getElementById('gallery');
+  const dropBtn = document.getElementById('dropBtn');
+  const dropMenu = document.getElementById('dropMenu');
+  const lightbox = document.getElementById('lightbox');
+
+  // DROP DOWN LOGIK (Helt fixad)
+  dropBtn.onclick = (e) => {
+    e.stopPropagation();
+    dropMenu.classList.toggle('show');
+  };
+
+  // Stäng menyn om man klickar utanför
+  window.onclick = () => {
+    if (dropMenu.classList.contains('show')) {
+      dropMenu.classList.remove('show');
+    }
+  };
+
+  function buildMenu() {
+    Object.keys(ALBUMS).forEach(key => {
+      const btn = document.createElement('button');
+      btn.textContent = ALBUMS[key].label;
+      btn.onclick = () => {
+        location.hash = key;
+        dropBtn.innerHTML = ALBUMS[key].label + ' ▾';
+      };
+      dropMenu.appendChild(btn);
+    });
+  }
+
+  function render() {
+    const key = location.hash.replace('#', '') || 'hem';
+    const album = ALBUMS[key] || ALBUMS.hem;
+    let files = [...album.files];
+    
+    if(key === 'hem') files.sort(() => Math.random() - 0.5);
+    
+    gallery.innerHTML = '';
+    
+    files.forEach((file, index) => {
+      const div = document.createElement('div');
+      div.className = 'item';
+      
+      const img = document.createElement('img');
+      const tryPaths = [`images/${file}`, `bilder/${file}`, file];
+      let pIdx = 0;
+      img.src = tryPaths[pIdx];
+      img.onerror = () => {
+        pIdx++;
+        if(pIdx < tryPaths.length) img.src = tryPaths[pathIdx];
+      };
+      
+      img.onclick = () => {
+        document.getElementById('lbImg').src = img.src;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      };
+
+      div.appendChild(img);
+      gallery.appendChild(div);
+    });
+  }
+
+  document.getElementById('themeToggle').onclick = () => {
+    const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  };
+
+  document.getElementById('mainLogo').onclick = (e) => {
+    e.preventDefault();
+    location.hash = 'hem';
+    dropBtn.innerHTML = 'Hem ▾';
+  };
+
+  lightbox.onclick = () => {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = 'auto';
+  };
+
+  window.addEventListener('hashchange', render);
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  buildMenu();
+  render();
+</script>
+
+</body>
+</html>
