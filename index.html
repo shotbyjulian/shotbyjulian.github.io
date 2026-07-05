@@ -4,284 +4,237 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SBJ — Shot by Julian</title>
-<meta name="description" content="Shot by Julian — fotografi. Vroom. Nature. Noir.">
 <style>
   :root {
-    --bg: #000000;
+    --bg: #050505;
     --text: #ffffff;
-    --dim: #6b6b6b;
-    --line: #262626;
+    --dim: #555555;
+    --line: #1a1a1a;
     --gap: 2px;
     --sans: 'Helvetica Neue', Inter, Arial, sans-serif;
-    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   [data-theme="light"] {
-    --bg: #ffffff;
+    --bg: #fdfdfd;
     --text: #000000;
-    --dim: #8c8c8c;
-    --line: #dcdcdc;
+    --dim: #a0a0a0;
+    --line: #eeeeee;
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html { scroll-behavior: smooth; }
-
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    font-weight: 400;
-    transition: background 0.4s var(--ease), color 0.4s var(--ease);
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--sans); overflow-x: hidden;
+    transition: background 0.6s var(--ease);
   }
 
-  header { padding: 56px 24px 0; display: flex; flex-direction: column; align-items: flex-start; }
-  .wordmark-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  /* --- NATURAL GRAIN EFFECT --- */
+  .grain {
+    position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.045; pointer-events: none; z-index: 9999;
+    animation: noise 0.2s steps(2) infinite;
+  }
+  @keyframes noise {
+    0% { transform: translate(0,0); }
+    10% { transform: translate(-1%,-1%); }
+    30% { transform: translate(1%,1%); }
+    50% { transform: translate(-0.5%,1.5%); }
+    70% { transform: translate(1.5%,0.5%); }
+    90% { transform: translate(-1%,0.5%); }
+    100% { transform: translate(0,0); }
+  }
+
+  header { padding: 80px 24px 20px; }
   .wordmark {
-    font-size: clamp(3rem, 12vw, 9rem);
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 0.9;
-    text-transform: uppercase;
-    color: var(--text);
-    background: none; border: none; padding: 0; cursor: pointer;
+    font-size: clamp(4rem, 15vw, 12rem); font-weight: 600;
+    letter-spacing: -0.04em; text-transform: uppercase;
+    cursor: pointer; line-height: 0.8;
   }
 
-  .wm-letter { display: inline-block; opacity: 0; transform: translateY(0.4em); animation: rise 0.6s var(--ease) forwards; }
-  .wm-letter:nth-child(1) { animation-delay: 0.05s; }
-  .wm-letter:nth-child(2) { animation-delay: 0.15s; }
-  .wm-letter:nth-child(3) { animation-delay: 0.25s; }
-
-  .wordmark-tag { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: lowercase; color: var(--dim); opacity: 0; animation: fadeInTag 0.6s var(--ease) 0.55s forwards; }
-
-  .meta-row {
-    width: 100%; display: flex; justify-content: space-between; align-items: baseline;
-    padding: 14px 0 40px; border-bottom: 1px solid var(--line);
-    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
-    position: relative; overflow: hidden;
-  }
-
-  @keyframes fadeInTag { to { opacity: 1; } }
-  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
-
-  nav { display: flex; gap: 28px; padding: 20px 24px 20px; flex-wrap: wrap; }
+  nav { display: flex; gap: 30px; padding: 40px 24px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
   nav button {
-    background: none; border: none; padding: 0; font-size: 0.78rem; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--dim); cursor: pointer; transition: color 0.3s var(--ease);
+    background: none; border: none; padding: 0; font-size: 0.7rem;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim);
+    cursor: pointer; transition: color 0.4s var(--ease), transform 0.4s var(--ease);
   }
-  nav button[aria-current="true"] { color: var(--text); }
-  .nav-spacer { flex: 1; }
+  nav button:hover { color: var(--text); transform: translateY(-1px); }
+  nav button[aria-current="true"] { color: var(--text); font-weight: 600; }
 
-  .grid { display: grid; grid-template-columns: 1fr; gap: var(--gap); }
-  @media (min-width: 700px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  /* --- GRID & PLATES --- */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: var(--gap); }
+  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
 
-  .plate { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
-  .plate.in-view { opacity: 1; transform: translateY(0); }
-  .plate .frame { width: 100%; background: color-mix(in srgb, var(--text) 4%, var(--bg)); display: flex; overflow: hidden; }
-  .plate img { width: 100%; height: auto; cursor: zoom-in; transition: transform 0.5s var(--ease); }
-  .plate:hover img { transform: scale(1.02); }
+  .plate {
+    position: relative; opacity: 0; transform: translateY(30px) scale(0.98);
+    transition: opacity 1.2s var(--ease), transform 1.2s var(--ease);
+    overflow: hidden; cursor: zoom-in;
+  }
+  .plate.revealed { opacity: 1; transform: translateY(0) scale(1); }
 
-  .plate-caption { padding: 12px 14px 30px; font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase; }
-  .cap-top { display: flex; justify-content: space-between; color: var(--text); margin-bottom: 4px; }
-  .cap-desc { color: var(--dim); font-style: italic; text-transform: none; font-size: 0.75rem; }
+  .frame { width: 100%; aspect-ratio: 4/5; background: #111; overflow: hidden; position: relative; }
+  .plate img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 1.5s var(--ease), filter 0.8s var(--ease);
+  }
+  .plate:hover img { transform: scale(1.05); filter: contrast(1.1); }
 
-  /* LIGHTBOX */
-  .lightbox { position: fixed; inset: 0; background: var(--bg); display: none; align-items: center; justify-content: center; z-index: 2000; opacity: 0; transition: opacity 0.3s var(--ease); }
-  .lightbox.open { display: flex; opacity: 1; }
-  .lightbox img { max-width: 90vw; max-height: 80vh; object-fit: contain; }
-  .lb-info { position: absolute; bottom: 40px; text-align: center; width: 100%; }
-  .lb-desc { display: block; color: var(--text); font-style: italic; margin-top: 8px; font-size: 0.9rem; }
-  .lb-btn { position: absolute; background: none; border: 1px solid var(--line); color: var(--text); width: 44px; height: 44px; cursor: pointer; }
-  .lb-close { top: 24px; right: 24px; }
-  .lb-prev { left: 24px; } .lb-next { right: 24px; }
+  .caption {
+    position: absolute; bottom: 0; left: 0; width: 100%;
+    padding: 30px 20px; background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+    color: white; transform: translateY(10px); opacity: 0;
+    transition: all 0.6s var(--ease); pointer-events: none;
+  }
+  .plate:hover .caption { transform: translateY(0); opacity: 1; }
+  .cap-word { font-size: 1.2rem; font-weight: 300; letter-spacing: 0.05em; }
 
-  .theme-toggle, .mono-toggle { position: fixed; top: 24px; padding: 8px 16px; background: none; border: 1px solid var(--line); color: var(--text); cursor: pointer; z-index: 1100; font-size: 0.68rem; }
-  .theme-toggle { right: 24px; } .mono-toggle { right: 130px; }
-  html.mono-active img { filter: grayscale(1); }
+  /* --- LIGHTBOX --- */
+  .lightbox {
+    position: fixed; inset: 0; background: var(--bg); z-index: 10000;
+    display: none; align-items: center; justify-content: center; opacity: 0;
+    transition: opacity 0.5s var(--ease);
+  }
+  .lightbox.active { display: flex; opacity: 1; }
+  .lb-img { max-width: 90vw; max-height: 85vh; transform: scale(0.95); transition: transform 0.6s var(--ease); }
+  .lightbox.active .lb-img { transform: scale(1); }
 
-  footer { padding: 60px 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--dim); text-transform: uppercase; }
+  .lb-word {
+    position: absolute; bottom: 50px; font-size: 0.8rem;
+    letter-spacing: 0.4em; text-transform: uppercase; color: var(--dim);
+  }
+
+  .ui-btn {
+    position: fixed; top: 30px; padding: 10px 15px; background: none;
+    border: 1px solid var(--line); color: var(--text); cursor: pointer;
+    font-size: 0.6rem; letter-spacing: 0.2em; z-index: 11000;
+  }
+  #themeToggle { right: 30px; }
+  #monoToggle { right: 120px; }
+
+  html.mono img { filter: grayscale(1) !important; }
 </style>
 </head>
 <body>
 
-<button class="theme-toggle" id="themeToggle">MODE</button>
-<button class="mono-toggle" id="monoToggle">B/W</button>
+<div class="grain"></div>
+<button class="ui-btn" id="themeToggle">MODE</button>
+<button class="ui-btn" id="monoToggle">B&W</button>
 
 <header>
-  <div class="wordmark-row">
-    <button class="wordmark" id="mainLogo">
-      <span class="wm-letter">S</span><span class="wm-letter">B</span><span class="wm-letter">J</span>
-    </button>
-    <span class="wordmark-tag">shot by julian</span>
-  </div>
-  <div class="meta-row">
-    <span>FOTOGRAFI</span>
-    <span id="metaCount">00</span>
-  </div>
+  <div class="wordmark" id="logo">SBJ</div>
 </header>
 
-<nav id="albumNav"></nav>
+<nav id="nav"></nav>
 
 <main>
   <div id="gallery" class="grid"></div>
 </main>
 
-<footer>
-  <span>&copy; SBJ <span id="year"></span></span>
-  <a href="#" style="color:inherit;text-decoration:none">INSTAGRAM</a>
-</footer>
-
 <div class="lightbox" id="lightbox">
-  <button class="lb-btn lb-close" id="lbClose">✕</button>
-  <button class="lb-btn lb-prev" id="lbPrev">‹</button>
-  <img id="lbImg" src="">
-  <button class="lb-btn lb-next" id="lbNext">›</button>
-  <div class="lb-info">
-    <span id="lbTitle" style="letter-spacing:0.2em; color:var(--dim); font-size:0.7rem">ALBUM</span>
-    <span class="lb-desc" id="lbDesc">Beskrivning</span>
-  </div>
+  <img class="lb-img" id="lbImg" src="">
+  <div class="lb-word" id="lbWord">WORD</div>
 </div>
 
 <script>
-  const ALBUMS = {
-    vroom: {
-      label: 'VROOM',
-      files: [
-        { name: "bild (2).jpg", desc: "L'esprit de l'extase" },
-        { name: "bild (3).jpg", desc: "Aerodinamica classica" },
-        { name: "bild (4).jpg", desc: "Il dettaglio d'oro" },
-        { name: "bild (5).jpg", desc: "Chrome et poussière" },
-        { name: "bild (6).jpg", desc: "Veloce come il vento" },
-        { name: "bild (7).jpg", desc: "Simmetria meccanica" },
-        { name: "bild (8).jpg", desc: "The spirit of speed" },
-        { name: "bild (9).jpg", desc: "Eclat métallique" },
-        { name: "bild (10).jpg", desc: "Forme et fonction" },
-        { name: "bild (11).jpg", desc: "Gleam of the past" },
-        { name: "bild (12).jpg", desc: "Arresto immediato" },
-        { name: "bild (13).jpg", desc: "Precisione moderna" },
-        { name: "bild (14).jpg", desc: "Toro scatenato" },
-        { name: "bild (15).jpg", desc: "Bianco assoluto" },
-        { name: "bild (16).jpg", desc: "Cavalli d'acciaio" },
-        { name: "bild (17).jpg", desc: "Grand Tourisme" },
-        { name: "bild (18).jpg", desc: "Nocturnal drive" },
-        { name: "bild (19).jpg", desc: "Route de campagne" },
-        { name: "bild (20).jpg", desc: "Vintage silhouette" },
-        { name: "bild (21).jpg", desc: "Classic curves" },
-        { name: "bild (22).jpg", desc: "Rouge passion" },
-        { name: "bild (27).jpg", desc: "Vorsprung" },
-        { name: "bild (28).jpg", desc: "Elegance in grey" },
-        { name: "bild (29).jpg", desc: "Stadtlicht" },
-        { name: "bild (30).jpg", desc: "Silent power" },
-        { name: "bild (31).jpg", desc: "Abendstimmung" }
-      ]
-    },
-    nature: {
-      label: 'NATURE',
-      files: [
-        { name: "bild (23).jpg", desc: "Komorebi (木漏れ日)" },
-        { name: "bild (24).jpg", desc: "Sentiero nel bosco" },
-        { name: "bild (25).jpg", desc: "Sous le feuillage" },
-        { name: "bild (26).jpg", desc: "Verde lussureggiante" },
-        { name: "bild (36).jpg", desc: "L'albero solitario" }
-      ]
-    },
-    noir: {
-      label: 'NOIR',
-      files: [
-        { name: "bild (32).jpg", desc: "L'heure bleue" },
-        { name: "bild (33).jpg", desc: "Ombre portée" },
-        { name: "bild (34).jpg", desc: "Luce nella notte" },
-        { name: "bild (35).jpg", desc: "Chiaroscuro" }
-      ]
-    },
-    misc: {
-      label: 'MISC',
-      files: [
-        { name: "bild (1).jpg", desc: "Fidelis amicus" },
-        { name: "bild (37).jpg", desc: "Ciel et terre" }
-      ]
-    }
-  };
-
-  const TOP_PICKS = [
-    { name: "bild (8).jpg", desc: "The spirit of speed", album: 'VROOM' },
-    { name: "bild (14).jpg", desc: "Toro scatenato", album: 'VROOM' },
-    { name: "bild (23).jpg", desc: "Komorebi", album: 'NATURE' },
-    { name: "bild (35).jpg", desc: "Chiaroscuro", album: 'NOIR' },
-    { name: "bild (1).jpg", desc: "Fidelis amicus", album: 'MISC' },
-    { name: "bild (22).jpg", desc: "Rouge passion", album: 'VROOM' }
+  const IMAGES = [
+    { n: "1", w: "AMICUS", a: "MISC" },
+    { n: "2", w: "EQUUS", a: "VROOM" },
+    { n: "3", w: "SPIRITUS", a: "VROOM" },
+    { n: "4", w: "AURUM", a: "VROOM" },
+    { n: "5", w: "FERRUM", a: "VROOM" },
+    { n: "6", w: "VELOX", a: "VROOM" },
+    { n: "7", w: "対称", a: "VROOM" },
+    { n: "8", w: "閃光", a: "VROOM" },
+    { n: "9", w: "METALLUM", a: "VROOM" },
+    { n: "10", w: "FORMA", a: "VROOM" },
+    { n: "11", w: "LUMEN", a: "VROOM" },
+    { n: "12", w: "ROTA", a: "VROOM" },
+    { n: "13", w: "技術", a: "VROOM" },
+    { n: "14", w: "TAURO", a: "VROOM" },
+    { n: "15", w: "ALBUS", a: "VROOM" },
+    { n: "16", w: "MACHINA", a: "VROOM" },
+    { n: "17", w: "ITER", a: "VROOM" },
+    { n: "18", w: "NOCTIS", a: "VROOM" },
+    { n: "19", w: "VIA", a: "VROOM" },
+    { n: "20", w: "VETUSTUS", a: "VROOM" },
+    { n: "21", w: "CURVA", a: "VROOM" },
+    { n: "22", w: "IGNIS", a: "VROOM" },
+    { n: "23", w: "木漏れ日", a: "NATURE" },
+    { n: "24", w: "SILVA", a: "NATURE" },
+    { n: "25", w: "FOLIUM", a: "NATURE" },
+    { n: "26", w: "VIRIDIS", a: "NATURE" },
+    { n: "27", w: "VORSPRUNG", a: "VROOM" },
+    { n: "28", w: "CANUS", a: "VROOM" },
+    { n: "29", w: "URBS", a: "VROOM" },
+    { n: "30", w: "SILENTIUM", a: "VROOM" },
+    { n: "31", w: "VESPER", a: "VROOM" },
+    { n: "32", w: "暗闇", a: "NOIR" },
+    { n: "33", w: "UMBRA", a: "NOIR" },
+    { n: "34", w: "LUX", a: "NOIR" },
+    { n: "35", w: "魂", a: "NOIR" },
+    { n: "36", w: "ARBOR", a: "NATURE" },
+    { n: "37", w: "AETHER", a: "MISC" }
   ];
 
-  let currentEntries = [];
-  let currentIndex = 0;
+  const gallery = document.getElementById('gallery');
+  const nav = document.getElementById('nav');
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbWord = document.getElementById('lbWord');
 
-  function paint(entries) {
-    const gallery = document.getElementById('gallery');
+  function render(filter = 'ALL') {
     gallery.innerHTML = '';
-    entries.forEach((item, i) => {
+    const filtered = filter === 'ALL' ? IMAGES : IMAGES.filter(i => i.a === filter);
+    
+    filtered.forEach((img, i) => {
       const plate = document.createElement('div');
       plate.className = 'plate';
       plate.innerHTML = `
-        <div class="frame"><img src="images/${item.name}" loading="lazy"></div>
-        <div class="plate-caption">
-          <div class="cap-top"><span>${item.album || ''}</span><span>${String(i+1).padStart(2,'0')}</span></div>
-          <div class="cap-desc">${item.desc}</div>
+        <div class="frame">
+          <img src="images/bild (${img.n}).jpg" loading="lazy">
+          <div class="caption"><div class="cap-word">${img.w}</div></div>
         </div>
       `;
-      plate.onclick = () => openLightbox(i);
+      plate.onclick = () => {
+        lbImg.src = `images/bild (${img.n}).jpg`;
+        lbWord.textContent = img.w;
+        lb.classList.add('active');
+      };
       gallery.appendChild(plate);
-      setTimeout(() => plate.classList.add('in-view'), i * 50);
+      
+      // Staggered reveal animation
+      setTimeout(() => plate.classList.add('revealed'), i * 80);
     });
   }
 
-  function openLightbox(index) {
-    currentIndex = index;
-    const item = currentEntries[currentIndex];
-    document.getElementById('lbImg').src = `images/${item.name}`;
-    document.getElementById('lbDesc').textContent = item.desc;
-    document.getElementById('lbTitle').textContent = item.album || "GALLERY";
-    document.getElementById('lightbox').classList.add('open');
-  }
-
-  document.getElementById('lbClose').onclick = () => document.getElementById('lightbox').classList.remove('open');
-  document.getElementById('lbNext').onclick = () => openLightbox((currentIndex + 1) % currentEntries.length);
-  document.getElementById('lbPrev').onclick = () => openLightbox((currentIndex - 1 + currentEntries.length) % currentEntries.length);
-
-  function loadAlbum(key) {
-    if (key === 'top') {
-      currentEntries = TOP_PICKS;
-    } else if (key === 'all') {
-      currentEntries = Object.values(ALBUMS).flatMap(a => a.files.map(f => ({...f, album: a.label})));
-    } else {
-      currentEntries = ALBUMS[key].files.map(f => ({...f, album: ALBUMS[key].label}));
-    }
-    document.getElementById('metaCount').textContent = String(currentEntries.length).padStart(2, '0');
-    paint(currentEntries);
-    window.scrollTo(0,0);
-  }
-
-  // Init Nav
-  const nav = document.getElementById('albumNav');
-  ['top', ...Object.keys(ALBUMS), 'all'].forEach(key => {
+  // Navigation setup
+  ['ALL', 'VROOM', 'NATURE', 'NOIR', 'MISC'].forEach(cat => {
     const btn = document.createElement('button');
-    btn.textContent = key === 'top' ? 'TOP' : (key === 'all' ? 'ALLT' : ALBUMS[key].label);
-    btn.onclick = () => loadAlbum(key);
+    btn.textContent = cat;
+    btn.onclick = () => {
+      document.querySelectorAll('nav button').forEach(b => b.removeAttribute('aria-current'));
+      btn.setAttribute('aria-current', 'true');
+      render(cat);
+    };
+    if(cat === 'ALL') btn.setAttribute('aria-current', 'true');
     nav.appendChild(btn);
   });
 
+  lb.onclick = () => lb.classList.remove('active');
+
   document.getElementById('themeToggle').onclick = () => {
-    const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', t);
+    const current = document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
   };
 
   document.getElementById('monoToggle').onclick = () => {
-    document.documentElement.classList.toggle('mono-active');
+    document.documentElement.classList.toggle('mono');
   };
 
-  document.getElementById('year').textContent = new Date().getFullYear();
-  loadAlbum('top');
-</script>
+  document.getElementById('logo').onclick = () => render('ALL');
 
+  render();
+</script>
 </body>
 </html>
