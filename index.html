@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JULIAN</title>
-<meta name="description" content="JULIAN — fotografi. Urval. I. II. III. IV.">
-<meta property="og:title" content="JULIAN">
-<meta property="og:description" content="fotografi. urval. i. ii. iii. iv.">
+<title>SBJ</title>
+<meta name="description" content="Shot by Julian — fotografi. Vroom. Nature. Noir.">
+<meta property="og:title" content="SBJ — Shot by Julian">
+<meta property="og:description" content="fotografi. vroom. nature. noir.">
 <meta property="og:image" content="images/bild (1).jpg">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#000000">
@@ -55,10 +55,17 @@
     align-items: flex-start;
   }
 
+  .wordmark-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
   .wordmark {
     font-size: clamp(3rem, 12vw, 9rem);
     font-weight: 500;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.02em;
     line-height: 0.9;
     text-transform: uppercase;
     color: var(--text);
@@ -67,10 +74,29 @@
     padding: 0;
     cursor: pointer;
     text-align: left;
-    opacity: 0;
-    transform: translateY(14px);
-    animation: rise 0.7s var(--ease) forwards;
+    display: inline-flex;
   }
+
+  .wm-letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.4em);
+    animation: rise 0.6s var(--ease) forwards;
+  }
+  .wm-letter:nth-child(1) { animation-delay: 0.05s; }
+  .wm-letter:nth-child(2) { animation-delay: 0.15s; }
+  .wm-letter:nth-child(3) { animation-delay: 0.25s; }
+
+  .wordmark-tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: lowercase;
+    color: var(--dim);
+    opacity: 0;
+    animation: fadeInTag 0.6s var(--ease) 0.55s forwards;
+  }
+
+  @keyframes fadeInTag { to { opacity: 1; } }
 
   .meta-row {
     width: 100%;
@@ -121,7 +147,17 @@
     cursor: pointer;
     position: relative;
     transition: color 0.3s var(--ease);
+    opacity: 0;
+    transform: translateY(8px);
+    animation: rise 0.5s var(--ease) forwards;
   }
+  nav button:nth-child(1) { animation-delay: 0.65s; }
+  nav button:nth-child(2) { animation-delay: 0.7s; }
+  nav button:nth-child(3) { animation-delay: 0.75s; }
+  nav button:nth-child(4) { animation-delay: 0.8s; }
+  nav button:nth-child(5) { animation-delay: 0.85s; }
+  nav button:nth-child(6) { animation-delay: 0.9s; }
+  nav button:nth-child(7) { animation-delay: 0.95s; }
 
   nav button[aria-current="true"] { color: var(--text); }
 
@@ -160,9 +196,13 @@
     display: flex;
     flex-direction: column;
     opacity: 0;
-    transform: translateY(18px);
-    animation: rise 0.6s var(--ease) forwards;
-    animation-delay: calc(var(--i, 0) * 60ms);
+    transform: translateY(24px);
+    transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  }
+
+  .plate.in-view {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .plate .frame {
@@ -175,17 +215,9 @@
     min-height: 120px;
   }
 
-  .plate img {
-    display: block;
-    width: 100%;
-    height: auto;
-    max-height: 92vh;
-    object-fit: contain;
-    opacity: 0;
-    transition: opacity 0.6s var(--ease);
-    cursor: zoom-in;
-  }
+  .plate img { display: block; width: 100%; height: auto; max-height: 92vh; object-fit: contain; opacity: 0; transition: opacity 0.6s var(--ease), filter 0.4s var(--ease), transform 0.5s var(--ease); cursor: zoom-in; filter: brightness(1); }
   .plate img.loaded { opacity: 1; }
+  .plate:hover img.loaded { filter: brightness(1.08); transform: scale(1.008); }
 
   .plate-caption {
     display: flex;
@@ -196,7 +228,11 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--dim);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.6s var(--ease) 0.15s, transform 0.6s var(--ease) 0.15s;
   }
+  .plate.in-view .plate-caption { opacity: 1; transform: translateY(0); }
   .plate-caption .cap-title { color: var(--text); }
 
   .plate.broken .frame {
@@ -226,9 +262,42 @@
     padding: 8px 16px;
     cursor: pointer; z-index: 1100; color: var(--text);
     font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
-    transition: border-color 0.3s var(--ease);
+    transition: border-color 0.3s var(--ease), transform 0.45s var(--ease), opacity 0.45s var(--ease);
   }
   .theme-toggle:hover { border-color: var(--text); }
+
+  .mono-toggle {
+    position: fixed; top: 24px; right: 132px;
+    background: none; border: 1px solid var(--line);
+    padding: 8px 16px;
+    cursor: pointer; z-index: 1100; color: var(--text);
+    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+    transition: border-color 0.3s var(--ease), transform 0.45s var(--ease), opacity 0.45s var(--ease);
+  }
+  .mono-toggle:hover { border-color: var(--text); }
+  .mono-toggle[aria-pressed="true"] {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  .controls-hidden { transform: translateY(-140%); opacity: 0; pointer-events: none; }
+
+  .scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: var(--text);
+    z-index: 1200;
+    transition: width 0.1s linear;
+  }
+
+  html.mono-active img { filter: grayscale(1) contrast(1.05); }
+
+  @media (max-width: 640px) {
+    .mono-toggle { top: 24px; right: 24px; }
+    .theme-toggle { top: 70px; right: 24px; }
+  }
 
   /* ---------- LIGHTBOX ---------- */
   .lightbox {
@@ -285,11 +354,34 @@
     border-top: 1px solid var(--line);
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 0.68rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--dim);
   }
+
+  .ig-link {
+    color: var(--dim);
+    text-decoration: none;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    position: relative;
+    transition: color 0.3s var(--ease);
+  }
+  .ig-link::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -4px;
+    height: 1px;
+    background: var(--text);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s var(--ease);
+  }
+  .ig-link:hover { color: var(--text); }
+  .ig-link:hover::after { transform: scaleX(1); }
 
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
@@ -298,10 +390,17 @@
 </head>
 <body>
 
+<div class="scroll-progress" id="scrollProgress"></div>
 <button class="theme-toggle" id="themeToggle" type="button" aria-label="Växla mellan mörkt och ljust läge">MODE</button>
+<button class="mono-toggle" id="monoToggle" type="button" aria-pressed="false" aria-label="Växla svartvitt läge">B/W</button>
 
 <header>
-  <button class="wordmark" id="mainLogo" type="button">JULIAN</button>
+  <div class="wordmark-row">
+    <button class="wordmark" id="mainLogo" type="button">
+      <span class="wm-letter">S</span><span class="wm-letter">B</span><span class="wm-letter">J</span>
+    </button>
+    <span class="wordmark-tag">shot by julian</span>
+  </div>
   <div class="meta-row">
     <span>FOTOGRAFI</span>
     <span class="meta-count" id="metaCount"></span>
@@ -315,7 +414,8 @@
 </main>
 
 <footer>
-  <span>JULIAN</span>
+  <span>Shot by Julian</span>
+  <a href="https://instagram.com/shot_by_julian_" target="_blank" rel="noopener noreferrer" class="ig-link">Instagram</a>
   <span id="year"></span>
 </footer>
 
@@ -345,45 +445,44 @@
   */
 
   const ALBUMS = {
-    ratt: {
-      // Makrodetaljer — emblem, galler, ytor
-      label: 'I. RÅTT',
+    vroom: {
+      // Alla bilar — emblem, detaljer, bilar i miljö
+      label: 'VROOM',
       files: [
         "bild (1).jpg","bild (2).jpg","bild (3).jpg","bild (4).jpg","bild (5).jpg",
-        "bild (6).jpg","bild (7).jpg","bild (8).jpg","bild (9).jpg","bild (10).jpg","bild (11).jpg"
-      ]
-    },
-    rorelse: {
-      // Bilar i sin miljö — väg, uppfart, ljus
-      label: 'II. RÖRELSE',
-      files: [
+        "bild (6).jpg","bild (7).jpg","bild (8).jpg","bild (9).jpg","bild (10).jpg","bild (11).jpg",
         "bild (12).jpg","bild (13).jpg","bild (14).jpg","bild (15).jpg","bild (16).jpg",
         "bild (17).jpg","bild (18).jpg","bild (19).jpg","bild (20).jpg","bild (21).jpg","bild (22).jpg",
         "bild (27).jpg","bild (28).jpg","bild (29).jpg","bild (30).jpg","bild (31).jpg"
       ]
     },
-    natur: {
-      // Skog, löv, himmel
-      label: 'III. NATUR',
-      files: ["bild (23).jpg","bild (24).jpg","bild (25).jpg","bild (26).jpg","bild (37).jpg"]
+    nature: {
+      // Grönska och träd
+      label: 'NATURE',
+      files: ["bild (23).jpg","bild (24).jpg","bild (25).jpg","bild (26).jpg"]
     },
-    morker: {
-      // Natt — lågt ljus, ett sken i mörkret
-      label: 'IV. MÖRKER',
-      files: ["bild (32).jpg","bild (33).jpg","bild (34).jpg","bild (35).jpg","bild (36).jpg"]
+    noir: {
+      // De fyra mörka bilderna
+      label: 'NOIR',
+      files: ["bild (32).jpg","bild (33).jpg","bild (34).jpg","bild (35).jpg"]
+    },
+    misc: {
+      // Allt annat
+      label: 'MISCELLANEOUS',
+      files: ["bild (36).jpg","bild (37).jpg"]
     }
   };
 
-  // Kurerat urval för TOP — ett stick ur varje kapitel, inte en fullständig genomgång.
+  // Kurerat urval för TOP — ett stick ur varje kapitel.
   const TOP_PICKS = [
-    { file: "bild (8).jpg", album: 'I. RÅTT' },
-    { file: "bild (10).jpg", album: 'I. RÅTT' },
-    { file: "bild (13).jpg", album: 'II. RÖRELSE' },
-    { file: "bild (17).jpg", album: 'II. RÖRELSE' },
-    { file: "bild (22).jpg", album: 'II. RÖRELSE' },
-    { file: "bild (24).jpg", album: 'III. NATUR' },
-    { file: "bild (35).jpg", album: 'IV. MÖRKER' },
-    { file: "bild (37).jpg", album: 'III. NATUR' }
+    { file: "bild (8).jpg", album: 'VROOM' },
+    { file: "bild (10).jpg", album: 'VROOM' },
+    { file: "bild (13).jpg", album: 'VROOM' },
+    { file: "bild (17).jpg", album: 'VROOM' },
+    { file: "bild (22).jpg", album: 'VROOM' },
+    { file: "bild (24).jpg", album: 'NATURE' },
+    { file: "bild (35).jpg", album: 'NOIR' },
+    { file: "bild (37).jpg", album: 'MISCELLANEOUS' }
   ];
 
   const gallery = document.getElementById('gallery');
@@ -408,6 +507,52 @@
     localStorage.setItem('theme', next);
   };
   initTheme();
+
+  // --- SVARTVITT LÄGE ---
+  const monoToggle = document.getElementById('monoToggle');
+  function initMono() {
+    const saved = localStorage.getItem('mono') === 'true';
+    document.documentElement.classList.toggle('mono-active', saved);
+    monoToggle.setAttribute('aria-pressed', String(saved));
+  }
+  monoToggle.onclick = () => {
+    const next = !document.documentElement.classList.contains('mono-active');
+    document.documentElement.classList.toggle('mono-active', next);
+    monoToggle.setAttribute('aria-pressed', String(next));
+    localStorage.setItem('mono', String(next));
+  };
+  initMono();
+
+  // --- KONTROLLER GÖMS VID SKROLL, KOMMER TILLBAKA VID STILLASTÅENDE ---
+  const themeToggle = document.getElementById('themeToggle');
+  const scrollProgress = document.getElementById('scrollProgress');
+  let lastScrollY = window.scrollY;
+  let hideTimer = null;
+
+  function updateScrollUI() {
+    const y = window.scrollY;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    scrollProgress.style.width = max > 0 ? `${Math.min(100, (y / max) * 100)}%` : '0%';
+
+    const goingDown = y > lastScrollY;
+    if (Math.abs(y - lastScrollY) > 4) {
+      if (goingDown && y > 80) {
+        themeToggle.classList.add('controls-hidden');
+        monoToggle.classList.add('controls-hidden');
+      } else {
+        themeToggle.classList.remove('controls-hidden');
+        monoToggle.classList.remove('controls-hidden');
+      }
+    }
+    lastScrollY = y;
+
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+      themeToggle.classList.remove('controls-hidden');
+      monoToggle.classList.remove('controls-hidden');
+    }, 900);
+  }
+  window.addEventListener('scroll', updateScrollUI, { passive: true });
 
   function buildNav() {
     albumNav.innerHTML = '';
@@ -447,10 +592,10 @@
   }
 
   const allFiles = [
-    ...ALBUMS.ratt.files.map(f => ({ file: f, album: ALBUMS.ratt.label })),
-    ...ALBUMS.rorelse.files.map(f => ({ file: f, album: ALBUMS.rorelse.label })),
-    ...ALBUMS.natur.files.map(f => ({ file: f, album: ALBUMS.natur.label })),
-    ...ALBUMS.morker.files.map(f => ({ file: f, album: ALBUMS.morker.label }))
+    ...ALBUMS.vroom.files.map(f => ({ file: f, album: ALBUMS.vroom.label })),
+    ...ALBUMS.nature.files.map(f => ({ file: f, album: ALBUMS.nature.label })),
+    ...ALBUMS.noir.files.map(f => ({ file: f, album: ALBUMS.noir.label })),
+    ...ALBUMS.misc.files.map(f => ({ file: f, album: ALBUMS.misc.label }))
   ];
 
   function resolveEntries(key) {
@@ -459,6 +604,15 @@
     if (ALBUMS[key]) return ALBUMS[key].files.map(f => ({ file: f, album: ALBUMS[key].label }));
     return TOP_PICKS;
   }
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
   function paint(entries) {
     gallery.innerHTML = '';
@@ -471,7 +625,7 @@
     entries.forEach((entry, i) => {
       const plate = document.createElement('div');
       plate.className = 'plate';
-      plate.style.setProperty('--i', i % 12);
+      plate.style.transitionDelay = `${(i % 6) * 60}ms`;
 
       const frame = document.createElement('div');
       frame.className = 'frame';
@@ -506,6 +660,7 @@
       plate.appendChild(frame);
       plate.appendChild(caption);
       gallery.appendChild(plate);
+      revealObserver.observe(plate);
     });
   }
 
