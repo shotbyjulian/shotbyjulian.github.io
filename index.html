@@ -12,8 +12,9 @@
     --ye-ease: cubic-bezier(0.8, 0, 0.1, 1);
   }
 
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; cursor: none !important; }
-  
+  /* Tvinga bort vanlig muspekare överallt */
+  html, body, * { cursor: none !important; }
+
   body {
     margin: 0; background: var(--bg); color: var(--text);
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -22,33 +23,35 @@
     transition: background 0.8s var(--ye-ease), color 0.8s var(--ye-ease);
   }
 
-  /* --- CUSTOM CURSOR --- */
+  /* --- CUSTOM CURSOR (SIKTE) --- */
   #cursor {
-    position: fixed; width: 20px; height: 20px;
+    position: fixed; top: 0; left: 0;
+    width: 20px; height: 20px;
     border: 1px solid var(--text); border-radius: 50%;
-    pointer-events: none; z-index: 99999;
-    transform: translate(-50%, -50%);
-    mix-blend-mode: difference; transition: width 0.3s, height 0.3s;
+    pointer-events: none; z-index: 100000;
+    mix-blend-mode: difference;
     display: flex; align-items: center; justify-content: center;
+    transition: width 0.3s var(--ye-ease), height 0.3s var(--ye-ease), background 0.3s;
+    /* Vi använder transform i JS för rörelsen */
   }
   #cursor::after { content: ''; position: absolute; width: 2px; height: 2px; background: var(--text); border-radius: 50%; }
-  .hovering #cursor { width: 50px; height: 50px; background: rgba(255,255,255,0.1); }
+  body.hovering #cursor { width: 50px; height: 50px; background: rgba(255,255,255,0.1); }
 
   /* --- SCROLL TRACKER --- */
   #scrollLine {
     position: fixed; top: 0; left: 0; height: 2px; background: var(--text);
-    width: 0%; z-index: 200; transition: width 0.1s linear;
+    width: 0%; z-index: 2000; transition: width 0.1s linear;
   }
 
   /* --- HEADER --- */
   header { padding: 60px 16px 10px; }
-  .wordmark { font-size: clamp(4.5rem, 22vw, 14rem); font-weight: 900; line-height: 0.8; letter-spacing: -0.07em; }
+  .wordmark { font-size: clamp(4.5rem, 22vw, 14rem); font-weight: 900; line-height: 0.8; letter-spacing: -0.07em; cursor: none; }
 
   /* --- NAVIGATION --- */
   nav {
     display: flex; justify-content: space-between; align-items: center;
     padding: 20px 16px 40px; position: sticky; top: 0; 
-    background: var(--bg); z-index: 100; transition: background 0.8s var(--ye-ease);
+    background: var(--bg); z-index: 1000; transition: background 0.8s var(--ye-ease);
   }
   .nav-left { display: flex; gap: 18px; overflow-x: auto; }
   .nav-left::-webkit-scrollbar { display: none; }
@@ -64,6 +67,10 @@
 
   .frame { width: 100%; height: 100%; position: relative; overflow: hidden; }
   .frame img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9) contrast(1.05); transition: transform 0.8s var(--ye-ease); }
+  
+  /* Svartvitt-klass för bilderna */
+  body.mono-active img { filter: grayscale(1) brightness(0.9) contrast(1.1) !important; }
+
   .plate:hover img { transform: scale(1.05); }
 
   .grain { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay; opacity: 0.12; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
@@ -103,7 +110,7 @@
 
 <nav id="stickyNav">
   <div class="nav-left" id="navLeft"></div>
-  <button id="alltBtn" style="color: #444; font-weight: 900; font-size: 0.75rem; border: none; background: none; cursor:pointer;">ALLT</button>
+  <button id="alltBtn" style="color: #444; font-weight: 900; font-size: 0.75rem; border: none; background: none; cursor:none;">ALLT</button>
 </nav>
 
 <main>
@@ -164,15 +171,16 @@
   const cursor = document.getElementById('cursor');
   const scrollLine = document.getElementById('scrollLine');
 
-  // pekare-logik
+  // Optimerad pekare med transform
   window.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
+    requestAnimationFrame(() => {
+        cursor.style.transform = `translate3d(${e.clientX - 10}px, ${e.clientY - 10}px, 0)`;
+    });
   });
 
-  // scroll-logik
+  // Scroll tracker
   window.addEventListener('scroll', () => {
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const winScroll = document.documentElement.scrollTop;
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrolled = (winScroll / height) * 100;
     scrollLine.style.width = scrolled + "%";
@@ -192,7 +200,6 @@
       plate.onmouseenter = () => document.body.classList.add('hovering');
       plate.onmouseleave = () => document.body.classList.remove('hovering');
       
-      // Slumpmässig metadata för Ye-vibe
       const res = ["4000X6000", "5124X7200", "3024X4032"][Math.floor(Math.random()*3)];
       const iso = Math.floor(Math.random() * 800) + 100;
       
@@ -225,8 +232,9 @@
   document.getElementById('logo').onclick = () => render('TOP');
   lb.onclick = () => { lb.classList.remove('active'); document.body.style.overflow = 'auto'; };
   
+  // FIX: Svartvitt enbart på bilder via en klass på body
   document.getElementById('monoToggle').onclick = () => {
-    document.body.style.filter = document.body.style.filter === 'grayscale(1)' ? 'none' : 'grayscale(1)';
+    document.body.classList.toggle('mono-active');
   };
   
   document.getElementById('themeToggle').onclick = () => {
