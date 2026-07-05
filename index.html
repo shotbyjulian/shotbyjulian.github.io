@@ -3,17 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SBJ</title>
+<title>SBJ — Shot by Julian</title>
 <meta name="description" content="Shot by Julian — fotografi. Vroom. Nature. Noir.">
-<meta property="og:title" content="SBJ — Shot by Julian">
-<meta property="og:description" content="fotografi. vroom. nature. noir.">
-<meta property="og:image" content="images/bild (1).jpg">
-<meta property="og:type" content="website">
-<meta name="theme-color" content="#000000">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23000%22/></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #000000;
@@ -44,24 +35,8 @@
     transition: background 0.4s var(--ease), color 0.4s var(--ease);
   }
 
-  :focus-visible { outline: 1px solid var(--text); outline-offset: 2px; }
-  a, button { font-family: var(--sans); }
-
-  /* ---------- HEADER ---------- */
-  header {
-    padding: 56px 24px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .wordmark-row {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-
+  header { padding: 56px 24px 0; display: flex; flex-direction: column; align-items: flex-start; }
+  .wordmark-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
   .wordmark {
     font-size: clamp(3rem, 12vw, 9rem);
     font-weight: 500;
@@ -69,684 +44,243 @@
     line-height: 0.9;
     text-transform: uppercase;
     color: var(--text);
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    text-align: left;
-    display: inline-flex;
+    background: none; border: none; padding: 0; cursor: pointer;
   }
 
-  .wm-letter {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(0.4em);
-    animation: rise 0.6s var(--ease) forwards;
-  }
+  .wm-letter { display: inline-block; opacity: 0; transform: translateY(0.4em); animation: rise 0.6s var(--ease) forwards; }
   .wm-letter:nth-child(1) { animation-delay: 0.05s; }
   .wm-letter:nth-child(2) { animation-delay: 0.15s; }
   .wm-letter:nth-child(3) { animation-delay: 0.25s; }
 
-  .wordmark-tag {
-    font-size: 0.62rem;
-    letter-spacing: 0.14em;
-    text-transform: lowercase;
-    color: var(--dim);
-    opacity: 0;
-    animation: fadeInTag 0.6s var(--ease) 0.55s forwards;
+  .wordmark-tag { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: lowercase; color: var(--dim); opacity: 0; animation: fadeInTag 0.6s var(--ease) 0.55s forwards; }
+
+  .meta-row {
+    width: 100%; display: flex; justify-content: space-between; align-items: baseline;
+    padding: 14px 0 40px; border-bottom: 1px solid var(--line);
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+    position: relative; overflow: hidden;
   }
 
   @keyframes fadeInTag { to { opacity: 1; } }
-
-  .meta-row {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 14px 0 40px;
-    border-bottom: 1px solid var(--line);
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--dim);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .meta-row::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -1px;
-    height: 1px;
-    width: 0;
-    background: var(--text);
-    animation: drawLine 0.9s var(--ease) 0.3s forwards;
-  }
-
-  @keyframes drawLine { to { width: 100%; } }
   @keyframes rise { to { opacity: 1; transform: translateY(0); } }
 
-  .meta-count { color: var(--dim); }
-
-  /* ---------- NAV ---------- */
-  nav {
-    display: flex;
-    gap: 28px;
-    padding: 20px 24px 20px;
-    flex-wrap: wrap;
-  }
-
+  nav { display: flex; gap: 28px; padding: 20px 24px 20px; flex-wrap: wrap; }
   nav button {
-    background: none;
-    border: none;
-    padding: 0;
-    font-size: 0.78rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--dim);
-    cursor: pointer;
-    position: relative;
-    transition: color 0.3s var(--ease);
-    opacity: 0;
-    transform: translateY(8px);
-    animation: rise 0.5s var(--ease) forwards;
+    background: none; border: none; padding: 0; font-size: 0.78rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--dim); cursor: pointer; transition: color 0.3s var(--ease);
   }
-  nav button:nth-child(1) { animation-delay: 0.65s; }
-  nav button:nth-child(2) { animation-delay: 0.7s; }
-  nav button:nth-child(3) { animation-delay: 0.75s; }
-  nav button:nth-child(4) { animation-delay: 0.8s; }
-  nav button:nth-child(5) { animation-delay: 0.85s; }
-  nav button:nth-child(6) { animation-delay: 0.9s; }
-  nav button:nth-child(7) { animation-delay: 0.95s; }
-
   nav button[aria-current="true"] { color: var(--text); }
-
-  nav button::after {
-    content: '';
-    position: absolute;
-    left: 0; right: 0; bottom: -8px;
-    height: 1px;
-    background: var(--text);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.35s var(--ease);
-  }
-  nav button[aria-current="true"]::after,
-  nav button:hover::after { transform: scaleX(1); }
-
   .nav-spacer { flex: 1; }
-  .nav-all {
-    margin-left: auto;
-  }
 
-  /* ---------- GRID ---------- */
-  main { padding: 0; }
-
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap);
-  }
+  .grid { display: grid; grid-template-columns: 1fr; gap: var(--gap); }
   @media (min-width: 700px) { .grid { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
 
-  .plate {
-    position: relative;
-    background: var(--bg);
-    display: flex;
-    flex-direction: column;
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
-  }
+  .plate { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+  .plate.in-view { opacity: 1; transform: translateY(0); }
+  .plate .frame { width: 100%; background: color-mix(in srgb, var(--text) 4%, var(--bg)); display: flex; overflow: hidden; }
+  .plate img { width: 100%; height: auto; cursor: zoom-in; transition: transform 0.5s var(--ease); }
+  .plate:hover img { transform: scale(1.02); }
 
-  .plate.in-view {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .plate-caption { padding: 12px 14px 30px; font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase; }
+  .cap-top { display: flex; justify-content: space-between; color: var(--text); margin-bottom: 4px; }
+  .cap-desc { color: var(--dim); font-style: italic; text-transform: none; font-size: 0.75rem; }
 
-  .plate .frame {
-    width: 100%;
-    background: color-mix(in srgb, var(--text) 4%, var(--bg));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    min-height: 120px;
-  }
-
-  .plate img { display: block; width: 100%; height: auto; max-height: 92vh; object-fit: contain; opacity: 0; transition: opacity 0.6s var(--ease), filter 0.4s var(--ease), transform 0.5s var(--ease); cursor: zoom-in; filter: brightness(1); }
-  .plate img.loaded { opacity: 1; }
-  .plate:hover img.loaded { filter: brightness(1.08); transform: scale(1.008); }
-
-  .plate-caption {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 10px 14px 22px;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--dim);
-    opacity: 0;
-    transform: translateY(6px);
-    transition: opacity 0.6s var(--ease) 0.15s, transform 0.6s var(--ease) 0.15s;
-  }
-  .plate.in-view .plate-caption { opacity: 1; transform: translateY(0); }
-  .plate-caption .cap-title { color: var(--text); }
-
-  .plate.broken .frame {
-    min-height: 200px;
-    color: var(--dim);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .empty-state {
-    padding: 160px 24px;
-    text-align: center;
-    color: var(--dim);
-    font-size: 0.85rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  /* Kapitel-övergång — hela griden tonar/lyfter tillsammans, inget hopp */
-  .grid.leaving { opacity: 0; transform: translateY(-8px); transition: opacity 0.25s var(--ease), transform 0.25s var(--ease); }
-
-  /* ---------- CONTROLS ---------- */
-  .theme-toggle {
-    position: fixed; top: 24px; right: 24px;
-    background: none; border: 1px solid var(--line);
-    padding: 8px 16px;
-    cursor: pointer; z-index: 1100; color: var(--text);
-    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
-    transition: border-color 0.3s var(--ease), transform 0.45s var(--ease), opacity 0.45s var(--ease);
-  }
-  .theme-toggle:hover { border-color: var(--text); }
-
-  .mono-toggle {
-    position: fixed; top: 24px; right: 132px;
-    background: none; border: 1px solid var(--line);
-    padding: 8px 16px;
-    cursor: pointer; z-index: 1100; color: var(--text);
-    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
-    transition: border-color 0.3s var(--ease), transform 0.45s var(--ease), opacity 0.45s var(--ease);
-  }
-  .mono-toggle:hover { border-color: var(--text); }
-  .mono-toggle[aria-pressed="true"] {
-    background: var(--text);
-    color: var(--bg);
-  }
-
-  .controls-hidden { transform: translateY(-140%); opacity: 0; pointer-events: none; }
-
-  .scroll-progress {
-    position: fixed;
-    top: 0; left: 0;
-    height: 2px;
-    width: 0%;
-    background: var(--text);
-    z-index: 1200;
-    transition: width 0.1s linear;
-  }
-
-  html.mono-active img { filter: grayscale(1) contrast(1.05); }
-
-  @media (max-width: 640px) {
-    .mono-toggle { top: 24px; right: 24px; }
-    .theme-toggle { top: 70px; right: 24px; }
-  }
-
-  /* ---------- LIGHTBOX ---------- */
-  .lightbox {
-    position: fixed; inset: 0; background: var(--bg);
-    display: none; align-items: center; justify-content: center; z-index: 2000;
-    opacity: 0;
-    transition: opacity 0.3s var(--ease);
-  }
+  /* LIGHTBOX */
+  .lightbox { position: fixed; inset: 0; background: var(--bg); display: none; align-items: center; justify-content: center; z-index: 2000; opacity: 0; transition: opacity 0.3s var(--ease); }
   .lightbox.open { display: flex; opacity: 1; }
-  .lightbox img {
-    max-width: 94vw; max-height: 86vh;
-    object-fit: contain;
-    opacity: 0;
-    transform: scale(0.98);
-    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
-  }
-  .lightbox.open img.shown { opacity: 1; transform: scale(1); }
-
-  .lb-btn {
-    position: absolute;
-    background: none;
-    border: 1px solid var(--line);
-    color: var(--text);
-    width: 44px; height: 44px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: border-color 0.3s var(--ease);
-  }
-  .lb-btn:hover { border-color: var(--text); }
+  .lightbox img { max-width: 90vw; max-height: 80vh; object-fit: contain; }
+  .lb-info { position: absolute; bottom: 40px; text-align: center; width: 100%; }
+  .lb-desc { display: block; color: var(--text); font-style: italic; margin-top: 8px; font-size: 0.9rem; }
+  .lb-btn { position: absolute; background: none; border: 1px solid var(--line); color: var(--text); width: 44px; height: 44px; cursor: pointer; }
   .lb-close { top: 24px; right: 24px; }
-  .lb-prev { left: 24px; top: 50%; transform: translateY(-50%); }
-  .lb-next { right: 24px; top: 50%; transform: translateY(-50%); }
+  .lb-prev { left: 24px; } .lb-next { right: 24px; }
 
-  .lb-info {
-    position: absolute;
-    bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    color: var(--dim);
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-  .lb-info .lb-title { color: var(--text); display: block; margin-bottom: 6px; }
+  .theme-toggle, .mono-toggle { position: fixed; top: 24px; padding: 8px 16px; background: none; border: 1px solid var(--line); color: var(--text); cursor: pointer; z-index: 1100; font-size: 0.68rem; }
+  .theme-toggle { right: 24px; } .mono-toggle { right: 130px; }
+  html.mono-active img { filter: grayscale(1); }
 
-  @media (max-width: 600px) {
-    .lb-prev, .lb-next, .lb-close { width: 38px; height: 38px; font-size: 0.85rem; }
-  }
-
-  footer {
-    padding: 60px 24px;
-    border-top: 1px solid var(--line);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.68rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--dim);
-  }
-
-  .ig-link {
-    color: var(--dim);
-    text-decoration: none;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    font-size: 0.68rem;
-    position: relative;
-    transition: color 0.3s var(--ease);
-  }
-  .ig-link::after {
-    content: '';
-    position: absolute;
-    left: 0; right: 0; bottom: -4px;
-    height: 1px;
-    background: var(--text);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.35s var(--ease);
-  }
-  .ig-link:hover { color: var(--text); }
-  .ig-link:hover::after { transform: scaleX(1); }
-
-  @media (prefers-reduced-motion: reduce) {
-    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-  }
+  footer { padding: 60px 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--dim); text-transform: uppercase; }
 </style>
 </head>
 <body>
 
-<div class="scroll-progress" id="scrollProgress"></div>
-<button class="theme-toggle" id="themeToggle" type="button" aria-label="Växla mellan mörkt och ljust läge">MODE</button>
-<button class="mono-toggle" id="monoToggle" type="button" aria-pressed="false" aria-label="Växla svartvitt läge">B/W</button>
+<button class="theme-toggle" id="themeToggle">MODE</button>
+<button class="mono-toggle" id="monoToggle">B/W</button>
 
 <header>
   <div class="wordmark-row">
-    <button class="wordmark" id="mainLogo" type="button">
+    <button class="wordmark" id="mainLogo">
       <span class="wm-letter">S</span><span class="wm-letter">B</span><span class="wm-letter">J</span>
     </button>
     <span class="wordmark-tag">shot by julian</span>
   </div>
   <div class="meta-row">
     <span>FOTOGRAFI</span>
-    <span class="meta-count" id="metaCount"></span>
+    <span id="metaCount">00</span>
   </div>
 </header>
 
-<nav id="albumNav" aria-label="Album"></nav>
+<nav id="albumNav"></nav>
 
 <main>
-  <div id="gallery" class="grid" aria-live="polite"></div>
+  <div id="gallery" class="grid"></div>
 </main>
 
 <footer>
-  <span>Shot by Julian</span>
-  <a href="https://instagram.com/shot_by_julian_" target="_blank" rel="noopener noreferrer" class="ig-link">Instagram</a>
-  <span id="year"></span>
+  <span>&copy; SBJ <span id="year"></span></span>
+  <a href="#" style="color:inherit;text-decoration:none">INSTAGRAM</a>
 </footer>
 
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Bildvisare">
-  <button class="lb-btn lb-close" id="lbClose" aria-label="Stäng" type="button">✕</button>
-  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Föregående" type="button">‹</button>
-  <img id="lbImg" src="" alt="">
-  <button class="lb-btn lb-next" id="lbNext" aria-label="Nästa" type="button">›</button>
+<div class="lightbox" id="lightbox">
+  <button class="lb-btn lb-close" id="lbClose">✕</button>
+  <button class="lb-btn lb-prev" id="lbPrev">‹</button>
+  <img id="lbImg" src="">
+  <button class="lb-btn lb-next" id="lbNext">›</button>
   <div class="lb-info">
-    <span class="lb-title" id="lbTitle"></span>
-    <span id="lbCounter"></span>
+    <span id="lbTitle" style="letter-spacing:0.2em; color:var(--dim); font-size:0.7rem">ALBUM</span>
+    <span class="lb-desc" id="lbDesc">Beskrivning</span>
   </div>
 </div>
 
 <script>
-  /*
-    Startvyn är TOP — ett kurerat urval, inte allt material.
-    Man måste klicka in i ett kapitel för att se resten.
-    "ALLT" finns som ett eget, sista nav-alternativ — en genväg
-    till hela arkivet, men aldrig standardvyn.
-
-    URVALET (TOP) är satt manuellt här nedan tills en riktig
-    bildanalys-pipeline kopplas på — jag kan inte se pixelinnehållet
-    i filnamnen, bara namnen. Byt gärna ut listan mot dina egna
-    favoriter, ordningen och antalet (8) är tänkt att kännas som
-    "det bästa", inte en fullständig genomgång.
-  */
-
   const ALBUMS = {
     vroom: {
-      // Alla bilar — emblem, detaljer, bilar i miljö
       label: 'VROOM',
       files: [
-        "bild (2).jpg","bild (3).jpg","bild (4).jpg","bild (5).jpg",
-        "bild (6).jpg","bild (7).jpg","bild (8).jpg","bild (9).jpg","bild (10).jpg","bild (11).jpg",
-        "bild (12).jpg","bild (13).jpg","bild (14).jpg","bild (15).jpg","bild (16).jpg",
-        "bild (17).jpg","bild (18).jpg","bild (19).jpg","bild (20).jpg","bild (21).jpg","bild (22).jpg",
-        "bild (27).jpg","bild (28).jpg","bild (29).jpg","bild (30).jpg","bild (31).jpg"
+        { name: "bild (2).jpg", desc: "L'esprit de l'extase" },
+        { name: "bild (3).jpg", desc: "Aerodinamica classica" },
+        { name: "bild (4).jpg", desc: "Il dettaglio d'oro" },
+        { name: "bild (5).jpg", desc: "Chrome et poussière" },
+        { name: "bild (6).jpg", desc: "Veloce come il vento" },
+        { name: "bild (7).jpg", desc: "Simmetria meccanica" },
+        { name: "bild (8).jpg", desc: "The spirit of speed" },
+        { name: "bild (9).jpg", desc: "Eclat métallique" },
+        { name: "bild (10).jpg", desc: "Forme et fonction" },
+        { name: "bild (11).jpg", desc: "Gleam of the past" },
+        { name: "bild (12).jpg", desc: "Arresto immediato" },
+        { name: "bild (13).jpg", desc: "Precisione moderna" },
+        { name: "bild (14).jpg", desc: "Toro scatenato" },
+        { name: "bild (15).jpg", desc: "Bianco assoluto" },
+        { name: "bild (16).jpg", desc: "Cavalli d'acciaio" },
+        { name: "bild (17).jpg", desc: "Grand Tourisme" },
+        { name: "bild (18).jpg", desc: "Nocturnal drive" },
+        { name: "bild (19).jpg", desc: "Route de campagne" },
+        { name: "bild (20).jpg", desc: "Vintage silhouette" },
+        { name: "bild (21).jpg", desc: "Classic curves" },
+        { name: "bild (22).jpg", desc: "Rouge passion" },
+        { name: "bild (27).jpg", desc: "Vorsprung" },
+        { name: "bild (28).jpg", desc: "Elegance in grey" },
+        { name: "bild (29).jpg", desc: "Stadtlicht" },
+        { name: "bild (30).jpg", desc: "Silent power" },
+        { name: "bild (31).jpg", desc: "Abendstimmung" }
       ]
     },
     nature: {
-      // Grönska och träd
       label: 'NATURE',
-      files: ["bild (23).jpg","bild (24).jpg","bild (25).jpg","bild (26).jpg","bild (36).jpg"]
+      files: [
+        { name: "bild (23).jpg", desc: "Komorebi (木漏れ日)" },
+        { name: "bild (24).jpg", desc: "Sentiero nel bosco" },
+        { name: "bild (25).jpg", desc: "Sous le feuillage" },
+        { name: "bild (26).jpg", desc: "Verde lussureggiante" },
+        { name: "bild (36).jpg", desc: "L'albero solitario" }
+      ]
     },
     noir: {
-      // De fyra mörka bilderna
       label: 'NOIR',
-      files: ["bild (32).jpg","bild (33).jpg","bild (34).jpg","bild (35).jpg"]
+      files: [
+        { name: "bild (32).jpg", desc: "L'heure bleue" },
+        { name: "bild (33).jpg", desc: "Ombre portée" },
+        { name: "bild (34).jpg", desc: "Luce nella notte" },
+        { name: "bild (35).jpg", desc: "Chiaroscuro" }
+      ]
     },
     misc: {
-      // Allt annat
-      label: 'MISCELLANEOUS',
-      files: ["bild (1).jpg","bild (37).jpg",]
+      label: 'MISC',
+      files: [
+        { name: "bild (1).jpg", desc: "Fidelis amicus" },
+        { name: "bild (37).jpg", desc: "Ciel et terre" }
+      ]
     }
   };
 
-  // Kurerat urval för TOP — ett stick ur varje kapitel.
   const TOP_PICKS = [
-    { file: "bild (8).jpg", album: 'VROOM' },
-    { file: "bild (10).jpg", album: 'VROOM' },
-    { file: "bild (13).jpg", album: 'VROOM' },
-    { file: "bild (17).jpg", album: 'VROOM' },
-    { file: "bild (22).jpg", album: 'VROOM' },
-    { file: "bild (24).jpg", album: 'NATURE' },
-    { file: "bild (35).jpg", album: 'NOIR' },
-    { file: "bild (37).jpg", album: 'MISCELLANEOUS' }
+    { name: "bild (8).jpg", desc: "The spirit of speed", album: 'VROOM' },
+    { name: "bild (14).jpg", desc: "Toro scatenato", album: 'VROOM' },
+    { name: "bild (23).jpg", desc: "Komorebi", album: 'NATURE' },
+    { name: "bild (35).jpg", desc: "Chiaroscuro", album: 'NOIR' },
+    { name: "bild (1).jpg", desc: "Fidelis amicus", album: 'MISC' },
+    { name: "bild (22).jpg", desc: "Rouge passion", album: 'VROOM' }
   ];
 
-  const gallery = document.getElementById('gallery');
-  const metaCount = document.getElementById('metaCount');
-  const albumNav = document.getElementById('albumNav');
-  const lightbox = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lbImg');
-  const lbTitle = document.getElementById('lbTitle');
-  const lbCounter = document.getElementById('lbCounter');
-
-  let currentFiles = [];
-  let currentIndex = -1;
-
-  function initTheme() {
-    const saved = localStorage.getItem('theme');
-    const preferred = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-    document.documentElement.setAttribute('data-theme', preferred);
-  }
-  document.getElementById('themeToggle').onclick = () => {
-    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-  };
-  initTheme();
-
-  // --- SVARTVITT LÄGE ---
-  const monoToggle = document.getElementById('monoToggle');
-  function initMono() {
-    const saved = localStorage.getItem('mono') === 'true';
-    document.documentElement.classList.toggle('mono-active', saved);
-    monoToggle.setAttribute('aria-pressed', String(saved));
-  }
-  monoToggle.onclick = () => {
-    const next = !document.documentElement.classList.contains('mono-active');
-    document.documentElement.classList.toggle('mono-active', next);
-    monoToggle.setAttribute('aria-pressed', String(next));
-    localStorage.setItem('mono', String(next));
-  };
-  initMono();
-
-  // --- KONTROLLER GÖMS VID SKROLL, KOMMER TILLBAKA VID STILLASTÅENDE ---
-  const themeToggle = document.getElementById('themeToggle');
-  const scrollProgress = document.getElementById('scrollProgress');
-  let lastScrollY = window.scrollY;
-  let hideTimer = null;
-
-  function updateScrollUI() {
-    const y = window.scrollY;
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    scrollProgress.style.width = max > 0 ? `${Math.min(100, (y / max) * 100)}%` : '0%';
-
-    const goingDown = y > lastScrollY;
-    if (Math.abs(y - lastScrollY) > 4) {
-      if (goingDown && y > 80) {
-        themeToggle.classList.add('controls-hidden');
-        monoToggle.classList.add('controls-hidden');
-      } else {
-        themeToggle.classList.remove('controls-hidden');
-        monoToggle.classList.remove('controls-hidden');
-      }
-    }
-    lastScrollY = y;
-
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => {
-      themeToggle.classList.remove('controls-hidden');
-      monoToggle.classList.remove('controls-hidden');
-    }, 900);
-  }
-  window.addEventListener('scroll', updateScrollUI, { passive: true });
-
-  function buildNav() {
-    albumNav.innerHTML = '';
-
-    const topBtn = document.createElement('button');
-    topBtn.textContent = 'TOP';
-    topBtn.dataset.key = 'top';
-    topBtn.onclick = () => { location.hash = 'top'; };
-    albumNav.appendChild(topBtn);
-
-    Object.keys(ALBUMS).forEach(key => {
-      const btn = document.createElement('button');
-      btn.textContent = ALBUMS[key].label;
-      btn.dataset.key = key;
-      btn.onclick = () => { location.hash = key; };
-      albumNav.appendChild(btn);
-    });
-
-    const spacer = document.createElement('span');
-    spacer.className = 'nav-spacer';
-    albumNav.appendChild(spacer);
-
-    const allBtn = document.createElement('button');
-    allBtn.textContent = 'ALLT';
-    allBtn.className = 'nav-all';
-    allBtn.dataset.key = 'all';
-    allBtn.onclick = () => { location.hash = 'all'; };
-    albumNav.appendChild(allBtn);
-  }
-
-  function markActiveNav(key) {
-    [...albumNav.children].forEach(btn => {
-      if (!btn.dataset) return;
-      if (btn.dataset.key === key) btn.setAttribute('aria-current', 'true');
-      else btn.removeAttribute('aria-current');
-    });
-  }
-
-  const allFiles = [
-    ...ALBUMS.vroom.files.map(f => ({ file: f, album: ALBUMS.vroom.label })),
-    ...ALBUMS.nature.files.map(f => ({ file: f, album: ALBUMS.nature.label })),
-    ...ALBUMS.noir.files.map(f => ({ file: f, album: ALBUMS.noir.label })),
-    ...ALBUMS.misc.files.map(f => ({ file: f, album: ALBUMS.misc.label }))
-  ];
-
-  function resolveEntries(key) {
-    if (key === 'top') return TOP_PICKS;
-    if (key === 'all') return allFiles;
-    if (ALBUMS[key]) return ALBUMS[key].files.map(f => ({ file: f, album: ALBUMS[key].label }));
-    return TOP_PICKS;
-  }
-
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('in-view');
-        revealObserver.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  let currentEntries = [];
+  let currentIndex = 0;
 
   function paint(entries) {
+    const gallery = document.getElementById('gallery');
     gallery.innerHTML = '';
-
-    if (!entries.length) {
-      gallery.innerHTML = '<p class="empty-state">Inga bilder i detta kapitel</p>';
-      return;
-    }
-
-    entries.forEach((entry, i) => {
+    entries.forEach((item, i) => {
       const plate = document.createElement('div');
       plate.className = 'plate';
-      plate.style.transitionDelay = `${(i % 6) * 60}ms`;
-
-      const frame = document.createElement('div');
-      frame.className = 'frame';
-
-      const img = document.createElement('img');
-      img.alt = `${entry.album} — plansch ${i + 1}`;
-      img.loading = 'lazy';
-      img.decoding = 'async';
-
-      const tryPaths = [`images/${entry.file}`, `bilder/${entry.file}`, entry.file];
-      let pIdx = 0;
-      img.src = tryPaths[pIdx];
-
-      img.onload = () => img.classList.add('loaded');
-      img.onerror = () => {
-        pIdx++;
-        if (pIdx < tryPaths.length) {
-          img.src = tryPaths[pIdx];
-        } else {
-          plate.classList.add('broken');
-          frame.textContent = 'BILD SAKNAS';
-        }
-      };
-
-      img.onclick = () => openLightbox(i);
-      frame.appendChild(img);
-
-      const caption = document.createElement('div');
-      caption.className = 'plate-caption';
-      caption.innerHTML = `<span class="cap-title">${entry.album}</span><span>${String(i + 1).padStart(2, '0')}</span>`;
-
-      plate.appendChild(frame);
-      plate.appendChild(caption);
+      plate.innerHTML = `
+        <div class="frame"><img src="images/${item.name}" loading="lazy"></div>
+        <div class="plate-caption">
+          <div class="cap-top"><span>${item.album || ''}</span><span>${String(i+1).padStart(2,'0')}</span></div>
+          <div class="cap-desc">${item.desc}</div>
+        </div>
+      `;
+      plate.onclick = () => openLightbox(i);
       gallery.appendChild(plate);
-      revealObserver.observe(plate);
+      setTimeout(() => plate.classList.add('in-view'), i * 50);
     });
-  }
-
-  function render(isFirstLoad) {
-    const key = location.hash.replace('#', '') || 'top';
-    const entries = resolveEntries(key);
-    markActiveNav(ALBUMS[key] ? key : key);
-    currentFiles = entries;
-    metaCount.textContent = String(entries.length).padStart(2, '0');
-
-    if (isFirstLoad) {
-      paint(entries);
-      return;
-    }
-
-    // Mjuk kapitel-övergång — lyft ut, byt innehåll, lyft in
-    gallery.classList.add('leaving');
-    setTimeout(() => {
-      paint(entries);
-      gallery.classList.remove('leaving');
-    }, 220);
   }
 
   function openLightbox(index) {
     currentIndex = index;
-    lightbox.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    showCurrent(true);
-    document.getElementById('lbClose').focus();
+    const item = currentEntries[currentIndex];
+    document.getElementById('lbImg').src = `images/${item.name}`;
+    document.getElementById('lbDesc').textContent = item.desc;
+    document.getElementById('lbTitle').textContent = item.album || "GALLERY";
+    document.getElementById('lightbox').classList.add('open');
   }
 
-  function showCurrent(firstOpen) {
-    const entry = currentFiles[currentIndex];
-    const galleryImg = gallery.children[currentIndex]?.querySelector('img');
-    lbImg.classList.remove('shown');
-    const src = galleryImg ? galleryImg.src : `images/${entry.file}`;
-    const swap = () => {
-      lbImg.src = src;
-      lbImg.alt = galleryImg ? galleryImg.alt : '';
-      lbTitle.textContent = entry.album;
-      lbCounter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(currentFiles.length).padStart(2, '0')}`;
-      requestAnimationFrame(() => lbImg.classList.add('shown'));
-    };
-    if (firstOpen) swap();
-    else setTimeout(swap, 120);
+  document.getElementById('lbClose').onclick = () => document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lbNext').onclick = () => openLightbox((currentIndex + 1) % currentEntries.length);
+  document.getElementById('lbPrev').onclick = () => openLightbox((currentIndex - 1 + currentEntries.length) % currentEntries.length);
+
+  function loadAlbum(key) {
+    if (key === 'top') {
+      currentEntries = TOP_PICKS;
+    } else if (key === 'all') {
+      currentEntries = Object.values(ALBUMS).flatMap(a => a.files.map(f => ({...f, album: a.label})));
+    } else {
+      currentEntries = ALBUMS[key].files.map(f => ({...f, album: ALBUMS[key].label}));
+    }
+    document.getElementById('metaCount').textContent = String(currentEntries.length).padStart(2, '0');
+    paint(currentEntries);
+    window.scrollTo(0,0);
   }
 
-  function closeLightbox() {
-    lightbox.classList.remove('open');
-    lbImg.classList.remove('shown');
-    document.body.style.overflow = 'auto';
-  }
-
-  function nextImage(dir) {
-    if (!currentFiles.length) return;
-    currentIndex = (currentIndex + dir + currentFiles.length) % currentFiles.length;
-    showCurrent(false);
-  }
-
-  document.getElementById('lbClose').onclick = closeLightbox;
-  document.getElementById('lbPrev').onclick = () => nextImage(-1);
-  document.getElementById('lbNext').onclick = () => nextImage(1);
-
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-
-  window.addEventListener('keydown', (e) => {
-    if (!lightbox.classList.contains('open')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') nextImage(-1);
-    if (e.key === 'ArrowRight') nextImage(1);
+  // Init Nav
+  const nav = document.getElementById('albumNav');
+  ['top', ...Object.keys(ALBUMS), 'all'].forEach(key => {
+    const btn = document.createElement('button');
+    btn.textContent = key === 'top' ? 'TOP' : (key === 'all' ? 'ALLT' : ALBUMS[key].label);
+    btn.onclick = () => loadAlbum(key);
+    nav.appendChild(btn);
   });
 
-  let touchStartX = 0;
-  lightbox.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
-  lightbox.addEventListener('touchend', (e) => {
-    const diff = e.changedTouches[0].screenX - touchStartX;
-    if (Math.abs(diff) > 50) nextImage(diff > 0 ? -1 : 1);
-  });
+  document.getElementById('themeToggle').onclick = () => {
+    const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  };
 
-  document.getElementById('mainLogo').onclick = () => { location.hash = 'top'; };
+  document.getElementById('monoToggle').onclick = () => {
+    document.documentElement.classList.toggle('mono-active');
+  };
 
-  window.addEventListener('hashchange', () => render(false));
   document.getElementById('year').textContent = new Date().getFullYear();
-
-  buildNav();
-  render(true);
+  loadAlbum('top');
 </script>
 
 </body>
