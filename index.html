@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SBJ</title>
+<title>SBJ — ARCHIVE</title>
 <style>
   :root {
     --bg: #000000;
@@ -12,7 +12,7 @@
     --ye-ease: cubic-bezier(0.8, 0, 0.1, 1);
   }
 
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; cursor: none !important; }
   
   body {
     margin: 0; background: var(--bg); color: var(--text);
@@ -22,12 +22,27 @@
     transition: background 0.8s var(--ye-ease), color 0.8s var(--ye-ease);
   }
 
-  /* --- HEADER --- */
-  header { padding: 60px 16px 10px; display: flex; flex-direction: column; }
-  .wordmark {
-    font-size: clamp(4.5rem, 22vw, 14rem); font-weight: 900;
-    line-height: 0.8; letter-spacing: -0.07em; cursor: pointer;
+  /* --- CUSTOM CURSOR --- */
+  #cursor {
+    position: fixed; width: 20px; height: 20px;
+    border: 1px solid var(--text); border-radius: 50%;
+    pointer-events: none; z-index: 99999;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference; transition: width 0.3s, height 0.3s;
+    display: flex; align-items: center; justify-content: center;
   }
+  #cursor::after { content: ''; position: absolute; width: 2px; height: 2px; background: var(--text); border-radius: 50%; }
+  .hovering #cursor { width: 50px; height: 50px; background: rgba(255,255,255,0.1); }
+
+  /* --- SCROLL TRACKER --- */
+  #scrollLine {
+    position: fixed; top: 0; left: 0; height: 2px; background: var(--text);
+    width: 0%; z-index: 200; transition: width 0.1s linear;
+  }
+
+  /* --- HEADER --- */
+  header { padding: 60px 16px 10px; }
+  .wordmark { font-size: clamp(4.5rem, 22vw, 14rem); font-weight: 900; line-height: 0.8; letter-spacing: -0.07em; }
 
   /* --- NAVIGATION --- */
   nav {
@@ -35,62 +50,38 @@
     padding: 20px 16px 40px; position: sticky; top: 0; 
     background: var(--bg); z-index: 100; transition: background 0.8s var(--ye-ease);
   }
-  .nav-left { display: flex; gap: 18px; overflow-x: auto; padding-bottom: 5px; }
+  .nav-left { display: flex; gap: 18px; overflow-x: auto; }
   .nav-left::-webkit-scrollbar { display: none; }
-  
-  nav button {
-    background: none; border: none; color: #444; font-weight: 900;
-    font-size: 0.75rem; cursor: pointer; padding: 0; white-space: nowrap;
-    transition: color 0.3s ease;
-  }
+  nav button { background: none; border: none; color: #444; font-weight: 900; font-size: 0.75rem; transition: color 0.3s; }
   nav button[aria-current="true"] { color: var(--text); }
 
   /* --- GRID --- */
-  .grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: var(--accent);
-  }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--accent); }
   @media (max-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
-  .plate {
-    position: relative; background: #000; overflow: hidden; aspect-ratio: 1/1;
-    opacity: 0; transform: translateY(20px);
-    transition: opacity 1s var(--ye-ease), transform 1s var(--ye-ease);
-  }
+  .plate { position: relative; background: #000; overflow: hidden; aspect-ratio: 1/1; opacity: 0; transform: translateY(20px); transition: opacity 1s var(--ye-ease), transform 1s var(--ye-ease); }
   .plate.revealed { opacity: 1; transform: translateY(0); }
 
   .frame { width: 100%; height: 100%; position: relative; overflow: hidden; }
-  .frame img {
-    width: 100%; height: 100%; object-fit: cover;
-    filter: brightness(0.9) contrast(1.05); transition: transform 0.8s var(--ye-ease);
-  }
+  .frame img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9) contrast(1.05); transition: transform 0.8s var(--ye-ease); }
   .plate:hover img { transform: scale(1.05); }
 
-  /* Fine Static Grain */
-  .grain {
-    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay; opacity: 0.1;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  .grain { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay; opacity: 0.12; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* --- METADATA HUD --- */
+  .hud {
+    position: absolute; bottom: 10px; left: 10px; font-family: monospace; font-size: 0.5rem;
+    color: rgba(255,255,255,0.5); pointer-events: none; opacity: 0; transition: opacity 0.3s;
   }
+  .plate:hover .hud { opacity: 1; }
 
   /* --- UI CONTROLS --- */
-  .ui-controls { 
-    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 8px; z-index: 10000; width: 90%; justify-content: center;
-  }
-  .ui-btn { 
-    background: #fff; color: #000; border: none; font-weight: 900; 
-    padding: 12px 5px; font-size: 0.6rem; cursor: pointer; border-radius: 2px;
-    letter-spacing: 0.05em; flex: 1; max-width: 110px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: all 0.2s;
-  }
+  .ui-controls { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10000; }
+  .ui-btn { background: #fff; color: #000; border: none; font-weight: 900; padding: 12px 24px; font-size: 0.65rem; border-radius: 2px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
   [data-theme="light"] .ui-btn { background: #000; color: #fff; }
-  .ui-btn.active-mode { background: #555; color: #fff; }
 
   /* --- LIGHTBOX --- */
-  .lightbox {
-    position: fixed; inset: 0; background: #000; z-index: 9999;
-    display: none; align-items: center; justify-content: center;
-  }
+  .lightbox { position: fixed; inset: 0; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; }
   .lightbox.active { display: flex; }
   .lb-img-wrap { position: relative; max-width: 95vw; max-height: 85vh; }
   .lb-img-wrap img { width: 100%; height: auto; max-height: 85vh; object-fit: contain; }
@@ -98,8 +89,10 @@
 </head>
 <body>
 
+<div id="cursor"></div>
+<div id="scrollLine"></div>
+
 <div class="ui-controls">
-  <button class="ui-btn" id="musicToggle">SOUND: OFF</button>
   <button class="ui-btn" id="monoToggle">B&W</button>
   <button class="ui-btn" id="themeToggle">INVERT</button>
 </div>
@@ -124,10 +117,7 @@
   </div>
 </div>
 
-<audio id="bgAudio" loop></audio>
-
 <script>
-  // FULLSTÄNDIG BILDLISTA
   const IMAGES = [
     { n: "1", w: "AMICUS", a: "MISC", top: true },
     { n: "2", w: "EQUUS", a: "VROOM" },
@@ -168,74 +158,30 @@
     { n: "37", w: "AETHER", a: "MISC", top: true }
   ];
 
-  const AUDIO_MAP = {
-    'VROOM': 'ghosttown.mp3',
-    'NATURE': 'saintpablo.mp3',
-    'NOIR': 'onlyone.mp3',
-    'MISC': 'skycity.mp3'
-  };
-
   const gallery = document.getElementById('gallery');
   const navLeft = document.getElementById('navLeft');
   const lb = document.getElementById('lightbox');
-  const audio = document.getElementById('bgAudio');
-  const musicBtn = document.getElementById('musicToggle');
-  
-  let currentAlbum = 'TOP';
-  let isMusicEnabled = false;
+  const cursor = document.getElementById('cursor');
+  const scrollLine = document.getElementById('scrollLine');
 
-  function playMusic(album) {
-    if (!isMusicEnabled) { fadeOutAudio(); return; }
-    const src = AUDIO_MAP[album];
-    if (!src) { fadeOutAudio(); return; }
-    
-    // Om vi redan spelar denna fil, fortsätt bara
-    if (audio.src.includes(src)) {
-        if (audio.paused) audio.play();
-        return;
-    }
+  // pekare-logik
+  window.addEventListener('mousemove', (e) => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
 
-    fadeOutAudio(() => {
-        audio.src = src;
-        audio.volume = 0;
-        audio.play().then(() => fadeInAudio()).catch(() => {});
-    });
-  }
-
-  function fadeOutAudio(callback) {
-    if (audio.paused) { if(callback) callback(); return; }
-    let vol = audio.volume;
-    const interval = setInterval(() => {
-        if (vol > 0.02) { vol -= 0.02; audio.volume = vol; }
-        else { clearInterval(interval); audio.pause(); if (callback) callback(); }
-    }, 30);
-  }
-
-  function fadeInAudio() {
-    let vol = 0;
-    const interval = setInterval(() => {
-        if (vol < 0.15) { vol += 0.01; audio.volume = vol; }
-        else { clearInterval(interval); }
-    }, 100);
-  }
-
-  musicBtn.onclick = () => {
-    isMusicEnabled = !isMusicEnabled;
-    musicBtn.textContent = isMusicEnabled ? "SOUND: ON" : "SOUND: OFF";
-    musicBtn.classList.toggle('active-mode', isMusicEnabled);
-    if (isMusicEnabled) playMusic(currentAlbum); else fadeOutAudio();
-  };
+  // scroll-logik
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    scrollLine.style.width = scrolled + "%";
+  });
 
   function render(filter) {
     gallery.innerHTML = '';
-    let filtered;
-    if (filter === 'TOP') filtered = IMAGES.filter(i => i.top);
-    else if (filter === 'ALLT') filtered = IMAGES;
-    else filtered = IMAGES.filter(i => i.a === filter);
+    let filtered = filter === 'TOP' ? IMAGES.filter(i => i.top) : (filter === 'ALLT' ? IMAGES : IMAGES.filter(i => i.a === filter));
     
-    currentAlbum = filter;
-    playMusic(filter);
-
     document.querySelectorAll('nav button, #alltBtn').forEach(btn => {
       btn.setAttribute('aria-current', btn.textContent === filter ? 'true' : 'false');
     });
@@ -243,7 +189,20 @@
     filtered.forEach((img, i) => {
       const plate = document.createElement('div');
       plate.className = 'plate';
-      plate.innerHTML = `<div class="frame"><img src="images/bild (${img.n}).jpg" loading="lazy"><div class="grain"></div></div>`;
+      plate.onmouseenter = () => document.body.classList.add('hovering');
+      plate.onmouseleave = () => document.body.classList.remove('hovering');
+      
+      // Slumpmässig metadata för Ye-vibe
+      const res = ["4000X6000", "5124X7200", "3024X4032"][Math.floor(Math.random()*3)];
+      const iso = Math.floor(Math.random() * 800) + 100;
+      
+      plate.innerHTML = `
+        <div class="frame">
+          <img src="images/bild (${img.n}).jpg" loading="lazy">
+          <div class="grain"></div>
+          <div class="hud">IMG_${img.n} // ${res} // ISO ${iso} // ${img.w}</div>
+        </div>
+      `;
       plate.onclick = () => {
         document.getElementById('lbImg').src = `images/bild (${img.n}).jpg`;
         lb.classList.add('active');
@@ -255,7 +214,6 @@
     window.scrollTo(0,0);
   }
 
-  // Init Nav
   ['TOP', 'VROOM', 'NATURE', 'NOIR', 'MISC'].forEach(cat => {
     const btn = document.createElement('button');
     btn.textContent = cat;
@@ -280,7 +238,6 @@
     document.getElementById('stickyNav').style.background = color;
   };
 
-  // Starta
   render('TOP');
 </script>
 </body>
