@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SBJ // ARCHIVE V6.2.1</title>
+<title>SBJ // ARCHIVE V6.3.1</title>
 <style>
   :root {
     --bg: #000;
@@ -33,7 +33,6 @@
     z-index: 10000; transform: translateY(100%); pointer-events: none;
   }
 
-  /* --- FULL WIDTH V6 LABEL --- */
   .system-banner {
     width: 100%; border-bottom: 2px solid var(--line);
     padding: 10px 15px; font-size: 0.65rem; font-weight: 900;
@@ -48,7 +47,6 @@
     letter-spacing: -0.13em;
   }
 
-  /* --- HYBRID NAV --- */
   nav {
     display: flex; position: sticky; top: 0; 
     background: var(--bg); z-index: 100; 
@@ -73,7 +71,6 @@
   nav button[aria-current="true"] { background: var(--text); color: var(--bg); }
   #alltBtn { border-left: 4px solid var(--line); border-right: none; margin-left: auto; }
 
-  /* --- GRID & LIVE FOCUS --- */
   .grid { 
     display: grid; grid-template-columns: repeat(2, 1fr);
     gap: 1px; background: var(--line); border-bottom: 4px solid var(--line);
@@ -103,11 +100,11 @@
   .hud {
     position: absolute; bottom: 8px; left: 8px; 
     background: var(--text); color: var(--bg);
-    padding: 2px 5px; font-family: monospace; font-size: 0.5rem;
-    font-weight: 900; opacity: 0.7;
+    padding: 2px 6px; font-family: monospace; font-size: 0.55rem;
+    font-weight: 900; opacity: 0.8;
+    display: flex; gap: 8px;
   }
 
-  /* --- FOOTER --- */
   footer { padding: 80px 20px; display: flex; flex-direction: column; gap: 50px; }
   .footer-box { border-top: 2px solid var(--line); padding-top: 20px; }
   .f-label { font-size: 0.6rem; opacity: 0.5; margin-bottom: 15px; }
@@ -122,9 +119,10 @@
   .ui-controls { position: fixed; bottom: 25px; right: 25px; z-index: 1000; }
   .ctrl-btn { background: var(--text); color: var(--bg); border: none; font-weight: 900; padding: 12px 20px; font-size: 0.6rem; }
 
-  .lightbox { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: none; align-items: center; justify-content: center; }
+  .lightbox { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: none; align-items: center; justify-content: center; flex-direction: column; }
   .lightbox.active { display: flex; }
-  .lightbox img { max-width: 95vw; max-height: 85vh; object-fit: contain; }
+  .lightbox img { max-width: 95vw; max-height: 80vh; object-fit: contain; }
+  .lb-info { margin-top: 20px; text-align: center; font-weight: 900; letter-spacing: 0.2em; font-size: 0.8rem; }
 </style>
 </head>
 <body>
@@ -133,7 +131,7 @@
 
 <div class="system-banner">
   <span id="system-tag">SYSTEM: INITIALIZING...</span>
-  <span>SBJ_ARCHIVE_V6 // © 2024</span>
+  <span>SBJ_ARCHIVE_V6.3.1 // © 2024</span>
 </div>
 
 <header>
@@ -168,10 +166,11 @@
 
 <div class="lightbox" id="lightbox">
   <img id="lbImg" src="">
+  <div class="lb-info" id="lbInfo">#00 // WORD</div>
 </div>
 
 <script>
-  // RENSAD LISTA (Dubbletter borttagna)
+  // RENSAD LISTA V6.3.1 (Ettords-beskrivningar inkluderade)
   const IMAGES = [
     { n: "1", w: "AMICUS", a: "MISC", top: true }, { n: "2", w: "EQUUS", a: "VROOM" },
     { n: "3", w: "SPIRITUS", a: "VROOM" }, { n: "4", w: "AURUM", a: "VROOM" },
@@ -179,13 +178,10 @@
     { n: "7", w: "対称", a: "VROOM" }, { n: "8", w: "閃光", a: "VROOM", top: true },
     { n: "9", w: "METALLUM", a: "VROOM" }, { n: "10", w: "FORMA", a: "VROOM", top: true },
     { n: "11", w: "LUMEN", a: "VROOM" }, { n: "12", w: "ROTA", a: "VROOM" },
-    /* Bild 13 borttagen (dubblett av 12) */
-    { n: "14", w: "TAURO", a: "VROOM", top: true },
-    { n: "15", w: "ALBUS", a: "VROOM" }, { n: "16", w: "MACHINA", a: "VROOM" },
-    { n: "17", w: "ITER", a: "VROOM", top: true }, { n: "18", w: "NOCTIS", a: "VROOM" },
-    { n: "19", w: "VIA", a: "VROOM" }, { n: "20", w: "VETUSTUS", a: "VROOM" },
-    /* Bild 21 borttagen (dubblett av 20) */
-    { n: "22", w: "IGNIS", a: "VROOM", top: true },
+    { n: "14", w: "TAURO", a: "VROOM", top: true }, { n: "15", w: "ALBUS", a: "VROOM" },
+    { n: "16", w: "MACHINA", a: "VROOM" }, { n: "17", w: "ITER", a: "VROOM", top: true },
+    { n: "18", w: "NOCTIS", a: "VROOM" }, { n: "19", w: "VIA", a: "VROOM" },
+    { n: "20", w: "VETUSTUS", a: "VROOM" }, { n: "22", w: "IGNIS", a: "VROOM", top: true },
     { n: "23", w: "木漏れ日", a: "NATURE", top: true }, { n: "24", w: "SILVA", a: "NATURE", top: true },
     { n: "25", w: "FOLIUM", a: "NATURE" }, { n: "26", w: "VIRIDIS", a: "NATURE" },
     { n: "27", w: "VORS", a: "VROOM" }, { n: "28", w: "CANUS", a: "VROOM" },
@@ -227,9 +223,10 @@
       filtered.forEach((img, i) => {
         const plate = document.createElement('div');
         plate.className = 'plate';
-        plate.innerHTML = `<div class="frame"><img src="images/bild (${img.n}).jpg" loading="lazy"><div class="hud">#${img.n}</div></div>`;
+        plate.innerHTML = `<div class="frame"><img src="images/bild (${img.n}).jpg" loading="lazy"><div class="hud"><span>#${img.n}</span><span>//</span><span>${img.w}</span></div></div>`;
         plate.onclick = () => {
           document.getElementById('lbImg').src = `images/bild (${img.n}).jpg`;
+          document.getElementById('lbInfo').textContent = `#${img.n} // ${img.w}`;
           lb.classList.add('active');
           document.body.style.overflow = 'hidden';
         };
