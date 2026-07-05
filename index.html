@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SBJ // ARCHIVE V6</title>
+<title>SBJ // ARCHIVE V5.4</title>
 <style>
   :root {
     --bg: #000;
@@ -40,7 +40,6 @@
     display: flex; justify-content: space-between;
     background: var(--bg);
   }
-  .system-banner span:nth-child(2) { opacity: 0.5; }
 
   header { padding: 40px 15px 15px; border-bottom: 4px solid var(--line); }
   .wordmark {
@@ -95,12 +94,8 @@
     transition: filter 0.6s var(--ye-ease), transform 1s var(--ye-ease);
   }
   
-  /* MOBILE LIVE SCROLL FOCUS (Triggered via JS) */
-  .plate.in-focus img {
-    filter: grayscale(0) brightness(1.1);
-  }
+  .plate.in-focus img { filter: grayscale(0) brightness(1.1); }
 
-  /* DESKTOP HOVER */
   @media (hover: hover) {
     .plate:hover img { transform: scale(1.05); filter: grayscale(0) brightness(1.1); }
   }
@@ -112,7 +107,7 @@
     font-weight: 900; opacity: 0.7;
   }
 
-  /* --- FOOTER (LARGE LEGAL) --- */
+  /* --- FOOTER --- */
   footer { padding: 80px 20px; display: flex; flex-direction: column; gap: 50px; }
   .footer-box { border-top: 2px solid var(--line); padding-top: 20px; }
   .f-label { font-size: 0.6rem; opacity: 0.5; margin-bottom: 15px; }
@@ -130,7 +125,6 @@
   .lightbox { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: none; align-items: center; justify-content: center; }
   .lightbox.active { display: flex; }
   .lightbox img { max-width: 95vw; max-height: 85vh; object-fit: contain; }
-
 </style>
 </head>
 <body>
@@ -177,6 +171,7 @@
 </div>
 
 <script>
+  // RENSAD LISTA (Dubbletter borttagna)
   const IMAGES = [
     { n: "1", w: "AMICUS", a: "MISC", top: true }, { n: "2", w: "EQUUS", a: "VROOM" },
     { n: "3", w: "SPIRITUS", a: "VROOM" }, { n: "4", w: "AURUM", a: "VROOM" },
@@ -184,11 +179,13 @@
     { n: "7", w: "対称", a: "VROOM" }, { n: "8", w: "閃光", a: "VROOM", top: true },
     { n: "9", w: "METALLUM", a: "VROOM" }, { n: "10", w: "FORMA", a: "VROOM", top: true },
     { n: "11", w: "LUMEN", a: "VROOM" }, { n: "12", w: "ROTA", a: "VROOM" },
-    { n: "13", w: "技術", a: "VROOM", top: true }, { n: "14", w: "TAURO", a: "VROOM", top: true },
+    /* Bild 13 borttagen (dubblett av 12) */
+    { n: "14", w: "TAURO", a: "VROOM", top: true },
     { n: "15", w: "ALBUS", a: "VROOM" }, { n: "16", w: "MACHINA", a: "VROOM" },
     { n: "17", w: "ITER", a: "VROOM", top: true }, { n: "18", w: "NOCTIS", a: "VROOM" },
     { n: "19", w: "VIA", a: "VROOM" }, { n: "20", w: "VETUSTUS", a: "VROOM" },
-    { n: "21", w: "CURVA", a: "VROOM" }, { n: "22", w: "IGNIS", a: "VROOM", top: true },
+    /* Bild 21 borttagen (dubblett av 20) */
+    { n: "22", w: "IGNIS", a: "VROOM", top: true },
     { n: "23", w: "木漏れ日", a: "NATURE", top: true }, { n: "24", w: "SILVA", a: "NATURE", top: true },
     { n: "25", w: "FOLIUM", a: "NATURE" }, { n: "26", w: "VIRIDIS", a: "NATURE" },
     { n: "27", w: "VORS", a: "VROOM" }, { n: "28", w: "CANUS", a: "VROOM" },
@@ -205,18 +202,13 @@
   const lb = document.getElementById('lightbox');
   const systemTag = document.getElementById('system-tag');
 
-  // SET SYSTEM LABEL
   const isMobile = window.innerWidth < 600;
   systemTag.textContent = isMobile ? "SYSTEM: MOBILE OPTIMIZED" : "SYSTEM: PC OPTIMIZED";
 
-  // SCROLL FOCUS OBSERVER (För färg på mobil)
   const focusObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-focus');
-      } else {
-        entry.target.classList.remove('in-focus');
-      }
+      if (entry.isIntersecting) { entry.target.classList.add('in-focus'); } 
+      else { entry.target.classList.remove('in-focus'); }
     });
   }, { threshold: 0.6 });
 
