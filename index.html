@@ -3,38 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shot by Julian</title>
-<meta name="description" content="Fotoportfolio av Julian — Garage, Strövtåg och Nocturne. Bilder från gatan, naturen och natten.">
-<meta property="og:title" content="Shot by Julian">
-<meta property="og:description" content="Fotoportfolio av Julian — Garage, Strövtåg och Nocturne.">
+<title>JULIAN</title>
+<meta name="description" content="JULIAN — fotografi. I. II. III.">
+<meta property="og:title" content="JULIAN">
+<meta property="og:description" content="fotografi. i. ii. iii.">
 <meta property="og:image" content="images/bild (1).jpg">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#0d1111">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23000%22/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
+  /*
+    Ye-referens: ingen dekoration. Ingen rundning. Inget crop.
+    Vitt/svart. Grotesk. Bilden får hela ytan, i sitt eget format,
+    ingen tvingas in i en ruta den inte hör hemma i.
+  */
   :root {
-    --bg: #0d1111;
-    --text: #e0f2f1;
-    --text-dim: #9fb8b6;
-    --accent: #4db6ac;
-    --accent-alt: #ff8a65;
-    --menu-bg: #1a2222;
-    --skeleton: #1c2424;
-    --radius: 40px;
-    --gap: 20px;
-    --serif: 'EB Garamond', serif;
-    --sans: 'Inter', sans-serif;
+    --bg: #000000;
+    --text: #ffffff;
+    --dim: #6b6b6b;
+    --line: #262626;
+    --gap: 2px;
+    --sans: 'Helvetica Neue', Inter, Arial, sans-serif;
   }
 
   [data-theme="light"] {
-    --bg: #f8faf9;
-    --text: #1a2b2b;
-    --text-dim: #5c7371;
-    --menu-bg: #ffffff;
-    --skeleton: #e9efee;
+    --bg: #ffffff;
+    --text: #000000;
+    --dim: #8c8c8c;
+    --line: #dcdcdc;
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -46,320 +45,312 @@
     background: var(--bg);
     color: var(--text);
     font-family: var(--sans);
-    transition: background 0.4s ease, color 0.4s ease;
+    font-weight: 400;
+    transition: background 0.3s linear, color 0.3s linear;
   }
 
   :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-    border-radius: 6px;
+    outline: 1px solid var(--text);
+    outline-offset: 2px;
   }
 
-  /* --- LOGGA --- */
+  a, button { font-family: var(--sans); }
+
+  /* ---------- HEADER ---------- */
   header {
-    padding: 80px 24px 20px;
+    padding: 56px 24px 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 22px;
-    text-align: center;
+    align-items: flex-start;
+    gap: 0;
   }
 
-  .logo {
-    font-family: var(--serif);
-    font-size: 3.5rem;
-    font-style: italic;
-    text-decoration: none;
+  .wordmark {
+    font-size: clamp(3rem, 12vw, 9rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    text-transform: uppercase;
     color: var(--text);
-    letter-spacing: -0.02em;
-    transition: transform 0.1s ease;
-    cursor: pointer;
     background: none;
     border: none;
     padding: 0;
-  }
-  .logo:active { transform: scale(0.95); }
-
-  .subtitle {
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin: -14px 0 0;
-    min-height: 1.2em;
-  }
-
-  /* --- DROP DOWN MENY --- */
-  .nav-wrapper {
-    position: relative;
-    display: inline-block;
-  }
-
-  .dropdown-trigger {
-    background: var(--menu-bg);
-    border: 2px solid var(--accent);
-    padding: 12px 32px;
-    border-radius: 100px;
-    font-size: 1rem;
-    font-weight: 600;
-    font-family: var(--sans);
     cursor: pointer;
-    color: var(--text);
+    text-align: left;
+  }
+
+  .meta-row {
+    width: 100%;
     display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 0 40px;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
   }
 
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--menu-bg);
-    min-width: 190px;
-    border-radius: 24px;
-    box-shadow: 0 15px 45px rgba(0,0,0,0.5);
-    margin-top: 12px;
-    padding: 10px;
-    z-index: 1000;
-    border: 1px solid rgba(255,255,255,0.05);
+  .meta-count { color: var(--dim); }
+
+  /* ---------- NAV ---------- */
+  nav {
+    display: flex;
+    gap: 28px;
+    padding: 20px 24px 20px;
+    flex-wrap: wrap;
   }
 
-  .dropdown-content.show {
-    display: block;
-    animation: popIn 0.2s ease-out;
-  }
-
-  @keyframes popIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
-  }
-
-  .dropdown-content button {
-    width: 100%;
-    padding: 14px;
-    border: none;
+  nav button {
     background: none;
-    text-align: center;
-    color: var(--text);
-    font-size: 1.1rem;
-    font-family: var(--sans);
+    border: none;
+    padding: 0;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
     cursor: pointer;
-    border-radius: 16px;
-    transition: 0.2s;
-  }
-  .dropdown-content button:hover,
-  .dropdown-content button:focus-visible {
-    background: var(--accent);
-    color: #000;
-  }
-  .dropdown-content button[aria-current="true"] {
-    font-weight: 600;
-    color: var(--accent-alt);
-  }
-  .dropdown-content button[aria-current="true"]:hover { color: #000; }
-
-  /* --- PUSSEL-LAYOUT (Masonry) --- */
-  main {
-    max-width: 1800px;
-    margin: 0 auto;
-    padding: 30px 20px 100px;
-  }
-
-  .masonry-puzzle {
-    column-count: 1;
-    column-gap: var(--gap);
-  }
-
-  @media (min-width: 700px) { .masonry-puzzle { column-count: 3; } }
-  @media (min-width: 1200px) { .masonry-puzzle { column-count: 4; } }
-  @media (min-width: 1600px) { .masonry-puzzle { column-count: 5; } }
-
-  .item {
-    break-inside: avoid;
-    margin-bottom: var(--gap);
     position: relative;
-    background: var(--skeleton);
-    border-radius: var(--radius);
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(16px);
-    animation: fadeIn 0.5s ease forwards;
-    animation-delay: calc(var(--i, 0) * 40ms);
   }
 
-  @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+  nav button[aria-current="true"] {
+    color: var(--text);
+  }
 
-  .item::before {
+  nav button[aria-current="true"]::after {
     content: '';
-    display: block;
-    padding-top: 66%;
-  }
-
-  .item img {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    cursor: zoom-in;
-    opacity: 0;
-    transition: opacity 0.4s ease, transform 0.3s ease;
+    left: 0; right: 0; bottom: -8px;
+    height: 1px;
+    background: var(--text);
   }
 
-  .item img.loaded { opacity: 1; }
-  .item img:hover { transform: scale(1.015); }
+  nav button:hover { color: var(--text); }
 
-  .item.broken::before { display: none; }
-  .item.broken {
-    padding-top: 40%;
+  /* ---------- GRID ---------- */
+  main { padding: 0; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap);
+  }
+
+  @media (min-width: 700px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1200px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .plate {
+    position: relative;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* bilden visas i sitt eget format — ingen crop, ingen tvingad ruta */
+  .plate .frame {
+    width: 100%;
+    background: color-mix(in srgb, var(--text) 4%, var(--bg));
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-dim);
-    font-size: 0.85rem;
-    font-family: var(--serif);
-    font-style: italic;
+    overflow: hidden;
+    min-height: 120px;
+  }
+
+  .plate img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 92vh;
+    object-fit: contain; /* aldrig cover — aldrig crop */
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    cursor: zoom-in;
+  }
+
+  .plate img.loaded { opacity: 1; }
+
+  .plate-caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 14px 22px;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .plate-caption .cap-title { color: var(--text); }
+
+  .plate.broken .frame {
+    min-height: 200px;
+    color: var(--dim);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 
   .empty-state {
+    padding: 160px 24px;
     text-align: center;
-    padding: 100px 20px;
-    color: var(--text-dim);
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 1.3rem;
+    color: var(--dim);
+    font-size: 0.85rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
 
-  /* --- KONTROLLER --- */
+  /* ---------- CONTROLS ---------- */
   .theme-toggle {
-    position: fixed; top: 20px; right: 20px;
-    width: 44px; height: 44px; border-radius: 50%;
-    background: var(--menu-bg); border: 2px solid var(--accent);
+    position: fixed; top: 24px; right: 24px;
+    background: none; border: 1px solid var(--line);
+    padding: 8px 16px;
     cursor: pointer; z-index: 1100; color: var(--text);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem;
+    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
   }
+  .theme-toggle:hover { border-color: var(--text); }
 
+  /* ---------- LIGHTBOX ---------- */
   .lightbox {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.92);
+    position: fixed; inset: 0; background: var(--bg);
     display: none; align-items: center; justify-content: center; z-index: 2000;
   }
-  [data-theme="light"] .lightbox { background: rgba(255,255,255,0.94); }
   .lightbox.open { display: flex; }
   .lightbox img {
-    max-width: 88vw; max-height: 88vh; border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    max-width: 94vw; max-height: 86vh;
+    object-fit: contain;
   }
 
   .lb-btn {
     position: absolute;
-    background: var(--menu-bg);
-    border: 2px solid var(--accent);
+    background: none;
+    border: 1px solid var(--line);
     color: var(--text);
-    border-radius: 50%;
-    width: 48px; height: 48px;
+    width: 44px; height: 44px;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
-  .lb-close { top: 20px; right: 20px; }
-  .lb-prev { left: 20px; top: 50%; transform: translateY(-50%); }
-  .lb-next { right: 20px; top: 50%; transform: translateY(-50%); }
-  .lb-counter {
+  .lb-btn:hover { border-color: var(--text); }
+  .lb-close { top: 24px; right: 24px; }
+  .lb-prev { left: 24px; top: 50%; transform: translateY(-50%); }
+  .lb-next { right: 24px; top: 50%; transform: translateY(-50%); }
+
+  .lb-info {
     position: absolute;
-    bottom: 24px;
+    bottom: 28px;
     left: 50%;
     transform: translateX(-50%);
-    color: var(--text-dim);
-    font-family: var(--sans);
-    font-size: 0.85rem;
-    letter-spacing: 0.05em;
+    text-align: center;
+    color: var(--dim);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
+  .lb-info .lb-title { color: var(--text); display: block; margin-bottom: 6px; }
 
   @media (max-width: 600px) {
-    .lb-prev, .lb-next { width: 40px; height: 40px; font-size: 1rem; }
-    .lb-close { width: 40px; height: 40px; }
+    .lb-prev, .lb-next, .lb-close { width: 38px; height: 38px; font-size: 0.85rem; }
   }
 
-  footer { text-align: center; padding: 60px; opacity: 0.4; font-family: var(--serif); font-style: italic; }
+  footer {
+    padding: 60px 24px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-  }
-
-  @media (max-width: 600px) {
-    .logo { font-size: 2.5rem; }
-    .masonry-puzzle { column-count: 1; }
+    * { transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
   }
 </style>
 </head>
 <body>
 
-<button class="theme-toggle" id="themeToggle" aria-label="Växla mellan mörkt och ljust tema" type="button">🌓</button>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Växla mellan mörkt och ljust läge">MODE</button>
 
 <header>
-  <button class="logo" id="mainLogo" type="button">Shot by Julian</button>
-  <p class="subtitle" id="subtitle"></p>
-
-  <div class="nav-wrapper">
-    <button class="dropdown-trigger" id="dropBtn" aria-haspopup="true" aria-expanded="false" type="button">Album ▾</button>
-    <div class="dropdown-content" id="dropMenu" role="menu"></div>
+  <button class="wordmark" id="mainLogo" type="button">JULIAN</button>
+  <div class="meta-row">
+    <span>FOTOGRAFI</span>
+    <span class="meta-count" id="metaCount"></span>
   </div>
 </header>
 
+<nav id="albumNav" aria-label="Album"></nav>
+
 <main>
-  <div id="gallery" class="masonry-puzzle" aria-live="polite"></div>
+  <div id="gallery" class="grid" aria-live="polite"></div>
 </main>
 
-<footer>Shot by Julian — <span id="year"></span></footer>
+<footer>
+  <span>JULIAN</span>
+  <span id="year"></span>
+</footer>
 
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Bildvisare">
   <button class="lb-btn lb-close" id="lbClose" aria-label="Stäng" type="button">✕</button>
-  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Föregående bild" type="button">‹</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Föregående" type="button">‹</button>
   <img id="lbImg" src="" alt="">
-  <button class="lb-btn lb-next" id="lbNext" aria-label="Nästa bild" type="button">›</button>
-  <span class="lb-counter" id="lbCounter"></span>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Nästa" type="button">›</button>
+  <div class="lb-info">
+    <span class="lb-title" id="lbTitle"></span>
+    <span id="lbCounter"></span>
+  </div>
 </div>
 
 <script>
-  // DINA BILDER
-  const GARAGE = [
-    "bild (27).jpg", "bild (28).jpg", "bild (29).jpg", "bild (30).jpg", "bild (31).jpg",
-    "bild (2).jpg", "bild (3).jpg", "bild (4).jpg", "bild (5).jpg", "bild (6).jpg", "bild (7).jpg",
-    "bild (8).jpg", "bild (9).jpg", "bild (10).jpg", "bild (11).jpg", "bild (12).jpg",
-    "bild (13).jpg", "bild (14).jpg", "bild (15).jpg", "bild (16).jpg", "bild (17).jpg", "bild (18).jpg",
-    "bild (19).jpg", "bild (20).jpg", "bild (21).jpg", "bild (22).jpg"
-  ];
-  const STROVTAG = [
-    "bild (23).jpg", "bild (24).jpg", "bild (25).jpg", "bild (26).jpg",
-    "bild (37).jpg", "bild (36).jpg", "bild (1).jpg"
-  ];
-  const NOCTURNE = ["bild (32).jpg", "bild (33).jpg", "bild (34).jpg", "bild (35).jpg"];
+  /*
+    Tre kapitel. Inga leende albumnamn — bara nummer och en rad.
+    I.   RÅTT       (garage-serien)
+    II.  RÖRELSE    (strövtåg-serien)
+    III. MÖRKER     (nocturne-serien)
+  */
 
   const ALBUMS = {
-    garage: { label: "Garage", files: GARAGE },
-    strovtag: { label: "Strövtåg", files: STROVTAG },
-    nocturne: { label: "Nocturne", files: NOCTURNE }
+    ratt: {
+      label: 'I. RÅTT',
+      files: [
+        "bild (27).jpg","bild (28).jpg","bild (29).jpg","bild (30).jpg","bild (31).jpg",
+        "bild (2).jpg","bild (3).jpg","bild (4).jpg","bild (5).jpg","bild (6).jpg","bild (7).jpg",
+        "bild (8).jpg","bild (9).jpg","bild (10).jpg","bild (11).jpg","bild (12).jpg",
+        "bild (13).jpg","bild (14).jpg","bild (15).jpg","bild (16).jpg","bild (17).jpg","bild (18).jpg",
+        "bild (19).jpg","bild (20).jpg","bild (21).jpg","bild (22).jpg"
+      ]
+    },
+    rorelse: {
+      label: 'II. RÖRELSE',
+      files: [
+        "bild (23).jpg","bild (24).jpg","bild (25).jpg","bild (26).jpg",
+        "bild (37).jpg","bild (36).jpg","bild (1).jpg"
+      ]
+    },
+    morker: {
+      label: 'III. MÖRKER',
+      files: ["bild (32).jpg","bild (33).jpg","bild (34).jpg","bild (35).jpg"]
+    }
   };
 
   const gallery = document.getElementById('gallery');
-  const subtitle = document.getElementById('subtitle');
-  const dropBtn = document.getElementById('dropBtn');
-  const dropMenu = document.getElementById('dropMenu');
+  const metaCount = document.getElementById('metaCount');
+  const albumNav = document.getElementById('albumNav');
   const lightbox = document.getElementById('lightbox');
   const lbImg = document.getElementById('lbImg');
+  const lbTitle = document.getElementById('lbTitle');
   const lbCounter = document.getElementById('lbCounter');
 
   let currentFiles = [];
   let currentIndex = -1;
-  // Slumpas en gång per sidladdning, inte vid varje visning av "Alla"
-  const shuffledAll = [...GARAGE, ...STROVTAG, ...NOCTURNE].sort(() => Math.random() - 0.5);
 
-  // --- TEMA (kommer ihåg valet, annars följer systemets inställning) ---
   function initTheme() {
     const saved = localStorage.getItem('theme');
     const preferred = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
@@ -372,87 +363,72 @@
   };
   initTheme();
 
-  // --- DROPDOWN ---
-  function closeMenu() {
-    dropMenu.classList.remove('show');
-    dropBtn.setAttribute('aria-expanded', 'false');
-  }
-  function openMenu() {
-    dropMenu.classList.add('show');
-    dropBtn.setAttribute('aria-expanded', 'true');
-  }
-  dropBtn.onclick = (e) => {
-    e.stopPropagation();
-    dropMenu.classList.contains('show') ? closeMenu() : openMenu();
-  };
-  window.addEventListener('click', () => { if (dropMenu.classList.contains('show')) closeMenu(); });
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeMenu();
-  });
-
-  function buildMenu() {
-    dropMenu.innerHTML = '';
+  function buildNav() {
+    albumNav.innerHTML = '';
     const allBtn = document.createElement('button');
-    allBtn.textContent = 'Alla';
-    allBtn.setAttribute('role', 'menuitem');
+    allBtn.textContent = 'ALLT';
     allBtn.dataset.key = 'all';
-    allBtn.onclick = () => { location.hash = 'all'; closeMenu(); };
-    dropMenu.appendChild(allBtn);
+    allBtn.onclick = () => { location.hash = 'all'; };
+    albumNav.appendChild(allBtn);
 
     Object.keys(ALBUMS).forEach(key => {
       const btn = document.createElement('button');
       btn.textContent = ALBUMS[key].label;
-      btn.setAttribute('role', 'menuitem');
       btn.dataset.key = key;
-      btn.onclick = () => { location.hash = key; closeMenu(); };
-      dropMenu.appendChild(btn);
+      btn.onclick = () => { location.hash = key; };
+      albumNav.appendChild(btn);
     });
   }
 
-  function markActiveMenuItem(key) {
-    [...dropMenu.children].forEach(btn => {
+  function markActiveNav(key) {
+    [...albumNav.children].forEach(btn => {
       if (btn.dataset.key === key) btn.setAttribute('aria-current', 'true');
       else btn.removeAttribute('aria-current');
     });
   }
 
-  // --- GALLERI ---
+  // Ordningen är fast — kronologin är delen av arbetet. Ingen slump.
+  const allFiles = [
+    ...ALBUMS.ratt.files.map(f => ({ file: f, album: ALBUMS.ratt.label })),
+    ...ALBUMS.rorelse.files.map(f => ({ file: f, album: ALBUMS.rorelse.label })),
+    ...ALBUMS.morker.files.map(f => ({ file: f, album: ALBUMS.morker.label }))
+  ];
+
   function render() {
     const key = location.hash.replace('#', '') || 'all';
-    let files, label;
+    let entries;
 
     if (key === 'all' || !ALBUMS[key]) {
-      files = shuffledAll;
-      label = 'Album ▾';
-      markActiveMenuItem('all');
+      entries = allFiles;
+      markActiveNav('all');
     } else {
-      files = ALBUMS[key].files;
-      label = ALBUMS[key].label + ' ▾';
-      markActiveMenuItem(key);
+      entries = ALBUMS[key].files.map(f => ({ file: f, album: ALBUMS[key].label }));
+      markActiveNav(key);
     }
 
-    dropBtn.innerHTML = label;
-    subtitle.textContent = files.length ? `${files.length} ${files.length === 1 ? 'bild' : 'bilder'}` : '';
-    currentFiles = files;
+    currentFiles = entries;
+    metaCount.textContent = String(entries.length).padStart(2, '0');
 
     gallery.innerHTML = '';
 
-    if (!files.length) {
-      gallery.innerHTML = '<p class="empty-state">Inga bilder hittades i det här albumet.</p>';
+    if (!entries.length) {
+      gallery.innerHTML = '<p class="empty-state">Inga bilder i detta kapitel</p>';
       return;
     }
 
-    files.forEach((file, i) => {
-      const div = document.createElement('div');
-      div.className = 'item';
-      div.style.setProperty('--i', i % 12);
+    entries.forEach((entry, i) => {
+      const plate = document.createElement('div');
+      plate.className = 'plate';
+
+      const frame = document.createElement('div');
+      frame.className = 'frame';
 
       const img = document.createElement('img');
-      img.alt = `${label.replace(' ▾', '')} — bild ${i + 1}`;
+      img.alt = `${entry.album} — plansch ${i + 1}`;
       img.loading = 'lazy';
       img.decoding = 'async';
 
-      const tryPaths = [`images/${file}`, `bilder/${file}`, file];
+      const tryPaths = [`images/${entry.file}`, `bilder/${entry.file}`, entry.file];
       let pIdx = 0;
       img.src = tryPaths[pIdx];
 
@@ -462,19 +438,24 @@
         if (pIdx < tryPaths.length) {
           img.src = tryPaths[pIdx];
         } else {
-          div.classList.add('broken');
-          div.textContent = 'Bild saknas';
+          plate.classList.add('broken');
+          frame.textContent = 'BILD SAKNAS';
         }
       };
 
       img.onclick = () => openLightbox(i);
+      frame.appendChild(img);
 
-      div.appendChild(img);
-      gallery.appendChild(div);
+      const caption = document.createElement('div');
+      caption.className = 'plate-caption';
+      caption.innerHTML = `<span class="cap-title">${entry.album}</span><span>${String(i + 1).padStart(2, '0')}</span>`;
+
+      plate.appendChild(frame);
+      plate.appendChild(caption);
+      gallery.appendChild(plate);
     });
   }
 
-  // --- LIGHTBOX ---
   function openLightbox(index) {
     currentIndex = index;
     showCurrent();
@@ -484,17 +465,17 @@
   }
 
   function showCurrent() {
-    const file = currentFiles[currentIndex];
+    const entry = currentFiles[currentIndex];
     const galleryImg = gallery.children[currentIndex]?.querySelector('img');
-    lbImg.src = galleryImg ? galleryImg.src : `images/${file}`;
+    lbImg.src = galleryImg ? galleryImg.src : `images/${entry.file}`;
     lbImg.alt = galleryImg ? galleryImg.alt : '';
-    lbCounter.textContent = `${currentIndex + 1} / ${currentFiles.length}`;
+    lbTitle.textContent = entry.album;
+    lbCounter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(currentFiles.length).padStart(2, '0')}`;
   }
 
   function closeLightbox() {
     lightbox.classList.remove('open');
     document.body.style.overflow = 'auto';
-    dropBtn.focus();
   }
 
   function nextImage(dir) {
@@ -507,9 +488,7 @@
   document.getElementById('lbPrev').onclick = () => nextImage(-1);
   document.getElementById('lbNext').onclick = () => nextImage(1);
 
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
-  });
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 
   window.addEventListener('keydown', (e) => {
     if (!lightbox.classList.contains('open')) return;
@@ -518,7 +497,6 @@
     if (e.key === 'ArrowRight') nextImage(1);
   });
 
-  // Enkel svep-navigering på touch
   let touchStartX = 0;
   lightbox.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
   lightbox.addEventListener('touchend', (e) => {
@@ -531,7 +509,7 @@
   window.addEventListener('hashchange', render);
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  buildMenu();
+  buildNav();
   render();
 </script>
 
