@@ -29,7 +29,7 @@
     display: flex; flex-direction: column; align-items: flex-start;
   }
   .wordmark {
-    font-size: clamp(4rem, 20vw, 12rem); font-weight: 900;
+    font-size: clamp(4.5rem, 22vw, 14rem); font-weight: 900;
     line-height: 0.8; letter-spacing: -0.07em;
     cursor: pointer; transition: transform 0.4s var(--ye-ease);
   }
@@ -54,14 +54,10 @@
 
   /* --- GRID --- */
   .grid {
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--accent);
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--accent);
   }
-  @media (max-width: 600px) { 
-    .grid { grid-template-columns: repeat(2, 1fr); }
-  }
+  @media (max-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
   .plate {
     position: relative; background: #000; overflow: hidden;
@@ -87,40 +83,42 @@
 
   .plate:hover img { transform: scale(1.05); }
 
+  /* --- UI CONTROLS --- */
+  .ui-controls { 
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 8px; z-index: 10000; width: 90%; justify-content: center;
+  }
+  .ui-btn { 
+    background: #fff; color: #000; border: none;
+    font-weight: 900; padding: 12px 14px; font-size: 0.6rem; 
+    cursor: pointer; border-radius: 2px;
+    letter-spacing: 0.05em; flex: 1; max-width: 120px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: transform 0.2s, background 0.3s;
+    white-space: nowrap;
+  }
+  .ui-btn:active { transform: scale(0.95); }
+  .ui-btn.active-mode { background: #555; color: #fff; } /* För musik-knappen */
+  
+  [data-theme="light"] .ui-btn { background: #000; color: #fff; }
+
   /* --- LIGHTBOX --- */
   .lightbox {
     position: fixed; inset: 0; background: #000; z-index: 9999;
     display: none; align-items: center; justify-content: center;
   }
-  .lightbox.active { display: flex; animation: shutter 0.3s var(--ye-ease); }
-  @keyframes shutter { 0% { opacity: 0; } 100% { opacity: 1; } }
-  
+  .lightbox.active { display: flex; }
   .lb-img-wrap { position: relative; max-width: 95vw; max-height: 85vh; }
   .lb-img-wrap img { width: 100%; height: auto; max-height: 85vh; object-fit: contain; }
-
-  /* --- UI CONTROLS --- */
-  .ui-controls { 
-    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 12px; z-index: 10000; width: auto;
-  }
-  .ui-btn { 
-    background: #fff; color: #000; border: none;
-    font-weight: 900; padding: 10px 20px; font-size: 0.65rem; 
-    cursor: pointer; border-radius: 2px;
-    letter-spacing: 0.05em;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    transition: transform 0.2s;
-  }
-  .ui-btn:active { transform: scale(0.95); }
-  [data-theme="light"] .ui-btn { background: #000; color: #fff; }
 
 </style>
 </head>
 <body>
 
 <div class="ui-controls">
-  <button class="ui-btn" id="monoToggle">BLACK & WHITE</button>
-  <button class="ui-btn" id="themeToggle">INVERT COLORS</button>
+  <button class="ui-btn" id="musicToggle">SOUND: OFF</button>
+  <button class="ui-btn" id="monoToggle">B&W</button>
+  <button class="ui-btn" id="themeToggle">INVERT</button>
 </div>
 
 <header>
@@ -143,7 +141,6 @@
   </div>
 </div>
 
-<!-- Ljudkontroll (dold) -->
 <audio id="bgAudio" loop></audio>
 
 <script>
@@ -187,14 +184,12 @@
     { n: "37", w: "AETHER", a: "MISC", top: true }
   ];
 
-  // MUSIK-MAPPING
-  // Notera: Här behöver du lägga in riktiga länkar till mp3-filer för att det ska fungera.
   const AUDIO_MAP = {
-    'VROOM': 'ghosttown.mp3', // Ersätt med Ghost Town snippet
-    'NATURE': 'saintpablo.mp3', // Ersätt med Saint Pablo
-    'NOIR': 'onlyone.mp3',   // Ersätt med Only One
-    'MISC': 'skycity.mp3',   // Ersätt med Sky City
-    'TOP': '', // Ingen musik på startsidan om du inte vill
+    'VROOM': 'ghosttown.mp3',
+    'NATURE': 'saintpablo.mp3',
+    'NOIR': 'onlyone.mp3',
+    'MISC': 'skycity.mp3',
+    'TOP': '',
     'ALLT': ''
   };
 
@@ -202,52 +197,69 @@
   const navLeft = document.getElementById('navLeft');
   const lb = document.getElementById('lightbox');
   const audio = document.getElementById('bgAudio');
-  let currentAlbum = '';
+  const musicBtn = document.getElementById('musicToggle');
+  
+  let currentAlbum = 'TOP';
+  let isMusicEnabled = false;
 
   function playMusic(album) {
+    if (!isMusicEnabled) {
+        fadeOutAudio();
+        return;
+    }
+
     const src = AUDIO_MAP[album];
-    
-    // Om det är samma album eller ingen musik, gör inget eller tona ut
-    if (!src || src === audio.src) {
+    if (!src || src === audio.src.split('/').pop()) {
         if (!src) fadeOutAudio();
         return;
     }
 
-    // Tona ut och byt källa
     fadeOutAudio(() => {
         audio.src = src;
-        audio.volume = 0.15;
-        audio.play().then(() => {
-            fadeInAudio();
-        }).catch(e => console.log("Autoplay blockerad. Väntar på interaktion."));
+        audio.volume = 0;
+        audio.play().then(() => fadeInAudio()).catch(e => console.log("Autoplay blockerad"));
     });
   }
 
   function fadeOutAudio(callback) {
     let vol = audio.volume;
     const interval = setInterval(() => {
-        if (vol > 0.05) {
-            vol -= 0.05;
+        if (vol > 0.02) {
+            vol -= 0.02;
             audio.volume = vol;
         } else {
             clearInterval(interval);
             audio.pause();
             if (callback) callback();
         }
-    }, 50);
+    }, 30);
   }
 
   function fadeInAudio() {
     let vol = 0;
+    audio.play();
     const interval = setInterval(() => {
-        if (vol < 0.2) { // Håll musiken tyst (0.2 av 1.0)
-            vol += 0.02;
+        if (vol < 0.15) {
+            vol += 0.01;
             audio.volume = vol;
         } else {
             clearInterval(interval);
         }
     }, 100);
   }
+
+  // MUSIK TOGGLE
+  musicBtn.onclick = () => {
+    isMusicEnabled = !isMusicEnabled;
+    musicBtn.textContent = isMusicEnabled ? "SOUND: ON" : "SOUND: OFF";
+    musicBtn.classList.toggle('active-mode', isMusicEnabled);
+    
+    if (isMusicEnabled) {
+        playMusic(currentAlbum);
+    } else {
+        fadeOutAudio();
+    }
+  };
 
   function render(filter) {
     gallery.innerHTML = '';
@@ -266,64 +278,11 @@
     filtered.forEach((img, i) => {
       const plate = document.createElement('div');
       plate.className = 'plate';
-      plate.innerHTML = `
-        <div class="frame">
-          <img src="images/bild (${img.n}).jpg" loading="lazy">
-          <div class="grain"></div>
-        </div>
-      `;
+      plate.innerHTML = `<div class="frame"><img src="images/bild (${img.n}).jpg" loading="lazy"><div class="grain"></div></div>`;
       plate.onclick = () => {
         document.getElementById('lbImg').src = `images/bild (${img.n}).jpg`;
         lb.classList.add('active');
         document.body.style.overflow = 'hidden';
       };
       gallery.appendChild(plate);
-      setTimeout(() => plate.classList.add('revealed'), i * 60);
-    });
-    window.scrollTo(0,0);
-  }
-
-  // Initiera nav
-  ['TOP', 'VROOM', 'NATURE', 'NOIR', 'MISC'].forEach(cat => {
-    const btn = document.createElement('button');
-    btn.textContent = cat;
-    btn.onclick = () => render(cat);
-    navLeft.appendChild(btn);
-  });
-
-  document.getElementById('alltBtn').onclick = () => render('ALLT');
-  document.getElementById('logo').onclick = () => render('TOP');
-  lb.onclick = () => {
-    lb.classList.remove('active');
-    document.body.style.overflow = 'auto';
-  };
-
-  // Tydliga kontroller
-  document.getElementById('monoToggle').onclick = () => {
-    document.body.style.filter = document.body.style.filter === 'grayscale(1)' ? 'none' : 'grayscale(1)';
-  };
-  
-  document.getElementById('themeToggle').onclick = () => {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    const color = isDark ? '#fff' : '#000';
-    const textColor = isDark ? '#000' : '#fff';
-    
-    document.body.style.background = color;
-    document.body.style.color = textColor;
-    document.getElementById('stickyNav').style.background = color;
-  };
-
-  // Starta
-  render('TOP');
-
-  // Fix för autoplay: Starta ljudet vid första klicket på sidan
-  document.body.addEventListener('click', () => {
-      if (audio.paused && AUDIO_MAP[currentAlbum]) {
-          playMusic(currentAlbum);
-      }
-  }, { once: true });
-
-</script>
-</body>
-</html>
+      setTimeou
