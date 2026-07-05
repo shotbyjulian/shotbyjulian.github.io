@@ -3,136 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SBJ</title>
+<title>SBJ // ARCHIVE</title>
 <style>
   :root {
-    --bg: #000000;
+    --bg: #0a0a0a;
     --text: #ffffff;
-    --line: #1a1a1a;
+    --line: #ffffff;
+    --accent: #222;
     --ye-ease: cubic-bezier(0.9, 0, 0.1, 1);
-    --spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   [data-theme="light"] {
-    --bg: #ffffff;
+    --bg: #f0f0f0;
     --text: #000000;
-    --line: #eeeeee;
+    --line: #000000;
+    --accent: #ddd;
   }
 
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; cursor: crosshair; }
   
   body {
     margin: 0; background: var(--bg); color: var(--text);
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     text-transform: uppercase; letter-spacing: -0.05em;
     overflow-x: hidden; -webkit-font-smoothing: antialiased;
-    transition: background 0.8s var(--ye-ease);
+    transition: background 0.5s var(--ye-ease);
   }
 
-  /* --- SHUTTER WIPE (Album Transition) --- */
+  /* --- TRANSITION SHUTTER --- */
   #shutter {
     position: fixed; inset: 0; background: var(--text);
-    z-index: 10000; pointer-events: none;
-    transform: translateY(100%);
+    z-index: 10000; transform: translateY(100%); pointer-events: none;
   }
 
-  /* --- HEADER & KINETIC LOGO --- */
+  /* --- INDUSTRIAL LABELS --- */
+  .label {
+    display: inline-block; border: 1px solid var(--text);
+    padding: 2px 6px; font-size: 0.6rem; font-weight: 900;
+    margin-bottom: 10px; line-height: 1;
+  }
+
   header { 
-    padding: 100px 15px 40px; 
-    border-bottom: 1px solid var(--line);
-    overflow: hidden;
+    padding: 80px 20px 40px; 
+    border-bottom: 4px solid var(--line);
   }
   .wordmark {
-    font-size: 32vw; font-weight: 900; line-height: 0.7; 
-    letter-spacing: -0.1em; cursor: pointer;
-    transition: letter-spacing 0.8s var(--ye-ease), transform 0.8s var(--ye-ease);
-    display: inline-block;
-    will-change: letter-spacing, transform;
+    font-size: 25vw; font-weight: 900; line-height: 0.7; 
+    letter-spacing: -0.12em; transition: transform 0.8s var(--ye-ease);
   }
 
   /* --- NAV --- */
   nav {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 20px 15px; position: sticky; top: 0; 
-    background: var(--bg); z-index: 100; border-bottom: 1px solid var(--line);
-    transition: padding 0.4s var(--ye-ease);
+    padding: 0; position: sticky; top: 0; 
+    background: var(--bg); z-index: 100; border-bottom: 4px solid var(--line);
   }
-  .nav-group { display: flex; gap: 20px; }
+  .nav-group { display: flex; height: 60px; }
   
-  nav button {
-    background: none; border: none; color: var(--text); opacity: 0.4;
-    font-weight: 900; font-size: 0.7rem; cursor: pointer; padding: 5px 0;
-    transition: all 0.3s var(--ye-ease); position: relative;
+  nav button, #alltBtn {
+    background: none; border-right: 4px solid var(--line); color: var(--text); 
+    font-weight: 900; font-size: 0.8rem; cursor: pointer; padding: 0 25px;
+    transition: background 0.3s; height: 100%;
   }
-  nav button::after {
-    content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
-    background: var(--text); transition: width 0.3s var(--ye-ease);
-  }
-  nav button:hover::after, nav button[aria-current="true"]::after { width: 100%; }
-  nav button:hover, nav button[aria-current="true"] { opacity: 1; transform: translateY(-2px); }
+  nav button:hover, nav button[aria-current="true"] { background: var(--text); color: var(--bg); }
+  #alltBtn { border-right: none; border-left: 4px solid var(--line); }
 
   /* --- GRID --- */
-  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); }
-  @media (max-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: var(--line); border-bottom: 4px solid var(--line); }
+  @media (max-width: 800px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
   .plate { 
     position: relative; background: var(--bg); aspect-ratio: 1/1; 
-    overflow: hidden; cursor: pointer;
-    clip-path: inset(100% 0 0 0); /* Initial state för reveal */
-    transition: clip-path 1.2s var(--ye-ease), transform 0.8s var(--ye-ease);
+    overflow: hidden; clip-path: inset(100% 0 0 0);
+    transition: clip-path 1s var(--ye-ease);
   }
   .plate.revealed { clip-path: inset(0 0 0 0); }
-  .plate:hover { transform: scale(0.98); z-index: 10; }
 
-  .plate img { 
+  .frame { width: 100%; height: 100%; position: relative; overflow: hidden; }
+  .frame img { 
     width: 100%; height: 100%; object-fit: cover; 
-    filter: brightness(0.8) grayscale(0.2); 
-    transition: transform 1.5s var(--ye-ease), filter 0.8s var(--ye-ease);
+    filter: grayscale(1) brightness(0.8); transition: all 1s var(--ye-ease);
   }
-  .plate:hover img { transform: scale(1.15); filter: brightness(1.1) grayscale(0); }
+  .plate:hover img { transform: scale(1.1); filter: grayscale(0) brightness(1.1); }
 
-  /* Metadata HUD */
+  /* Technical Sticker on Image */
   .hud {
-    position: absolute; bottom: 12px; left: 12px; font-family: monospace; font-size: 0.5rem;
-    color: var(--text); opacity: 0; transform: translateX(-10px);
-    transition: all 0.4s var(--ye-ease) 0.1s; pointer-events: none;
+    position: absolute; top: 15px; left: 15px; background: var(--text); color: var(--bg);
+    padding: 4px 8px; font-family: monospace; font-size: 0.55rem; font-weight: 900;
+    opacity: 0; transform: translateY(-10px); transition: all 0.4s var(--ye-ease);
   }
-  .plate:hover .hud { opacity: 0.8; transform: translateX(0); }
+  .plate:hover .hud { opacity: 1; transform: translateY(0); }
 
   .grain {
     position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay; opacity: 0.15;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
+  /* --- FOOTER --- */
+  footer { 
+    padding: 100px 20px; background: var(--bg);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+  }
+  .footer-box { border-top: 1px solid var(--line); padding-top: 20px; }
+  .f-label { font-size: 0.6rem; opacity: 0.5; margin-bottom: 10px; }
+  .f-link { display: block; font-size: 1.2rem; font-weight: 900; text-decoration: none; color: var(--text); margin-bottom: 5px; }
+  .f-link:hover { text-decoration: underline; }
+
   /* --- UI CONTROLS --- */
-  .controls { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; z-index: 1000; }
+  .controls { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 4px; z-index: 1000; }
   .ctrl-btn { 
     background: var(--text); color: var(--bg); border: none; font-weight: 900; 
-    padding: 15px 25px; font-size: 0.65rem; letter-spacing: 0.1em;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    transition: transform 0.3s var(--spring), filter 0.3s;
+    padding: 10px 15px; font-size: 0.6rem; width: 80px; text-align: center;
   }
-  .ctrl-btn:hover { transform: translateY(-5px) scale(1.05); filter: invert(1); }
-  .ctrl-btn:active { transform: scale(0.95); }
 
   /* --- LIGHTBOX --- */
   .lightbox { 
     position: fixed; inset: 0; background: var(--bg); z-index: 9999; 
     display: none; align-items: center; justify-content: center; 
-    opacity: 0; transition: opacity 0.5s var(--ye-ease);
   }
-  .lightbox.active { display: flex; opacity: 1; }
-  .lightbox img { 
-    max-width: 90vw; max-height: 85vh; object-fit: contain; 
-    transform: scale(0.8) translateY(50px);
-    transition: transform 0.8s var(--spring);
-  }
-  .lightbox.active img { transform: scale(1) translateY(0); }
-
-  footer { padding: 80px 15px; font-size: 0.6rem; opacity: 0.2; text-align: center; border-top: 1px solid var(--line); }
-
-  /* Animation for Mono Mode */
-  body.mono-active .plate img { filter: grayscale(1) contrast(1.1); }
+  .lightbox.active { display: flex; animation: flash 0.4s var(--ye-ease); }
+  @keyframes flash { 0% { background: var(--text); } 100% { background: var(--bg); } }
+  .lightbox img { max-width: 90vw; max-height: 80vh; object-fit: contain; border: 10px solid var(--line); }
 
 </style>
 </head>
@@ -141,10 +132,11 @@
 <div id="shutter"></div>
 
 <header>
+  <div class="label">STATUS: OPERATIONAL // V.5.0</div><br>
   <div class="wordmark" id="logo">SBJ</div>
 </header>
 
-<nav id="navbar">
+<nav>
   <div class="nav-group" id="navLeft"></div>
   <button id="alltBtn">ALLT</button>
 </nav>
@@ -153,19 +145,26 @@
   <div id="gallery" class="grid"></div>
 </main>
 
+<footer>
+  <div class="footer-box">
+    <div class="f-label">SOCIAL // CONNECT</div>
+    <a href="https://instagram.com/shot_by_julian_" class="f-link" target="_blank">INSTAGRAM</a>
+    <a href="mailto:hello@example.com" class="f-link">CONTACT ME</a>
+  </div>
+  <div class="footer-box">
+    <div class="f-label">LEGAL // SYSTEM</div>
+    <div style="font-weight: 900;">ALL RIGHTS RESERVED © <span id="year"></span></div>
+    <div style="font-size: 0.6rem; margin-top: 10px; opacity: 0.5;">ARCHIVE CAPTURED BY JULIAN. UNAUTHORIZED USE IS PROHIBITED.</div>
+  </div>
+</footer>
+
 <div class="controls">
-  <button class="ctrl-btn" id="monoBtn">MONOCHROME</button>
   <button class="ctrl-btn" id="themeBtn">INVERT</button>
 </div>
 
 <div class="lightbox" id="lightbox">
   <img id="lbImg" src="">
-  <div class="grain"></div>
 </div>
-
-<footer>
-  ARCHIVE SYSTEM — SBJ V.4.0 — © <span id="year"></span>
-</footer>
 
 <script>
   const IMAGES = [
@@ -192,41 +191,18 @@
 
   const gallery = document.getElementById('gallery');
   const navLeft = document.getElementById('navLeft');
-  const logo = document.getElementById('logo');
   const shutter = document.getElementById('shutter');
   const lb = document.getElementById('lightbox');
 
-  // --- KINETIC LOGO (Scroll React) ---
-  window.addEventListener('scroll', () => {
-    const scroll = window.scrollY;
-    const tracking = Math.max(-0.15, -0.1 - (scroll / 2000));
-    const scale = 1 - (scroll / 5000);
-    logo.style.letterSpacing = `${tracking}em`;
-    logo.style.transform = `scale(${scale})`;
-    
-    // Nav shrink
-    const navbar = document.getElementById('navbar');
-    navbar.style.padding = scroll > 100 ? '10px 15px' : '20px 15px';
-  });
-
-  // --- SHUTTER ANIMATION ---
-  function triggerShutter(callback) {
-    shutter.style.transform = 'translateY(100%)';
-    const anim = shutter.animate([
-      { transform: 'translateY(100%)' },
-      { transform: 'translateY(0%)', offset: 0.5 },
-      { transform: 'translateY(-100%)' }
-    ], { duration: 800, easing: 'cubic-bezier(0.9, 0, 0.1, 1)' });
-
-    setTimeout(callback, 400);
-  }
-
   function render(filter) {
-    triggerShutter(() => {
+    shutter.style.transform = 'translateY(100%)';
+    shutter.animate([ { transform: 'translateY(100%)' }, { transform: 'translateY(0%)', offset: 0.5 }, { transform: 'translateY(-100%)' } ], { duration: 600, easing: 'cubic-bezier(0.9, 0, 0.1, 1)' });
+
+    setTimeout(() => {
       gallery.innerHTML = '';
       let filtered = filter === 'TOP' ? IMAGES.filter(i => i.top) : (filter === 'ALLT' ? IMAGES : IMAGES.filter(i => i.a === filter));
       
-      document.querySelectorAll('nav button').forEach(btn => {
+      document.querySelectorAll('nav button, #alltBtn').forEach(btn => {
         btn.setAttribute('aria-current', btn.textContent === filter ? 'true' : 'false');
       });
 
@@ -234,9 +210,11 @@
         const plate = document.createElement('div');
         plate.className = 'plate';
         plate.innerHTML = `
-          <img src="images/bild (${img.n}).jpg" loading="lazy">
-          <div class="grain"></div>
-          <div class="hud">TYPE_${img.a} // ID_${img.n}</div>
+          <div class="frame">
+            <img src="images/bild (${img.n}).jpg" loading="lazy">
+            <div class="grain"></div>
+            <div class="hud">REF: ${img.n} // ${img.w}</div>
+          </div>
         `;
         plate.onclick = () => {
           document.getElementById('lbImg').src = `images/bild (${img.n}).jpg`;
@@ -244,12 +222,10 @@
           document.body.style.overflow = 'hidden';
         };
         gallery.appendChild(plate);
-        
-        // Staggered slutter-reveal
-        setTimeout(() => plate.classList.add('revealed'), i * 50);
+        setTimeout(() => plate.classList.add('revealed'), i * 40);
       });
       window.scrollTo(0, 0);
-    });
+    }, 300);
   }
 
   ['TOP', 'VROOM', 'NATURE', 'NOIR', 'MISC'].forEach(cat => {
@@ -260,10 +236,9 @@
   });
 
   document.getElementById('alltBtn').onclick = () => render('ALLT');
-  logo.onclick = () => render('TOP');
+  document.getElementById('logo').onclick = () => render('TOP');
   lb.onclick = () => { lb.classList.remove('active'); document.body.style.overflow = 'auto'; };
   
-  document.getElementById('monoBtn').onclick = () => document.body.classList.toggle('mono-active');
   document.getElementById('themeBtn').onclick = () => {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
