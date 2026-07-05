@@ -20,6 +20,7 @@
     text-transform: uppercase; letter-spacing: -0.03em;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    transition: background 0.8s var(--ye-ease);
   }
 
   /* --- HEADER --- */
@@ -39,26 +40,27 @@
     display: flex; justify-content: space-between; align-items: center;
     padding: 20px 16px 40px;
     position: sticky; top: 0; background: var(--bg); z-index: 100;
+    transition: background 0.8s var(--ye-ease);
   }
-  .nav-left { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
+  .nav-left { display: flex; gap: 18px; overflow-x: auto; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
   .nav-left::-webkit-scrollbar { display: none; }
   
   nav button {
-    background: none; border: none; color: #555; font-weight: 900;
-    font-size: 0.7rem; cursor: pointer; padding: 0; white-space: nowrap;
+    background: none; border: none; color: #444; font-weight: 900;
+    font-size: 0.75rem; cursor: pointer; padding: 0; white-space: nowrap;
     transition: color 0.3s ease;
   }
   nav button[aria-current="true"] { color: #fff; }
 
-  /* --- GRID OPTIMIZATION --- */
+  /* --- GRID --- */
   .grid {
     display: grid; 
-    grid-template-columns: repeat(3, 1fr); /* 3 bilder på rad desktop */
+    grid-template-columns: repeat(3, 1fr);
     gap: 1px;
     background: var(--accent);
   }
   @media (max-width: 600px) { 
-    .grid { grid-template-columns: repeat(2, 1fr); } /* 2 bilder på rad mobil */
+    .grid { grid-template-columns: repeat(2, 1fr); }
   }
 
   .plate {
@@ -76,7 +78,7 @@
     transition: transform 0.8s var(--ye-ease);
   }
 
-  /* Fine Static Grain - Enbart på bilder */
+  /* Fine Static Grain */
   .grain {
     position: absolute; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -85,51 +87,49 @@
 
   .plate:hover img { transform: scale(1.05); }
 
-  /* Mobile-friendly caption */
-  .caption {
-    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    background: rgba(0,0,0,0.4); opacity: 0; transition: opacity 0.4s ease;
-    z-index: 5; pointer-events: none;
-  }
-  .plate:hover .caption { opacity: 1; }
-  .cap-word { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.05em; }
-
   /* --- LIGHTBOX --- */
   .lightbox {
     position: fixed; inset: 0; background: #000; z-index: 9999;
     display: none; align-items: center; justify-content: center;
   }
   .lightbox.active { display: flex; animation: shutter 0.3s var(--ye-ease); }
-  @keyframes shutter { 0% { opacity: 0; transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
+  @keyframes shutter { 0% { opacity: 0; } 100% { opacity: 1; } }
   
-  .lb-img-wrap { position: relative; max-width: 95vw; max-height: 80vh; }
-  .lb-img-wrap img { width: 100%; height: auto; max-height: 80vh; object-fit: contain; }
-  .lb-word { position: absolute; bottom: -40px; left: 0; font-size: 1rem; font-weight: 900; width: 100%; text-align: center; }
+  .lb-img-wrap { position: relative; max-width: 95vw; max-height: 85vh; }
+  .lb-img-wrap img { width: 100%; height: auto; max-height: 85vh; object-fit: contain; }
 
-  /* UI */
-  .ui-controls { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 10000; }
-  .ui-btn { 
-    background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); 
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    font-weight: 900; padding: 12px 18px; font-size: 0.6rem; cursor: pointer; border-radius: 4px;
+  /* --- UI CONTROLS --- */
+  .ui-controls { 
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 12px; z-index: 10000; width: auto;
   }
+  .ui-btn { 
+    background: #fff; color: #000; border: none;
+    font-weight: 900; padding: 10px 20px; font-size: 0.65rem; 
+    cursor: pointer; border-radius: 2px;
+    letter-spacing: 0.05em;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: transform 0.2s;
+  }
+  .ui-btn:active { transform: scale(0.95); }
+  [data-theme="light"] .ui-btn { background: #000; color: #fff; }
 
 </style>
 </head>
 <body>
 
 <div class="ui-controls">
-  <button class="ui-btn" id="monoToggle">M</button>
-  <button class="ui-btn" id="themeToggle">INV</button>
+  <button class="ui-btn" id="monoToggle">BLACK & WHITE</button>
+  <button class="ui-btn" id="themeToggle">INVERT COLORS</button>
 </div>
 
 <header>
   <div class="wordmark" id="logo">SBJ</div>
 </header>
 
-<nav>
+<nav id="stickyNav">
   <div class="nav-left" id="navLeft"></div>
-  <button id="alltBtn" style="color: #555; font-weight: 900; font-size: 0.7rem; border: none; background: none;">ALLT</button>
+  <button id="alltBtn" style="color: #444; font-weight: 900; font-size: 0.75rem; border: none; background: none; cursor:pointer;">ALLT</button>
 </nav>
 
 <main>
@@ -140,9 +140,11 @@
   <div class="lb-img-wrap">
     <img id="lbImg" src="">
     <div class="grain"></div>
-    <div class="lb-word" id="lbWord"></div>
   </div>
 </div>
+
+<!-- Ljudkontroll (dold) -->
+<audio id="bgAudio" loop></audio>
 
 <script>
   const IMAGES = [
@@ -185,11 +187,67 @@
     { n: "37", w: "AETHER", a: "MISC", top: true }
   ];
 
+  // MUSIK-MAPPING
+  // Notera: Här behöver du lägga in riktiga länkar till mp3-filer för att det ska fungera.
+  const AUDIO_MAP = {
+    'VROOM': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', // Ersätt med Ghost Town snippet
+    'NATURE': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', // Ersätt med Saint Pablo
+    'NOIR': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',   // Ersätt med Only One
+    'MISC': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',   // Ersätt med Sky City
+    'TOP': '', // Ingen musik på startsidan om du inte vill
+    'ALLT': ''
+  };
+
   const gallery = document.getElementById('gallery');
   const navLeft = document.getElementById('navLeft');
   const lb = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lbImg');
-  const lbWord = document.getElementById('lbWord');
+  const audio = document.getElementById('bgAudio');
+  let currentAlbum = '';
+
+  function playMusic(album) {
+    const src = AUDIO_MAP[album];
+    
+    // Om det är samma album eller ingen musik, gör inget eller tona ut
+    if (!src || src === audio.src) {
+        if (!src) fadeOutAudio();
+        return;
+    }
+
+    // Tona ut och byt källa
+    fadeOutAudio(() => {
+        audio.src = src;
+        audio.volume = 0;
+        audio.play().then(() => {
+            fadeInAudio();
+        }).catch(e => console.log("Autoplay blockerad. Väntar på interaktion."));
+    });
+  }
+
+  function fadeOutAudio(callback) {
+    let vol = audio.volume;
+    const interval = setInterval(() => {
+        if (vol > 0.05) {
+            vol -= 0.05;
+            audio.volume = vol;
+        } else {
+            clearInterval(interval);
+            audio.pause();
+            if (callback) callback();
+        }
+    }, 50);
+  }
+
+  function fadeInAudio() {
+    let vol = 0;
+    const interval = setInterval(() => {
+        if (vol < 0.2) { // Håll musiken tyst (0.2 av 1.0)
+            vol += 0.02;
+            audio.volume = vol;
+        } else {
+            clearInterval(interval);
+        }
+    }, 100);
+  }
 
   function render(filter) {
     gallery.innerHTML = '';
@@ -198,6 +256,9 @@
     else if (filter === 'ALLT') filtered = IMAGES;
     else filtered = IMAGES.filter(i => i.a === filter);
     
+    currentAlbum = filter;
+    playMusic(filter);
+
     document.querySelectorAll('nav button').forEach(btn => {
       btn.setAttribute('aria-current', btn.textContent === filter ? 'true' : 'false');
     });
@@ -209,12 +270,10 @@
         <div class="frame">
           <img src="images/bild (${img.n}).jpg" loading="lazy">
           <div class="grain"></div>
-          <div class="caption"><div class="cap-word">${img.w}</div></div>
         </div>
       `;
       plate.onclick = () => {
-        lbImg.src = `images/bild (${img.n}).jpg`;
-        lbWord.textContent = img.w;
+        document.getElementById('lbImg').src = `images/bild (${img.n}).jpg`;
         lb.classList.add('active');
         document.body.style.overflow = 'hidden';
       };
@@ -224,6 +283,7 @@
     window.scrollTo(0,0);
   }
 
+  // Initiera nav
   ['TOP', 'VROOM', 'NATURE', 'NOIR', 'MISC'].forEach(cat => {
     const btn = document.createElement('button');
     btn.textContent = cat;
@@ -238,18 +298,32 @@
     document.body.style.overflow = 'auto';
   };
 
+  // Tydliga kontroller
   document.getElementById('monoToggle').onclick = () => {
     document.body.style.filter = document.body.style.filter === 'grayscale(1)' ? 'none' : 'grayscale(1)';
   };
+  
   document.getElementById('themeToggle').onclick = () => {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    document.body.style.background = isDark ? '#fff' : '#000';
-    document.body.style.color = isDark ? '#000' : '#fff';
-    document.querySelector('nav').style.background = isDark ? '#fff' : '#000';
+    const color = isDark ? '#fff' : '#000';
+    const textColor = isDark ? '#000' : '#fff';
+    
+    document.body.style.background = color;
+    document.body.style.color = textColor;
+    document.getElementById('stickyNav').style.background = color;
   };
 
+  // Starta
   render('TOP');
+
+  // Fix för autoplay: Starta ljudet vid första klicket på sidan
+  document.body.addEventListener('click', () => {
+      if (audio.paused && AUDIO_MAP[currentAlbum]) {
+          playMusic(currentAlbum);
+      }
+  }, { once: true });
+
 </script>
 </body>
 </html>
