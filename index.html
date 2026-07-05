@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SBJ</title>
-<meta name="description" content="SBJ — fotografi. I. II. III.">
+<meta name="description" content="SBJ — fotografi. Urval. I. II. III. IV.">
 <meta property="og:title" content="SBJ">
-<meta property="og:description" content="fotografi. i. ii. iii.">
+<meta property="og:description" content="fotografi. urval. i. ii. iii. iv.">
 <meta property="og:image" content="images/bild (1).jpg">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#000000">
@@ -15,11 +15,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  /*
-    Ye-referens: ingen dekoration. Ingen rundning. Inget crop.
-    Vitt/svart. Grotesk. Bilden får hela ytan, i sitt eget format,
-    ingen tvingas in i en ruta den inte hör hemma i.
-  */
   :root {
     --bg: #000000;
     --text: #ffffff;
@@ -27,6 +22,7 @@
     --line: #262626;
     --gap: 2px;
     --sans: 'Helvetica Neue', Inter, Arial, sans-serif;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   [data-theme="light"] {
@@ -37,7 +33,6 @@
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -46,14 +41,10 @@
     color: var(--text);
     font-family: var(--sans);
     font-weight: 400;
-    transition: background 0.3s linear, color 0.3s linear;
+    transition: background 0.4s var(--ease), color 0.4s var(--ease);
   }
 
-  :focus-visible {
-    outline: 1px solid var(--text);
-    outline-offset: 2px;
-  }
-
+  :focus-visible { outline: 1px solid var(--text); outline-offset: 2px; }
   a, button { font-family: var(--sans); }
 
   /* ---------- HEADER ---------- */
@@ -62,7 +53,6 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0;
   }
 
   .wordmark {
@@ -77,6 +67,9 @@
     padding: 0;
     cursor: pointer;
     text-align: left;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: rise 0.7s var(--ease) forwards;
   }
 
   .meta-row {
@@ -90,7 +83,22 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--dim);
+    position: relative;
+    overflow: hidden;
   }
+
+  .meta-row::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -1px;
+    height: 1px;
+    width: 0;
+    background: var(--text);
+    animation: drawLine 0.9s var(--ease) 0.3s forwards;
+  }
+
+  @keyframes drawLine { to { width: 100%; } }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
 
   .meta-count { color: var(--dim); }
 
@@ -112,21 +120,28 @@
     color: var(--dim);
     cursor: pointer;
     position: relative;
+    transition: color 0.3s var(--ease);
   }
 
-  nav button[aria-current="true"] {
-    color: var(--text);
-  }
+  nav button[aria-current="true"] { color: var(--text); }
 
-  nav button[aria-current="true"]::after {
+  nav button::after {
     content: '';
     position: absolute;
     left: 0; right: 0; bottom: -8px;
     height: 1px;
     background: var(--text);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s var(--ease);
   }
+  nav button[aria-current="true"]::after,
+  nav button:hover::after { transform: scaleX(1); }
 
-  nav button:hover { color: var(--text); }
+  .nav-spacer { flex: 1; }
+  .nav-all {
+    margin-left: auto;
+  }
 
   /* ---------- GRID ---------- */
   main { padding: 0; }
@@ -136,22 +151,20 @@
     grid-template-columns: 1fr;
     gap: var(--gap);
   }
-
-  @media (min-width: 700px) {
-    .grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (min-width: 1200px) {
-    .grid { grid-template-columns: repeat(3, 1fr); }
-  }
+  @media (min-width: 700px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
 
   .plate {
     position: relative;
     background: var(--bg);
     display: flex;
     flex-direction: column;
+    opacity: 0;
+    transform: translateY(18px);
+    animation: rise 0.6s var(--ease) forwards;
+    animation-delay: calc(var(--i, 0) * 60ms);
   }
 
-  /* bilden visas i sitt eget format — ingen crop, ingen tvingad ruta */
   .plate .frame {
     width: 100%;
     background: color-mix(in srgb, var(--text) 4%, var(--bg));
@@ -167,12 +180,11 @@
     width: 100%;
     height: auto;
     max-height: 92vh;
-    object-fit: contain; /* aldrig cover — aldrig crop */
+    object-fit: contain;
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.6s var(--ease);
     cursor: zoom-in;
   }
-
   .plate img.loaded { opacity: 1; }
 
   .plate-caption {
@@ -185,7 +197,6 @@
     text-transform: uppercase;
     color: var(--dim);
   }
-
   .plate-caption .cap-title { color: var(--text); }
 
   .plate.broken .frame {
@@ -205,6 +216,9 @@
     text-transform: uppercase;
   }
 
+  /* Kapitel-övergång — hela griden tonar/lyfter tillsammans, inget hopp */
+  .grid.leaving { opacity: 0; transform: translateY(-8px); transition: opacity 0.25s var(--ease), transform 0.25s var(--ease); }
+
   /* ---------- CONTROLS ---------- */
   .theme-toggle {
     position: fixed; top: 24px; right: 24px;
@@ -212,6 +226,7 @@
     padding: 8px 16px;
     cursor: pointer; z-index: 1100; color: var(--text);
     font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+    transition: border-color 0.3s var(--ease);
   }
   .theme-toggle:hover { border-color: var(--text); }
 
@@ -219,12 +234,18 @@
   .lightbox {
     position: fixed; inset: 0; background: var(--bg);
     display: none; align-items: center; justify-content: center; z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s var(--ease);
   }
-  .lightbox.open { display: flex; }
+  .lightbox.open { display: flex; opacity: 1; }
   .lightbox img {
     max-width: 94vw; max-height: 86vh;
     object-fit: contain;
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
   }
+  .lightbox.open img.shown { opacity: 1; transform: scale(1); }
 
   .lb-btn {
     position: absolute;
@@ -235,6 +256,7 @@
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
     font-size: 1rem;
+    transition: border-color 0.3s var(--ease);
   }
   .lb-btn:hover { border-color: var(--text); }
   .lb-close { top: 24px; right: 24px; }
@@ -270,7 +292,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    * { transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
   }
 </style>
 </head>
@@ -293,7 +315,7 @@
 </main>
 
 <footer>
-  <span>SBJ</span>
+  <span>SHOT BY JULIAN</span>
   <span id="year"></span>
 </footer>
 
@@ -310,35 +332,59 @@
 
 <script>
   /*
-    Tre kapitel. Inga leende albumnamn — bara nummer och en rad.
-    I.   RÅTT       (garage-serien)
-    II.  RÖRELSE    (strövtåg-serien)
-    III. MÖRKER     (nocturne-serien)
+    Startvyn är TOP — ett kurerat urval, inte allt material.
+    Man måste klicka in i ett kapitel för att se resten.
+    "ALLT" finns som ett eget, sista nav-alternativ — en genväg
+    till hela arkivet, men aldrig standardvyn.
+
+    URVALET (TOP) är satt manuellt här nedan tills en riktig
+    bildanalys-pipeline kopplas på — jag kan inte se pixelinnehållet
+    i filnamnen, bara namnen. Byt gärna ut listan mot dina egna
+    favoriter, ordningen och antalet (8) är tänkt att kännas som
+    "det bästa", inte en fullständig genomgång.
   */
 
   const ALBUMS = {
     ratt: {
+      // Makrodetaljer — emblem, galler, ytor
       label: 'I. VROOM',
       files: [
-        "bild (27).jpg","bild (28).jpg","bild (29).jpg","bild (30).jpg","bild (31).jpg",
-        "bild (2).jpg","bild (3).jpg","bild (4).jpg","bild (5).jpg","bild (6).jpg","bild (7).jpg",
-        "bild (8).jpg","bild (9).jpg","bild (10).jpg","bild (11).jpg","bild (12).jpg",
-        "bild (13).jpg","bild (14).jpg","bild (15).jpg","bild (16).jpg","bild (17).jpg","bild (18).jpg",
-        "bild (19).jpg","bild (20).jpg","bild (21).jpg","bild (22).jpg"
+        "bild (1).jpg","bild (2).jpg","bild (3).jpg","bild (4).jpg","bild (5).jpg",
+        "bild (6).jpg","bild (7).jpg","bild (8).jpg","bild (9).jpg","bild (10).jpg","bild (11).jpg"
       ]
     },
     rorelse: {
+      // Bilar i sin miljö — väg, uppfart, ljus
       label: 'II. MISCELLANEOUS',
       files: [
-        "bild (23).jpg","bild (24).jpg","bild (25).jpg","bild (26).jpg",
-        "bild (37).jpg","bild (36).jpg","bild (1).jpg"
+        "bild (12).jpg","bild (13).jpg","bild (14).jpg","bild (15).jpg","bild (16).jpg",
+        "bild (17).jpg","bild (18).jpg","bild (19).jpg","bild (20).jpg","bild (21).jpg","bild (22).jpg",
+        "bild (27).jpg","bild (28).jpg","bild (29).jpg","bild (30).jpg","bild (31).jpg"
       ]
     },
+    natur: {
+      // Skog, löv, himmel
+      label: 'III. NATUR',
+      files: ["bild (23).jpg","bild (24).jpg","bild (25).jpg","bild (26).jpg","bild (37).jpg"]
+    },
     morker: {
-      label: 'III. NOIR',
-      files: ["bild (32).jpg","bild (33).jpg","bild (34).jpg","bild (35).jpg"]
+      // Natt — lågt ljus, ett sken i mörkret
+      label: 'IV. NOIR',
+      files: ["bild (32).jpg","bild (33).jpg","bild (34).jpg","bild (35).jpg","bild (36).jpg"]
     }
   };
+
+  // Kurerat urval för TOP — ett stick ur varje kapitel, inte en fullständig genomgång.
+  const TOP_PICKS = [
+    { file: "bild (8).jpg", album: 'I. VROOM' },
+    { file: "bild (10).jpg", album: 'I. VROOM' },
+    { file: "bild (13).jpg", album: 'II. MISCELLANEOUS' },
+    { file: "bild (17).jpg", album: 'II. MISCELLANEOUS' },
+    { file: "bild (22).jpg", album: 'II. MISCELLANEOUS' },
+    { file: "bild (24).jpg", album: 'III. NATUR' },
+    { file: "bild (35).jpg", album: 'IV. NOIR' },
+    { file: "bild (37).jpg", album: 'III. NATUR' }
+  ];
 
   const gallery = document.getElementById('gallery');
   const metaCount = document.getElementById('metaCount');
@@ -365,11 +411,12 @@
 
   function buildNav() {
     albumNav.innerHTML = '';
-    const allBtn = document.createElement('button');
-    allBtn.textContent = 'ALLT';
-    allBtn.dataset.key = 'all';
-    allBtn.onclick = () => { location.hash = 'all'; };
-    albumNav.appendChild(allBtn);
+
+    const topBtn = document.createElement('button');
+    topBtn.textContent = 'TOP';
+    topBtn.dataset.key = 'top';
+    topBtn.onclick = () => { location.hash = 'top'; };
+    albumNav.appendChild(topBtn);
 
     Object.keys(ALBUMS).forEach(key => {
       const btn = document.createElement('button');
@@ -378,37 +425,42 @@
       btn.onclick = () => { location.hash = key; };
       albumNav.appendChild(btn);
     });
+
+    const spacer = document.createElement('span');
+    spacer.className = 'nav-spacer';
+    albumNav.appendChild(spacer);
+
+    const allBtn = document.createElement('button');
+    allBtn.textContent = 'ALLT';
+    allBtn.className = 'nav-all';
+    allBtn.dataset.key = 'all';
+    allBtn.onclick = () => { location.hash = 'all'; };
+    albumNav.appendChild(allBtn);
   }
 
   function markActiveNav(key) {
     [...albumNav.children].forEach(btn => {
+      if (!btn.dataset) return;
       if (btn.dataset.key === key) btn.setAttribute('aria-current', 'true');
       else btn.removeAttribute('aria-current');
     });
   }
 
-  // Ordningen är fast — kronologin är delen av arbetet. Ingen slump.
   const allFiles = [
     ...ALBUMS.ratt.files.map(f => ({ file: f, album: ALBUMS.ratt.label })),
     ...ALBUMS.rorelse.files.map(f => ({ file: f, album: ALBUMS.rorelse.label })),
+    ...ALBUMS.natur.files.map(f => ({ file: f, album: ALBUMS.natur.label })),
     ...ALBUMS.morker.files.map(f => ({ file: f, album: ALBUMS.morker.label }))
   ];
 
-  function render() {
-    const key = location.hash.replace('#', '') || 'all';
-    let entries;
+  function resolveEntries(key) {
+    if (key === 'top') return TOP_PICKS;
+    if (key === 'all') return allFiles;
+    if (ALBUMS[key]) return ALBUMS[key].files.map(f => ({ file: f, album: ALBUMS[key].label }));
+    return TOP_PICKS;
+  }
 
-    if (key === 'all' || !ALBUMS[key]) {
-      entries = allFiles;
-      markActiveNav('all');
-    } else {
-      entries = ALBUMS[key].files.map(f => ({ file: f, album: ALBUMS[key].label }));
-      markActiveNav(key);
-    }
-
-    currentFiles = entries;
-    metaCount.textContent = String(entries.length).padStart(2, '0');
-
+  function paint(entries) {
     gallery.innerHTML = '';
 
     if (!entries.length) {
@@ -419,6 +471,7 @@
     entries.forEach((entry, i) => {
       const plate = document.createElement('div');
       plate.className = 'plate';
+      plate.style.setProperty('--i', i % 12);
 
       const frame = document.createElement('div');
       frame.className = 'frame';
@@ -456,32 +509,60 @@
     });
   }
 
+  function render(isFirstLoad) {
+    const key = location.hash.replace('#', '') || 'top';
+    const entries = resolveEntries(key);
+    markActiveNav(ALBUMS[key] ? key : key);
+    currentFiles = entries;
+    metaCount.textContent = String(entries.length).padStart(2, '0');
+
+    if (isFirstLoad) {
+      paint(entries);
+      return;
+    }
+
+    // Mjuk kapitel-övergång — lyft ut, byt innehåll, lyft in
+    gallery.classList.add('leaving');
+    setTimeout(() => {
+      paint(entries);
+      gallery.classList.remove('leaving');
+    }, 220);
+  }
+
   function openLightbox(index) {
     currentIndex = index;
-    showCurrent();
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
+    showCurrent(true);
     document.getElementById('lbClose').focus();
   }
 
-  function showCurrent() {
+  function showCurrent(firstOpen) {
     const entry = currentFiles[currentIndex];
     const galleryImg = gallery.children[currentIndex]?.querySelector('img');
-    lbImg.src = galleryImg ? galleryImg.src : `images/${entry.file}`;
-    lbImg.alt = galleryImg ? galleryImg.alt : '';
-    lbTitle.textContent = entry.album;
-    lbCounter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(currentFiles.length).padStart(2, '0')}`;
+    lbImg.classList.remove('shown');
+    const src = galleryImg ? galleryImg.src : `images/${entry.file}`;
+    const swap = () => {
+      lbImg.src = src;
+      lbImg.alt = galleryImg ? galleryImg.alt : '';
+      lbTitle.textContent = entry.album;
+      lbCounter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(currentFiles.length).padStart(2, '0')}`;
+      requestAnimationFrame(() => lbImg.classList.add('shown'));
+    };
+    if (firstOpen) swap();
+    else setTimeout(swap, 120);
   }
 
   function closeLightbox() {
     lightbox.classList.remove('open');
+    lbImg.classList.remove('shown');
     document.body.style.overflow = 'auto';
   }
 
   function nextImage(dir) {
     if (!currentFiles.length) return;
     currentIndex = (currentIndex + dir + currentFiles.length) % currentFiles.length;
-    showCurrent();
+    showCurrent(false);
   }
 
   document.getElementById('lbClose').onclick = closeLightbox;
@@ -504,13 +585,13 @@
     if (Math.abs(diff) > 50) nextImage(diff > 0 ? -1 : 1);
   });
 
-  document.getElementById('mainLogo').onclick = () => { location.hash = 'all'; };
+  document.getElementById('mainLogo').onclick = () => { location.hash = 'top'; };
 
-  window.addEventListener('hashchange', render);
+  window.addEventListener('hashchange', () => render(false));
   document.getElementById('year').textContent = new Date().getFullYear();
 
   buildNav();
-  render();
+  render(true);
 </script>
 
 </body>
