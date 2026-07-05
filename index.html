@@ -216,7 +216,7 @@
     // Tona ut och byt källa
     fadeOutAudio(() => {
         audio.src = src;
-        audio.volume = 0;
+        audio.volume = 0.15;
         audio.play().then(() => {
             fadeInAudio();
         }).catch(e => console.log("Autoplay blockerad. Väntar på interaktion."));
