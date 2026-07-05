@@ -2,14 +2,14 @@
 <html lang="sv" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SBJ</title>
 <style>
   :root {
     --bg: #000000;
     --text: #ffffff;
     --accent: #111111;
-    --ye-ease: cubic-bezier(0.85, 0, 0.15, 1);
+    --ye-ease: cubic-bezier(0.8, 0, 0.1, 1);
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -19,118 +19,108 @@
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     text-transform: uppercase; letter-spacing: -0.03em;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /* --- HEADER & LOGO --- */
+  /* --- HEADER --- */
   header {
-    padding: 120px 24px 20px;
+    padding: 60px 16px 10px;
     display: flex; flex-direction: column; align-items: flex-start;
   }
   .wordmark {
-    font-size: clamp(6rem, 30vw, 22rem); font-weight: 900;
-    line-height: 0.7; letter-spacing: -0.06em;
-    cursor: pointer;
-    user-select: none;
-    transition: transform 0.6s var(--ye-ease);
+    font-size: clamp(4rem, 20vw, 12rem); font-weight: 900;
+    line-height: 0.8; letter-spacing: -0.07em;
+    cursor: pointer; transition: transform 0.4s var(--ye-ease);
   }
-  .wordmark:active { transform: scale(0.95); }
+  .wordmark:active { transform: scale(0.96); opacity: 0.7; }
 
   /* --- NAVIGATION --- */
   nav {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 40px 24px 80px;
+    padding: 20px 16px 40px;
+    position: sticky; top: 0; background: var(--bg); z-index: 100;
   }
-  .nav-left { display: flex; gap: 25px; }
-  .nav-right { }
+  .nav-left { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
+  .nav-left::-webkit-scrollbar { display: none; }
   
   nav button {
-    background: none; border: none; color: #444; font-weight: 900;
-    font-size: 0.85rem; cursor: pointer; padding: 0;
-    transition: color 0.3s ease, transform 0.3s ease;
-    letter-spacing: 0.05em;
+    background: none; border: none; color: #555; font-weight: 900;
+    font-size: 0.7rem; cursor: pointer; padding: 0; white-space: nowrap;
+    transition: color 0.3s ease;
   }
-  nav button:hover { color: #fff; transform: translateY(-1px); }
   nav button[aria-current="true"] { color: #fff; }
 
-  /* --- GRID --- */
+  /* --- GRID OPTIMIZATION --- */
   .grid {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); /* 3 bilder på rad desktop */
+    gap: 1px;
     background: var(--accent);
   }
-  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { 
+    .grid { grid-template-columns: repeat(2, 1fr); } /* 2 bilder på rad mobil */
+  }
 
   .plate {
     position: relative; background: #000; overflow: hidden;
     aspect-ratio: 1/1; cursor: crosshair;
-    opacity: 0; clip-path: inset(100% 0 0 0);
-    transition: opacity 1.5s var(--ye-ease), clip-path 1.5s var(--ye-ease);
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 1s var(--ye-ease), transform 1s var(--ye-ease);
   }
-  .plate.revealed { opacity: 1; clip-path: inset(0 0 0 0); }
+  .plate.revealed { opacity: 1; transform: translateY(0); }
 
-  /* --- IMAGE & FINE GRAIN --- */
   .frame { width: 100%; height: 100%; position: relative; overflow: hidden; }
   .frame img {
     width: 100%; height: 100%; object-fit: cover;
-    filter: brightness(0.85) contrast(1.1);
-    transition: transform 1.2s var(--ye-ease);
+    filter: brightness(0.9) contrast(1.05);
+    transition: transform 0.8s var(--ye-ease);
   }
 
-  /* Statiskt, väldigt fint grain */
-  .grain-overlay {
+  /* Fine Static Grain - Enbart på bilder */
+  .grain {
     position: absolute; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity: 0.12; pointer-events: none;
-    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.1; pointer-events: none; mix-blend-mode: overlay;
   }
 
-  .plate:hover img { transform: scale(1.08); }
+  .plate:hover img { transform: scale(1.05); }
 
-  /* Caption reveal animation */
+  /* Mobile-friendly caption */
   .caption {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    background: rgba(0,0,0,0.6); opacity: 0; transition: opacity 0.5s var(--ye-ease);
-    z-index: 5;
+    background: rgba(0,0,0,0.4); opacity: 0; transition: opacity 0.4s ease;
+    z-index: 5; pointer-events: none;
   }
   .plate:hover .caption { opacity: 1; }
-  .cap-word { 
-    font-size: 4rem; font-weight: 900; letter-spacing: -0.05em; 
-    transform: translateY(40px); transition: transform 0.6s var(--ye-ease);
-  }
-  .plate:hover .cap-word { transform: translateY(0); }
+  .cap-word { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.05em; }
 
   /* --- LIGHTBOX --- */
   .lightbox {
     position: fixed; inset: 0; background: #000; z-index: 9999;
     display: none; align-items: center; justify-content: center;
-    cursor: zoom-out;
   }
-  .lightbox.active { display: flex; animation: shutter-in 0.4s var(--ye-ease); }
-  @keyframes shutter-in {
-    from { clip-path: inset(50% 0 50% 0); }
-    to { clip-path: inset(0 0 0 0); }
-  }
+  .lightbox.active { display: flex; animation: shutter 0.3s var(--ye-ease); }
+  @keyframes shutter { 0% { opacity: 0; transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
   
-  .lb-img-wrap { position: relative; max-width: 90vw; max-height: 85vh; }
-  .lb-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
-  .lb-img-wrap .grain-overlay { opacity: 0.15; }
+  .lb-img-wrap { position: relative; max-width: 95vw; max-height: 80vh; }
+  .lb-img-wrap img { width: 100%; height: auto; max-height: 80vh; object-fit: contain; }
+  .lb-word { position: absolute; bottom: -40px; left: 0; font-size: 1rem; font-weight: 900; width: 100%; text-align: center; }
 
-  .lb-word { position: absolute; bottom: 40px; right: 40px; font-size: 2rem; font-weight: 900; }
-
-  /* UI ELEMENTS */
-  .ui-controls { position: fixed; top: 30px; right: 30px; display: flex; gap: 15px; z-index: 10000; }
+  /* UI */
+  .ui-controls { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 10000; }
   .ui-btn { 
-    background: none; color: #555; border: 1px solid #222; font-weight: 900; 
-    padding: 8px 16px; font-size: 0.65rem; cursor: pointer; transition: all 0.3s;
+    background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); 
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    font-weight: 900; padding: 12px 18px; font-size: 0.6rem; cursor: pointer; border-radius: 4px;
   }
-  .ui-btn:hover { color: #fff; border-color: #fff; }
 
 </style>
 </head>
 <body>
 
 <div class="ui-controls">
-  <button class="ui-btn" id="monoToggle">MONO</button>
-  <button class="ui-btn" id="themeToggle">INVERT</button>
+  <button class="ui-btn" id="monoToggle">M</button>
+  <button class="ui-btn" id="themeToggle">INV</button>
 </div>
 
 <header>
@@ -139,7 +129,7 @@
 
 <nav>
   <div class="nav-left" id="navLeft"></div>
-  <div class="nav-right" id="navRight"></div>
+  <button id="alltBtn" style="color: #555; font-weight: 900; font-size: 0.7rem; border: none; background: none;">ALLT</button>
 </nav>
 
 <main>
@@ -149,9 +139,9 @@
 <div class="lightbox" id="lightbox">
   <div class="lb-img-wrap">
     <img id="lbImg" src="">
-    <div class="grain-overlay"></div>
+    <div class="grain"></div>
+    <div class="lb-word" id="lbWord"></div>
   </div>
-  <div class="lb-word" id="lbWord">WORD</div>
 </div>
 
 <script>
@@ -160,26 +150,26 @@
     { n: "2", w: "EQUUS", a: "VROOM" },
     { n: "3", w: "SPIRITUS", a: "VROOM" },
     { n: "4", w: "AURUM", a: "VROOM" },
-    { n: "5", w: "FERRUM", a: "VROOM" },
+    { n: "5", w: "FERRUM", a: "VROOM", top: true },
     { n: "6", w: "VELOX", a: "VROOM" },
     { n: "7", w: "対称", a: "VROOM" },
     { n: "8", w: "閃光", a: "VROOM", top: true },
     { n: "9", w: "METALLUM", a: "VROOM" },
-    { n: "10", w: "FORMA", a: "VROOM" },
+    { n: "10", w: "FORMA", a: "VROOM", top: true },
     { n: "11", w: "LUMEN", a: "VROOM" },
     { n: "12", w: "ROTA", a: "VROOM" },
-    { n: "13", w: "技術", a: "VROOM" },
+    { n: "13", w: "技術", a: "VROOM", top: true },
     { n: "14", w: "TAURO", a: "VROOM", top: true },
     { n: "15", w: "ALBUS", a: "VROOM" },
     { n: "16", w: "MACHINA", a: "VROOM" },
-    { n: "17", w: "ITER", a: "VROOM" },
+    { n: "17", w: "ITER", a: "VROOM", top: true },
     { n: "18", w: "NOCTIS", a: "VROOM" },
     { n: "19", w: "VIA", a: "VROOM" },
     { n: "20", w: "VETUSTUS", a: "VROOM" },
     { n: "21", w: "CURVA", a: "VROOM" },
     { n: "22", w: "IGNIS", a: "VROOM", top: true },
     { n: "23", w: "木漏れ日", a: "NATURE", top: true },
-    { n: "24", w: "SILVA", a: "NATURE" },
+    { n: "24", w: "SILVA", a: "NATURE", top: true },
     { n: "25", w: "FOLIUM", a: "NATURE" },
     { n: "26", w: "VIRIDIS", a: "NATURE" },
     { n: "27", w: "VORS", a: "VROOM" },
@@ -187,17 +177,16 @@
     { n: "29", w: "URBS", a: "VROOM" },
     { n: "30", w: "SILENT", a: "VROOM" },
     { n: "31", w: "VESPER", a: "VROOM" },
-    { n: "32", w: "暗闇", a: "NOIR" },
+    { n: "32", w: "暗闇", a: "NOIR", top: true },
     { n: "33", w: "UMBRA", a: "NOIR" },
     { n: "34", w: "LUX", a: "NOIR" },
     { n: "35", w: "魂", a: "NOIR", top: true },
     { n: "36", w: "ARBOR", a: "NATURE" },
-    { n: "37", w: "AETHER", a: "MISC" }
+    { n: "37", w: "AETHER", a: "MISC", top: true }
   ];
 
   const gallery = document.getElementById('gallery');
   const navLeft = document.getElementById('navLeft');
-  const navRight = document.getElementById('navRight');
   const lb = document.getElementById('lightbox');
   const lbImg = document.getElementById('lbImg');
   const lbWord = document.getElementById('lbWord');
@@ -209,7 +198,6 @@
     else if (filter === 'ALLT') filtered = IMAGES;
     else filtered = IMAGES.filter(i => i.a === filter);
     
-    // Update active nav
     document.querySelectorAll('nav button').forEach(btn => {
       btn.setAttribute('aria-current', btn.textContent === filter ? 'true' : 'false');
     });
@@ -220,7 +208,7 @@
       plate.innerHTML = `
         <div class="frame">
           <img src="images/bild (${img.n}).jpg" loading="lazy">
-          <div class="grain-overlay"></div>
+          <div class="grain"></div>
           <div class="caption"><div class="cap-word">${img.w}</div></div>
         </div>
       `;
@@ -228,16 +216,14 @@
         lbImg.src = `images/bild (${img.n}).jpg`;
         lbWord.textContent = img.w;
         lb.classList.add('active');
+        document.body.style.overflow = 'hidden';
       };
       gallery.appendChild(plate);
-      
-      // Staggered reveal
-      setTimeout(() => plate.classList.add('revealed'), i * 100);
+      setTimeout(() => plate.classList.add('revealed'), i * 60);
     });
     window.scrollTo(0,0);
   }
 
-  // NAV SETUP
   ['TOP', 'VROOM', 'NATURE', 'NOIR', 'MISC'].forEach(cat => {
     const btn = document.createElement('button');
     btn.textContent = cat;
@@ -245,18 +231,13 @@
     navLeft.appendChild(btn);
   });
 
-  const allBtn = document.createElement('button');
-  allBtn.textContent = 'ALLT';
-  allBtn.onclick = () => render('ALLT');
-  navRight.appendChild(allBtn);
-
-  // Logo Reset
+  document.getElementById('alltBtn').onclick = () => render('ALLT');
   document.getElementById('logo').onclick = () => render('TOP');
+  lb.onclick = () => {
+    lb.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  };
 
-  // Lightbox close
-  lb.onclick = () => lb.classList.remove('active');
-
-  // Controls
   document.getElementById('monoToggle').onclick = () => {
     document.body.style.filter = document.body.style.filter === 'grayscale(1)' ? 'none' : 'grayscale(1)';
   };
@@ -265,9 +246,9 @@
     document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
     document.body.style.background = isDark ? '#fff' : '#000';
     document.body.style.color = isDark ? '#000' : '#fff';
+    document.querySelector('nav').style.background = isDark ? '#fff' : '#000';
   };
 
-  // Start with TOP
   render('TOP');
 </script>
 </body>
