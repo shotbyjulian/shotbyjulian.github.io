@@ -18,31 +18,24 @@
     margin: 0; background: var(--bg); color: var(--text);
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     text-transform: uppercase; letter-spacing: -0.03em;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    transition: background 0.8s var(--ye-ease);
+    overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    transition: background 0.8s var(--ye-ease), color 0.8s var(--ye-ease);
   }
 
   /* --- HEADER --- */
-  header {
-    padding: 60px 16px 10px;
-    display: flex; flex-direction: column; align-items: flex-start;
-  }
+  header { padding: 60px 16px 10px; display: flex; flex-direction: column; }
   .wordmark {
     font-size: clamp(4.5rem, 22vw, 14rem); font-weight: 900;
-    line-height: 0.8; letter-spacing: -0.07em;
-    cursor: pointer; transition: transform 0.4s var(--ye-ease);
+    line-height: 0.8; letter-spacing: -0.07em; cursor: pointer;
   }
-  .wordmark:active { transform: scale(0.96); opacity: 0.7; }
 
   /* --- NAVIGATION --- */
   nav {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 20px 16px 40px;
-    position: sticky; top: 0; background: var(--bg); z-index: 100;
-    transition: background 0.8s var(--ye-ease);
+    padding: 20px 16px 40px; position: sticky; top: 0; 
+    background: var(--bg); z-index: 100; transition: background 0.8s var(--ye-ease);
   }
-  .nav-left { display: flex; gap: 18px; overflow-x: auto; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
+  .nav-left { display: flex; gap: 18px; overflow-x: auto; padding-bottom: 5px; }
   .nav-left::-webkit-scrollbar { display: none; }
   
   nav button {
@@ -50,7 +43,7 @@
     font-size: 0.75rem; cursor: pointer; padding: 0; white-space: nowrap;
     transition: color 0.3s ease;
   }
-  nav button[aria-current="true"] { color: #fff; }
+  nav button[aria-current="true"] { color: var(--text); }
 
   /* --- GRID --- */
   .grid {
@@ -60,8 +53,7 @@
   @media (max-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
   .plate {
-    position: relative; background: #000; overflow: hidden;
-    aspect-ratio: 1/1; cursor: crosshair;
+    position: relative; background: #000; overflow: hidden; aspect-ratio: 1/1;
     opacity: 0; transform: translateY(20px);
     transition: opacity 1s var(--ye-ease), transform 1s var(--ye-ease);
   }
@@ -70,18 +62,15 @@
   .frame { width: 100%; height: 100%; position: relative; overflow: hidden; }
   .frame img {
     width: 100%; height: 100%; object-fit: cover;
-    filter: brightness(0.9) contrast(1.05);
-    transition: transform 0.8s var(--ye-ease);
+    filter: brightness(0.9) contrast(1.05); transition: transform 0.8s var(--ye-ease);
   }
+  .plate:hover img { transform: scale(1.05); }
 
   /* Fine Static Grain */
   .grain {
-    position: absolute; inset: 0;
+    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay; opacity: 0.1;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity: 0.1; pointer-events: none; mix-blend-mode: overlay;
   }
-
-  .plate:hover img { transform: scale(1.05); }
 
   /* --- UI CONTROLS --- */
   .ui-controls { 
@@ -89,18 +78,13 @@
     display: flex; gap: 8px; z-index: 10000; width: 90%; justify-content: center;
   }
   .ui-btn { 
-    background: #fff; color: #000; border: none;
-    font-weight: 900; padding: 12px 14px; font-size: 0.6rem; 
-    cursor: pointer; border-radius: 2px;
-    letter-spacing: 0.05em; flex: 1; max-width: 120px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    transition: transform 0.2s, background 0.3s;
-    white-space: nowrap;
+    background: #fff; color: #000; border: none; font-weight: 900; 
+    padding: 12px 5px; font-size: 0.6rem; cursor: pointer; border-radius: 2px;
+    letter-spacing: 0.05em; flex: 1; max-width: 110px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: all 0.2s;
   }
-  .ui-btn:active { transform: scale(0.95); }
-  .ui-btn.active-mode { background: #555; color: #fff; } /* För musik-knappen */
-  
   [data-theme="light"] .ui-btn { background: #000; color: #fff; }
+  .ui-btn.active-mode { background: #555; color: #fff; }
 
   /* --- LIGHTBOX --- */
   .lightbox {
@@ -110,7 +94,6 @@
   .lightbox.active { display: flex; }
   .lb-img-wrap { position: relative; max-width: 95vw; max-height: 85vh; }
   .lb-img-wrap img { width: 100%; height: auto; max-height: 85vh; object-fit: contain; }
-
 </style>
 </head>
 <body>
@@ -144,6 +127,7 @@
 <audio id="bgAudio" loop></audio>
 
 <script>
+  // FULLSTÄNDIG BILDLISTA
   const IMAGES = [
     { n: "1", w: "AMICUS", a: "MISC", top: true },
     { n: "2", w: "EQUUS", a: "VROOM" },
@@ -188,9 +172,7 @@
     'VROOM': 'ghosttown.mp3',
     'NATURE': 'saintpablo.mp3',
     'NOIR': 'onlyone.mp3',
-    'MISC': 'skycity.mp3',
-    'TOP': '',
-    'ALLT': ''
+    'MISC': 'skycity.mp3'
   };
 
   const gallery = document.getElementById('gallery');
@@ -203,62 +185,45 @@
   let isMusicEnabled = false;
 
   function playMusic(album) {
-    if (!isMusicEnabled) {
-        fadeOutAudio();
-        return;
-    }
-
+    if (!isMusicEnabled) { fadeOutAudio(); return; }
     const src = AUDIO_MAP[album];
-    if (!src || src === audio.src.split('/').pop()) {
-        if (!src) fadeOutAudio();
+    if (!src) { fadeOutAudio(); return; }
+    
+    // Om vi redan spelar denna fil, fortsätt bara
+    if (audio.src.includes(src)) {
+        if (audio.paused) audio.play();
         return;
     }
 
     fadeOutAudio(() => {
         audio.src = src;
         audio.volume = 0;
-        audio.play().then(() => fadeInAudio()).catch(e => console.log("Autoplay blockerad"));
+        audio.play().then(() => fadeInAudio()).catch(() => {});
     });
   }
 
   function fadeOutAudio(callback) {
+    if (audio.paused) { if(callback) callback(); return; }
     let vol = audio.volume;
     const interval = setInterval(() => {
-        if (vol > 0.02) {
-            vol -= 0.02;
-            audio.volume = vol;
-        } else {
-            clearInterval(interval);
-            audio.pause();
-            if (callback) callback();
-        }
+        if (vol > 0.02) { vol -= 0.02; audio.volume = vol; }
+        else { clearInterval(interval); audio.pause(); if (callback) callback(); }
     }, 30);
   }
 
   function fadeInAudio() {
     let vol = 0;
-    audio.play();
     const interval = setInterval(() => {
-        if (vol < 0.15) {
-            vol += 0.01;
-            audio.volume = vol;
-        } else {
-            clearInterval(interval);
-        }
+        if (vol < 0.15) { vol += 0.01; audio.volume = vol; }
+        else { clearInterval(interval); }
     }, 100);
   }
 
-  // MUSIK TOGGLE
   musicBtn.onclick = () => {
     isMusicEnabled = !isMusicEnabled;
     musicBtn.textContent = isMusicEnabled ? "SOUND: ON" : "SOUND: OFF";
     musicBtn.classList.toggle('active-mode', isMusicEnabled);
-    
-    if (isMusicEnabled) {
-        playMusic(currentAlbum);
-    } else {
-        fadeOutAudio();
-    }
+    if (isMusicEnabled) playMusic(currentAlbum); else fadeOutAudio();
   };
 
   function render(filter) {
@@ -271,7 +236,7 @@
     currentAlbum = filter;
     playMusic(filter);
 
-    document.querySelectorAll('nav button').forEach(btn => {
+    document.querySelectorAll('nav button, #alltBtn').forEach(btn => {
       btn.setAttribute('aria-current', btn.textContent === filter ? 'true' : 'false');
     });
 
@@ -285,4 +250,38 @@
         document.body.style.overflow = 'hidden';
       };
       gallery.appendChild(plate);
-      setTimeou
+      setTimeout(() => plate.classList.add('revealed'), i * 60);
+    });
+    window.scrollTo(0,0);
+  }
+
+  // Init Nav
+  ['TOP', 'VROOM', 'NATURE', 'NOIR', 'MISC'].forEach(cat => {
+    const btn = document.createElement('button');
+    btn.textContent = cat;
+    btn.onclick = () => render(cat);
+    navLeft.appendChild(btn);
+  });
+
+  document.getElementById('alltBtn').onclick = () => render('ALLT');
+  document.getElementById('logo').onclick = () => render('TOP');
+  lb.onclick = () => { lb.classList.remove('active'); document.body.style.overflow = 'auto'; };
+  
+  document.getElementById('monoToggle').onclick = () => {
+    document.body.style.filter = document.body.style.filter === 'grayscale(1)' ? 'none' : 'grayscale(1)';
+  };
+  
+  document.getElementById('themeToggle').onclick = () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    const color = isDark ? '#fff' : '#000';
+    document.body.style.background = color;
+    document.body.style.color = isDark ? '#000' : '#fff';
+    document.getElementById('stickyNav').style.background = color;
+  };
+
+  // Starta
+  render('TOP');
+</script>
+</body>
+</html>
