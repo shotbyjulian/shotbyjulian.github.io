@@ -53,6 +53,15 @@
   .font-display{font-family:'Playfair Display',serif;font-weight:600}
   .font-geometric{font-family:'Montserrat',sans-serif;font-weight:500;letter-spacing:0.03em}
 
+  /* ---------- version badge ---------- */
+  .version-badge{
+    position:fixed;top:22px;left:clamp(20px,4vw,56px);z-index:400;
+    font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;
+    color:var(--muted);text-transform:uppercase;
+    animation:versionFade 0.8s var(--ease) 0.2s both;
+  }
+  @keyframes versionFade{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
   /* ---------- reveal-on-scroll ---------- */
   .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s var(--ease),transform 0.8s var(--ease)}
   .reveal.is-visible{opacity:1;transform:translateY(0)}
@@ -265,6 +274,8 @@
 </head>
 <body>
 
+<div class="version-badge">v7.0</div>
+
 <header class="masthead-bar">
   <a href="#home" class="mark">SBJ</a>
   <nav class="primary">
@@ -340,7 +351,7 @@
     "AURUM": "font-modern",        // Modern sans
     "FERRUM": "font-tech",         // Tech mono
     "VELOX": "font-compact",       // Compact mono
-    "対称": "font-display",        // Display serif
+    "對稱": "font-display",        // Display serif
     "閃光": "font-geometric",      // Geometric sans
     "METALLUM": "font-mono",       // Mono
     "FORMA": "font-elegant",       // Elegant serif
