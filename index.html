@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SHOT BY JULIAN — ARCHIVE</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>SHOT BY JULIAN — ARCHIVE v7.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500;1,9..144,600&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;600&family=Courier+Prime:wght@400;700&family=Inconsolata:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Crimson+Text:ital,wght@0,400;1,400&family=Lora:ital,wght@0,400;1,400&family=Roboto+Mono:wght@400;600&family=Work+Sans:wght@400;600&family=Inter:wght@400;600&family=DM+Mono:wght@400;500&family=Source+Code+Pro:wght@400;600&family=Poppins:wght@400;600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
@@ -55,12 +58,19 @@
 
   /* ---------- version badge ---------- */
   .version-badge{
-    position:fixed;top:22px;left:clamp(20px,4vw,56px);z-index:400;
-    font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;
-    color:var(--muted);text-transform:uppercase;
-    animation:versionFade 0.8s var(--ease) 0.2s both;
+    position:fixed;top:18px;left:18px;z-index:99999;
+    font-family:'IBM Plex Mono',monospace;font-size:0.8rem;letter-spacing:0.15em;
+    color:#ffffff;text-transform:uppercase;font-weight:900;
+    border:2px solid var(--accent-2);padding:10px 16px;
+    background:var(--accent-2);backdrop-filter:blur(10px);
+    box-shadow:0 4px 20px rgba(178,58,42,0.3);
+    animation:versionPulse 1.2s var(--ease) both;
+    letter-spacing:0.2em;
   }
-  @keyframes versionFade{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes versionPulse{
+    0%{opacity:0;transform:scale(0.8) translateY(-20px)}
+    100%{opacity:1;transform:scale(1) translateY(0)}
+  }
 
   /* ---------- reveal-on-scroll ---------- */
   .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s var(--ease),transform 0.8s var(--ease)}
@@ -274,7 +284,7 @@
 </head>
 <body>
 
-<div class="version-badge">v7.0</div>
+<div class="version-badge">V7.0</div>
 
 <header class="masthead-bar">
   <a href="#home" class="mark">SBJ</a>
