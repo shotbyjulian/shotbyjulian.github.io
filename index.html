@@ -3,23 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>SHOT BY JULIAN — ARCHIVE v7.0</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500;1,9..144,600&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;600&family=Courier+Prime:wght@400;700&family=Inconsolata:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Crimson+Text:ital,wght@0,400;1,400&family=Lora:ital,wght@0,400;1,400&family=Roboto+Mono:wght@400;600&family=Work+Sans:wght@400;600&family=Inter:wght@400;600&family=DM+Mono:wght@400;500&family=Source+Code+Pro:wght@400;600&family=Poppins:wght@400;600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<title>SHOT BY JULIAN — ARCHIVE v8.0</title>
 <style>
   :root{
     --ink:#0b0b0a;
     --ink-2:#141412;
+    --ink-3:#1c1b18;
     --paper:#f3f1ea;
     --rule:#333230;
     --accent:#8a2a1f;
     --accent-2:#b23a2a;
+    --accent-3:#d4574a;
     --muted:#96938a;
     --ease:cubic-bezier(0.16,1,0.3,1);
+    --serif:Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'SFMono-Regular',Menlo,Consolas,'Liberation Mono',monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html{scroll-behavior:smooth}
@@ -29,44 +28,46 @@
   }
   body{
     background:var(--ink);color:var(--paper);
-    font-family:'Archivo',sans-serif;
+    font-family:var(--sans);
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
+    line-height:1.5;
   }
   a{color:inherit;text-decoration:none}
   img{display:block;max-width:100%}
   :focus-visible{outline:1px solid var(--accent-2);outline-offset:4px}
 
-  .serif{font-family:'Fraunces',serif}
-  .mono{font-family:'IBM Plex Mono',monospace}
+  .serif{font-family:var(--serif)}
+  .mono{font-family:var(--mono)}
   .label{
-    font-family:'Archivo',sans-serif;font-weight:600;
-    font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);
+    font-family:var(--sans);font-weight:700;
+    font-size:0.68rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);
   }
+  .accent-text{color:var(--accent-3)}
 
-  /* Font families for descriptions */
-  .font-serif{font-family:'Fraunces',serif;font-style:italic;font-weight:500}
-  .font-mono{font-family:'IBM Plex Mono',monospace;font-weight:400}
-  .font-compact{font-family:'Space Mono',monospace;font-weight:400}
-  .font-elegant{font-family:'Crimson Text',serif;font-style:italic;font-weight:400}
-  .font-modern{font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.02em}
-  .font-tech{font-family:'JetBrains Mono',monospace;font-weight:500}
-  .font-bold{font-family:'Poppins',sans-serif;font-weight:600}
-  .font-classic{font-family:'Courier Prime',monospace;font-weight:400}
-  .font-display{font-family:'Playfair Display',serif;font-weight:600}
-  .font-geometric{font-family:'Montserrat',sans-serif;font-weight:500;letter-spacing:0.03em}
+  /* ---------- grain overlay ---------- */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;
+    opacity:0.04;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 
   /* ---------- version badge ---------- */
   .version-badge{
     position:fixed;top:18px;left:18px;z-index:99999;
-    font-family:'IBM Plex Mono',monospace;font-size:0.8rem;letter-spacing:0.15em;
-    color:#ffffff;text-transform:uppercase;font-weight:900;
-    border:2px solid var(--accent-2);padding:10px 16px;
-    background:var(--accent-2);backdrop-filter:blur(10px);
-    box-shadow:0 4px 20px rgba(178,58,42,0.3);
+    font-family:var(--mono);font-size:0.72rem;letter-spacing:0.2em;
+    color:#fff;text-transform:uppercase;font-weight:700;
+    border:1px solid var(--accent-2);padding:9px 15px;
+    background:var(--accent-2);
+    box-shadow:0 4px 24px rgba(178,58,42,0.35);
     animation:versionPulse 1.2s var(--ease) both;
-    letter-spacing:0.2em;
+    display:flex;align-items:center;gap:8px;
   }
+  .version-badge::before{
+    content:"";width:7px;height:7px;border-radius:50%;background:#fff;
+    animation:blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.25}}
   @keyframes versionPulse{
     0%{opacity:0;transform:scale(0.8) translateY(-20px)}
     100%{opacity:1;transform:scale(1) translateY(0)}
@@ -80,444 +81,482 @@
   header.masthead-bar{
     position:fixed;top:0;left:0;right:0;z-index:500;
     display:flex;align-items:center;justify-content:space-between;
-    padding:22px clamp(20px,4vw,56px);
+    padding:20px clamp(20px,4vw,56px);
     background:linear-gradient(to bottom, rgba(11,11,10,0.92), rgba(11,11,10,0));
-    backdrop-filter:blur(2px);
+    backdrop-filter:blur(4px);
+    transition:background 0.4s var(--ease),padding 0.4s var(--ease);
   }
-  .mark{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:1.15rem;letter-spacing:0.01em}
+  header.masthead-bar.scrolled{
+    background:rgba(11,11,10,0.94);
+    padding:14px clamp(20px,4vw,56px);
+    border-bottom:1px solid var(--rule);
+  }
+  .mark{
+    font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:1.2rem;letter-spacing:0.01em;
+    padding-left:120px;
+  }
+  @media(max-width:640px){.mark{padding-left:0;font-size:1rem;position:absolute;left:50%;transform:translateX(-50%)}}
   nav.primary{display:flex;gap:clamp(14px,2.5vw,34px)}
   nav.primary a{
-    font-family:'Archivo',sans-serif;font-weight:600;
-    font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;
-    padding-bottom:3px;border-bottom:1px solid transparent;
-    transition:border-color 0.3s var(--ease),color 0.3s var(--ease);
+    font-family:var(--sans);font-weight:700;
+    font-size:0.66rem;letter-spacing:0.16em;text-transform:uppercase;
+    padding-bottom:3px;position:relative;color:var(--paper);
   }
-  nav.primary a:hover{border-color:var(--accent-2)}
+  nav.primary a::after{
+    content:"";position:absolute;left:0;bottom:0;width:0;height:1px;
+    background:var(--accent-3);transition:width 0.35s var(--ease);
+  }
+  nav.primary a:hover::after{width:100%}
+  @media(max-width:640px){nav.primary a:nth-child(-n+2){display:none}}
 
   section{scroll-margin-top:90px}
 
   /* ---------- hero ---------- */
-  .hero{position:relative;height:100svh;min-height:560px;overflow:hidden}
-  .hero-img-wrap{position:absolute;inset:0}
-  .hero-img-wrap img{width:100%;height:100%;object-fit:cover;filter:grayscale(0.15) brightness(0.72)}
-  .hero-scrim{position:absolute;inset:0;background:linear-gradient(180deg, rgba(11,11,10,0.15) 0%, rgba(11,11,10,0.05) 40%, rgba(11,11,10,0.85) 100%)}
+  .hero{position:relative;height:100svh;min-height:560px;overflow:hidden;display:flex}
+  .hero-bg{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(178,58,42,0.18), transparent 55%),
+      radial-gradient(ellipse at 80% 90%, rgba(138,42,31,0.22), transparent 60%),
+      linear-gradient(160deg,#1a1815 0%,#0b0b0a 70%);
+  }
+  .hero-svg{position:absolute;inset:0;width:100%;height:100%;opacity:0.5}
+  .hero-scrim{position:absolute;inset:0;background:linear-gradient(180deg, rgba(11,11,10,0.1) 0%, rgba(11,11,10,0.05) 40%, rgba(11,11,10,0.9) 100%)}
   .hero-meta{
     position:absolute;top:100px;right:clamp(20px,4vw,56px);
     text-align:right;
   }
   .hero-meta .l1{font-size:0.62rem}
-  .hero-meta .l2{font-size:0.62rem;margin-top:4px;color:var(--paper);opacity:0.6}
+  .hero-meta .l2{font-size:0.62rem;margin-top:4px;color:var(--paper);opacity:0.55}
   .hero-title-wrap{
-    position:absolute;left:clamp(16px,4vw,48px);right:clamp(16px,4vw,48px);bottom:clamp(48px,8vh,90px);
+    position:absolute;left:clamp(16px,4vw,48px);right:clamp(16px,4vw,48px);bottom:clamp(56px,9vh,100px);
   }
+  .hero-kicker{
+    display:inline-flex;align-items:center;gap:10px;margin-bottom:20px;
+    animation:fadeUp 0.9s var(--ease) 0.1s both;
+  }
+  .hero-kicker .line{width:44px;height:1px;background:var(--accent-3)}
   .hero-title{
-    font-family:'Fraunces',serif;font-style:italic;font-weight:500;
-    font-size:clamp(3rem,11vw,9rem);line-height:0.86;letter-spacing:-0.01em;
-    text-shadow:0 6px 30px rgba(0,0,0,0.4);
+    font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:clamp(3rem,12vw,9.5rem);line-height:0.84;letter-spacing:-0.02em;
+    text-shadow:0 6px 40px rgba(0,0,0,0.5);
   }
+  .hero-title span{display:block}
+  .hero-title .t1{animation:fadeUp 1s var(--ease) 0.2s both}
+  .hero-title .t2{animation:fadeUp 1s var(--ease) 0.35s both;color:var(--accent-3)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
   .hero-sub{
-    margin-top:18px;max-width:40ch;font-size:0.95rem;line-height:1.6;color:var(--paper);opacity:0.78;
+    margin-top:22px;max-width:42ch;font-size:0.98rem;line-height:1.65;opacity:0.8;
+    animation:fadeUp 1s var(--ease) 0.5s both;
   }
   .scroll-cue{
-    position:absolute;bottom:24px;left:clamp(16px,4vw,48px);
+    position:absolute;bottom:26px;right:clamp(16px,4vw,48px);
     display:flex;align-items:center;gap:10px;
+    animation:fadeUp 1s var(--ease) 0.7s both;
   }
-  .scroll-cue .stem{width:1px;height:34px;background:var(--muted);position:relative;overflow:hidden}
-  .scroll-cue .stem::after{
-    content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--paper);
-    animation:cue 1.8s ease-in-out infinite;
-  }
-  @keyframes cue{ 0%{top:-100%} 60%{top:100%} 100%{top:100%} }
+  .scroll-cue .label{font-size:0.6rem}
+  .scroll-cue svg{animation:bob 1.8s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-  /* ---------- intro / statement ---------- */
-  .intro{
-    padding:clamp(70px,12vh,140px) clamp(20px,4vw,56px);
-    display:grid;grid-template-columns:1fr;gap:26px;
-    max-width:1400px;margin:0 auto;
+  /* ---------- section shell ---------- */
+  .shell{padding:clamp(60px,10vh,130px) clamp(20px,4vw,56px);max-width:1400px;margin:0 auto}
+  .sec-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    gap:24px;flex-wrap:wrap;border-bottom:1px solid var(--rule);
+    padding-bottom:22px;margin-bottom:clamp(36px,6vh,64px);
   }
-  @media (min-width:860px){
-    .intro{grid-template-columns:0.9fr 1.4fr;align-items:start;gap:60px}
+  .sec-title{
+    font-family:var(--serif);font-weight:400;font-style:italic;
+    font-size:clamp(2rem,5vw,3.4rem);line-height:1;letter-spacing:-0.01em;
   }
-  .intro .kicker{margin-bottom:22px}
-  .intro p{
-    font-size:clamp(1.3rem,2.4vw,2.1rem);line-height:1.32;font-weight:400;
-    letter-spacing:-0.01em;
-  }
-  .intro p .cap{
-    font-family:'Fraunces',serif;font-style:italic;font-size:1.5em;
-  }
+  .sec-idx{font-family:var(--mono);font-size:0.72rem;letter-spacing:0.2em;color:var(--accent-3)}
 
-  /* ---------- gallery index / filters ---------- */
-  .gallery-head{
-    padding:0 clamp(20px,4vw,56px);max-width:1400px;margin:0 auto;
-    display:flex;flex-wrap:wrap;align-items:baseline;gap:14px 26px;
-    border-top:1px solid var(--rule);padding-top:26px;
+  /* ---------- gallery ---------- */
+  .gallery{
+    display:grid;grid-template-columns:repeat(12,1fr);
+    gap:clamp(14px,2vw,26px);
   }
-  .gallery-head h2{
-    font-family:'Fraunces',serif;font-style:italic;font-weight:500;
-    font-size:clamp(1.8rem,3.5vw,2.6rem);margin-right:auto;
-  }
-  .filters{display:flex;flex-wrap:wrap;gap:4px 4px;font-family:'IBM Plex Mono',monospace}
-  .filters button{
-    background:none;border:none;color:var(--muted);cursor:pointer;
-    font-size:0.72rem;letter-spacing:0.04em;padding:6px 10px;
-    transition:color 0.25s var(--ease);
-  }
-  .filters button:not(:last-child)::after{content:'/';margin-left:8px;color:var(--rule)}
-  .filters button[aria-current="true"],.filters button:hover{color:var(--paper)}
-
-  /* ---------- spreads ---------- */
-  .spreads{
-    max-width:1400px;margin:0 auto;padding:40px clamp(20px,4vw,56px) 60px;
-    display:flex;flex-direction:column;gap:clamp(56px,9vw,120px);
-    transition:opacity 0.45s ease;
-  }
-  .spreads.switching{opacity:0}
-
-  .spread{display:grid;grid-template-columns:1fr;gap:18px;align-items:center}
-  @media (min-width:860px){
-    .spread{grid-template-columns:7fr 5fr;gap:0;min-height:64vh}
-    .spread.reverse{grid-template-columns:5fr 7fr}
-    .spread.reverse .spread-media{order:2}
-    .spread.reverse .spread-copy{order:1}
-  }
-
-  .spread-media{
+  .card{
     position:relative;overflow:hidden;background:var(--ink-2);
-    aspect-ratio:4/5;cursor:pointer;
+    border:1px solid var(--rule);
+    transition:transform 0.5s var(--ease),border-color 0.5s var(--ease);
   }
-  @media (min-width:860px){ .spread-media{aspect-ratio:auto;height:70vh;max-height:820px} }
-  .spread-media img{
-    width:100%;height:100%;object-fit:cover;
-    filter:grayscale(0.55) brightness(0.82);
-    transition:transform 1.1s var(--ease),filter 0.7s var(--ease);
+  .card:hover{transform:translateY(-6px);border-color:var(--accent-2)}
+  .card .frame{position:relative;overflow:hidden}
+  .card svg{display:block;width:100%;height:auto;transition:transform 0.9s var(--ease),filter 0.6s var(--ease)}
+  .card:hover svg{transform:scale(1.05);filter:saturate(1.2)}
+  .card .cap{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 16px;gap:12px;border-top:1px solid var(--rule);
   }
-  @media (hover:hover){
-    .spread-media:hover img{transform:scale(1.045);filter:grayscale(0) brightness(1)}
-    .spread-media:hover .spread-hover-meta{opacity:1;transform:translateY(0)}
+  .card .cap h3{font-family:var(--serif);font-style:italic;font-weight:500;font-size:1.05rem}
+  .card .cap .m{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.12em;color:var(--muted)}
+  .card .tag{
+    position:absolute;top:12px;left:12px;z-index:3;
+    font-family:var(--mono);font-size:0.58rem;letter-spacing:0.16em;text-transform:uppercase;
+    background:rgba(11,11,10,0.7);padding:5px 10px;border:1px solid rgba(243,241,234,0.2);
+    backdrop-filter:blur(4px);
   }
-  .spread-hover-meta{
-    position:absolute;left:0;right:0;bottom:0;padding:22px 22px 20px;
-    background:linear-gradient(0deg, rgba(11,11,10,0.9), rgba(11,11,10,0));
-    opacity:0;transform:translateY(10px);
-    transition:opacity 0.4s var(--ease),transform 0.4s var(--ease);
+  .c-wide{grid-column:span 8}
+  .c-tall{grid-column:span 4}
+  .c-half{grid-column:span 6}
+  .c-third{grid-column:span 4}
+  @media(max-width:860px){
+    .c-wide,.c-tall,.c-half{grid-column:span 12}
+    .c-third{grid-column:span 6}
   }
-  .spread-hover-meta .t{font-family:'Fraunces',serif;font-style:italic;font-size:1.3rem}
-  .spread-hover-meta .m{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:4px}
-
-  .spread-copy{position:relative;padding:20px 4px}
-  @media (min-width:860px){
-    .spread-copy{padding:0 clamp(20px,4vw,56px)}
-    .spread.reverse .spread-copy{padding:0 clamp(20px,4vw,56px)}
-  }
-  .spread-folio{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--accent-2);letter-spacing:0.05em}
-  .spread-title{
-    font-family:'Fraunces',serif;font-style:italic;font-weight:500;
-    font-size:clamp(2.6rem,6vw,4.6rem);line-height:0.92;margin-top:10px;
-  }
-  .spread-cat{font-size:0.68rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-top:14px}
-  .tap-hint{display:none;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:14px}
-  @media (hover:none){ .tap-hint{display:block} }
+  @media(max-width:520px){.c-third{grid-column:span 12}}
 
   /* ---------- about ---------- */
-  .about{
-    padding:clamp(80px,12vh,150px) clamp(20px,4vw,56px);
-    border-top:1px solid var(--rule);
-    max-width:1400px;margin:0 auto;
-    display:grid;grid-template-columns:1fr;gap:40px;
+  .about{background:var(--ink-2);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(30px,5vw,70px);align-items:start}
+  @media(max-width:820px){.about-grid{grid-template-columns:1fr}}
+  .about-lead{
+    font-family:var(--serif);font-style:italic;font-weight:400;
+    font-size:clamp(1.5rem,3vw,2.3rem);line-height:1.35;
   }
-  @media (min-width:860px){ .about{grid-template-columns:1fr 1fr;gap:80px} }
-  .about-statement{
-    font-family:'Fraunces',serif;font-style:italic;font-weight:400;
-    font-size:clamp(1.7rem,3.4vw,2.6rem);line-height:1.28;
-  }
-  .about-body{align-self:end}
-  .about-body p{font-size:0.98rem;line-height:1.75;color:var(--paper);opacity:0.82;max-width:52ch}
-  .about-body p + p{margin-top:16px}
+  .about-lead em{color:var(--accent-3);font-style:italic}
+  .about-body p{margin-top:18px;opacity:0.82;font-size:0.98rem;line-height:1.7;max-width:52ch}
+  .stats{display:grid;gap:26px;margin-top:8px}
+  .stat{border-left:2px solid var(--accent-2);padding-left:18px}
+  .stat .n{font-family:var(--serif);font-size:2.6rem;line-height:1;font-style:italic}
+  .stat .k{margin-top:6px;font-size:0.72rem}
 
-  /* ---------- contact / footer ---------- */
-  .contact{
-    padding:clamp(70px,10vh,120px) clamp(20px,4vw,56px) 40px;
-    border-top:1px solid var(--rule);
-    max-width:1400px;margin:0 auto;
+  /* ---------- services ---------- */
+  .services{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.5vw,30px)}
+  @media(max-width:820px){.services{grid-template-columns:1fr}}
+  .svc{
+    border:1px solid var(--rule);padding:30px 26px;background:var(--ink-2);
+    transition:background 0.4s var(--ease),transform 0.4s var(--ease);
+    position:relative;overflow:hidden;
   }
-  .contact-links{display:flex;flex-direction:column;gap:6px;margin-top:22px}
-  .contact-links a{
-    font-family:'Fraunces',serif;font-style:italic;font-weight:500;
-    font-size:clamp(2.4rem,7vw,5rem);line-height:1.02;
-    display:inline-block;position:relative;width:fit-content;
-    transition:color 0.3s var(--ease);
-    padding-bottom:4px;
-  }
-  .contact-links a::after{
-    content:'';position:absolute;left:0;bottom:0;width:100%;height:2px;background:var(--paper);
-    transform:scaleX(0);transform-origin:left;transition:transform 0.5s var(--ease);
-  }
-  .contact-links a:hover{color:var(--accent-2)}
-  .contact-links a:hover::after{transform:scaleX(1)}
+  .svc:hover{background:var(--ink-3);transform:translateY(-5px)}
+  .svc .no{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.2em;color:var(--accent-3)}
+  .svc h3{font-family:var(--serif);font-style:italic;font-weight:500;font-size:1.5rem;margin:14px 0 12px}
+  .svc p{opacity:0.75;font-size:0.92rem;line-height:1.65}
+  .svc ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+  .svc li{font-family:var(--mono);font-size:0.72rem;letter-spacing:0.08em;color:var(--muted);padding-left:16px;position:relative}
+  .svc li::before{content:"—";position:absolute;left:0;color:var(--accent-3)}
 
-  footer.legal{
-    display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;
-    padding:26px clamp(20px,4vw,56px) 40px;border-top:1px solid var(--rule);
-    font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);
+  /* ---------- quote ---------- */
+  .quote{text-align:center;max-width:900px;margin:0 auto}
+  .quote blockquote{
+    font-family:var(--serif);font-style:italic;font-weight:400;
+    font-size:clamp(1.6rem,4vw,3rem);line-height:1.3;letter-spacing:-0.01em;
   }
+  .quote .who{margin-top:26px;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.18em;color:var(--muted)}
 
-  /* ---------- lightbox ---------- */
-  .lightbox{
-    position:fixed;inset:0;background:rgba(11,11,10,0.97);z-index:900;
-    display:flex;align-items:center;justify-content:center;flex-direction:column;
-    opacity:0;pointer-events:none;transition:opacity 0.4s var(--ease);padding:26px;
+  /* ---------- contact ---------- */
+  .contact{background:var(--ink-2);border-top:1px solid var(--rule)}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,70px);align-items:center}
+  @media(max-width:820px){.contact-grid{grid-template-columns:1fr}}
+  .contact h2{
+    font-family:var(--serif);font-style:italic;font-weight:400;
+    font-size:clamp(2.4rem,7vw,5rem);line-height:0.95;letter-spacing:-0.02em;
   }
-  .lightbox.active{opacity:1;pointer-events:auto}
-  .lightbox img{max-width:92vw;max-height:78vh;object-fit:contain}
-  .lightbox-info{margin-top:20px;text-align:center}
-  .lightbox-info .t{font-family:'Fraunces',serif;font-style:italic;font-size:1.4rem}
-  .lightbox-info .m{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--muted);margin-top:6px;letter-spacing:0.05em}
-  .lightbox-close{
-    position:absolute;top:22px;right:26px;background:none;border:none;color:var(--paper);
-    font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;cursor:pointer;
-    padding:8px 12px;transition:color 0.3s var(--ease),opacity 0.3s var(--ease);
-    opacity:0.7;
+  .contact h2 em{color:var(--accent-3)}
+  .contact-links{display:grid;gap:2px}
+  .clink{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 4px;border-bottom:1px solid var(--rule);
+    transition:padding 0.4s var(--ease),border-color 0.4s var(--ease);
   }
-  .lightbox-close:hover{opacity:1;color:var(--accent-2)}
+  .clink:hover{padding-left:16px;border-color:var(--accent-2)}
+  .clink .k{font-family:var(--mono);font-size:0.68rem;letter-spacing:0.16em;color:var(--muted);text-transform:uppercase}
+  .clink .v{font-family:var(--serif);font-style:italic;font-size:1.2rem}
+  .clink svg{color:var(--accent-3);opacity:0;transform:translateX(-8px);transition:all 0.4s var(--ease)}
+  .clink:hover svg{opacity:1;transform:translateX(0)}
+
+  /* ---------- footer ---------- */
+  footer.foot{
+    padding:40px clamp(20px,4vw,56px);
+    display:flex;align-items:center;justify-content:space-between;
+    gap:20px;flex-wrap:wrap;border-top:1px solid var(--rule);
+  }
+  footer.foot .label{font-size:0.62rem}
 </style>
 </head>
 <body>
 
-<div class="version-badge">V7.0</div>
+<div class="version-badge">ARCHIVE v8.0</div>
 
-<header class="masthead-bar">
-  <a href="#home" class="mark">SBJ</a>
+<header class="masthead-bar" id="masthead">
+  <div class="mark">Shot by Julian</div>
   <nav class="primary">
-    <a href="#home">Home</a>
-    <a href="#gallery">Gallery</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
+    <a href="#work">Arbeten</a>
+    <a href="#about">Om</a>
+    <a href="#services">Tjänster</a>
+    <a href="#contact">Kontakt</a>
   </nav>
 </header>
 
-<section id="home" class="hero">
-  <div class="hero-img-wrap"><img id="heroImg" src="" alt=""></div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <svg class="hero-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <radialGradient id="hg" cx="35%" cy="30%" r="75%">
+        <stop offset="0%" stop-color="#3a2420"/>
+        <stop offset="100%" stop-color="#0b0b0a"/>
+      </radialGradient>
+      <linearGradient id="ap" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#b23a2a"/>
+        <stop offset="100%" stop-color="#8a2a1f"/>
+      </linearGradient>
+    </defs>
+    <rect width="1440" height="900" fill="url(#hg)"/>
+    <g stroke="#b23a2a" stroke-width="1" opacity="0.28" fill="none">
+      <circle cx="1050" cy="300" r="200"/>
+      <circle cx="1050" cy="300" r="150"/>
+      <circle cx="1050" cy="300" r="100"/>
+    </g>
+    <g opacity="0.5">
+      <circle cx="1050" cy="300" r="60" fill="none" stroke="url(#ap)" stroke-width="3"/>
+      <circle cx="1050" cy="300" r="8" fill="#d4574a"/>
+      <line x1="1050" y1="230" x2="1050" y2="370" stroke="#d4574a" stroke-width="1"/>
+      <line x1="980" y1="300" x2="1120" y2="300" stroke="#d4574a" stroke-width="1"/>
+    </g>
+    <g stroke="#f3f1ea" stroke-width="1" opacity="0.06">
+      <line x1="0" y1="225" x2="1440" y2="225"/>
+      <line x1="0" y1="450" x2="1440" y2="450"/>
+      <line x1="0" y1="675" x2="1440" y2="675"/>
+      <line x1="480" y1="0" x2="480" y2="900"/>
+      <line x1="960" y1="0" x2="960" y2="900"/>
+    </g>
+  </svg>
   <div class="hero-scrim"></div>
-  <div class="hero-meta mono">
-    <div class="l1">ARCHIVE — SWEDEN</div>
-    <div class="l2" id="heroDate"></div>
+
+  <div class="hero-meta">
+    <div class="label l1">Stockholm · SE</div>
+    <div class="label l2">59.3293° N, 18.0686° E</div>
   </div>
+
   <div class="hero-title-wrap">
-    <h1 class="hero-title reveal">Shot by<br>Julian</h1>
-    <p class="hero-sub reveal">Photography archive. Cars, streets, landscapes. Shot on film, kept in order.</p>
+    <div class="hero-kicker">
+      <span class="line"></span>
+      <span class="label" style="color:var(--paper)">Fotografiskt Arkiv — MMXXIV</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="t1">Ljus,</span>
+      <span class="t2">skugga &amp; stund.</span>
+    </h1>
+    <p class="hero-sub">Ett kurerat arkiv av porträtt, gatufoto och redaktionellt arbete — fångat på film och i tystnad, någonstans mellan verklighet och minne.</p>
   </div>
-  <div class="scroll-cue"><div class="stem"></div><span class="label">Scroll</span></div>
+
+  <a href="#work" class="scroll-cue" aria-label="Scrolla ner">
+    <span class="label">Bläddra</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-3)" stroke-width="2"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+  </a>
 </section>
 
-<section class="intro">
-  <div class="kicker reveal label">Statement</div>
-  <p class="reveal">Every image is kept as shot—no staging, no edits. The work is organized by subject and archived chronologically. This is a direct record of what the camera saw.</p>
-</section>
-
-<section id="gallery">
-  <div class="gallery-head reveal">
-    <h2>The Index</h2>
-    <div class="filters" id="filters"></div>
+<!-- WORK -->
+<section id="work" class="shell">
+  <div class="sec-head reveal">
+    <h2 class="sec-title">Utvalda arbeten</h2>
+    <span class="sec-idx">01 / SELECTED</span>
   </div>
-  <div class="spreads" id="spreads"></div>
+
+  <div class="gallery">
+    <!-- wide -->
+    <article class="card c-wide reveal">
+      <div class="frame">
+        <span class="tag">Porträtt</span>
+        <svg viewBox="0 0 800 480" role="img" aria-label="Porträtt i motljus">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#2a211d"/><stop offset="100%" stop-color="#0e0d0c"/>
+            </linearGradient>
+            <radialGradient id="g1r" cx="65%" cy="35%" r="55%">
+              <stop offset="0%" stop-color="#c98a5a" stop-opacity="0.55"/>
+              <stop offset="100%" stop-color="#c98a5a" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="800" height="480" fill="url(#g1)"/>
+          <rect width="800" height="480" fill="url(#g1r)"/>
+          <ellipse cx="400" cy="250" rx="120" ry="150" fill="#1a1512"/>
+          <ellipse cx="400" cy="180" rx="70" ry="80" fill="#241c17"/>
+          <path d="M470 120 Q520 100 540 140" stroke="#c98a5a" stroke-width="2" fill="none" opacity="0.6"/>
+          <circle cx="620" cy="120" r="40" fill="#c98a5a" opacity="0.2"/>
+        </svg>
+      </div>
+      <div class="cap">
+        <h3>Motljus, nr. 14</h3>
+        <span class="m">35MM · 2024</span>
+      </div>
+    </article>
+
+    <!-- tall -->
+    <article class="card c-tall reveal">
+      <div class="frame">
+        <span class="tag">Gata</span>
+        <svg viewBox="0 0 400 480" role="img" aria-label="Gatuscen i regn">
+          <defs>
+            <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#20242a"/><stop offset="100%" stop-color="#0b0d10"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="480" fill="url(#g2)"/>
+          <rect x="0" y="360" width="400" height="120" fill="#101316"/>
+          <g fill="#3a4650" opacity="0.7">
+            <rect x="40" y="120" width="60" height="240"/>
+            <rect x="150" y="80" width="70" height="280"/>
+            <rect x="270" y="150" width="80" height="210"/>
+          </g>
+          <g fill="#d4574a" opacity="0.85">
+            <rect x="60" y="200" width="12" height="12"/>
+            <rect x="180" y="160" width="12" height="12"/>
+            <rect x="300" y="220" width="12" height="12"/>
+          </g>
+          <ellipse cx="200" cy="410" rx="30" ry="45" fill="#151a1e"/>
+          <line x1="0" y1="380" x2="400" y2="380" stroke="#5a6670" stroke-width="1" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="cap">
+        <h3>Nattregn</h3>
+        <span class="m">TRI-X · 2023</span>
+      </div>
+    </article>
+
+    <!-- thirds -->
+    <article class="card c-third reveal">
+      <div class="frame">
+        <span class="tag">Landskap</span>
+        <svg viewBox="0 0 400 320" role="img" aria-label="Dimhöljt landskap">
+          <defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4a4038"/><stop offset="100%" stop-color="#1a1714"/></linearGradient></defs>
+          <rect width="400" height="320" fill="url(#g3)"/>
+          <path d="M0 200 L120 130 L200 190 L300 120 L400 180 L400 320 L0 320 Z" fill="#221d18" opacity="0.9"/>
+          <path d="M0 240 L150 190 L280 230 L400 200 L400 320 L0 320 Z" fill="#14100d"/>
+          <circle cx="310" cy="80" r="34" fill="#d4574a" opacity="0.35"/>
+        </svg>
+      </div>
+      <div class="cap"><h3>Dimma vid gryning</h3><span class="m">6×7 · 2024</span></div>
+    </article>
+
+    <article class="card c-third reveal">
+      <div class="frame">
+        <span class="tag">Redaktionellt</span>
+        <svg viewBox="0 0 400 320" role="img" aria-label="Modeporträtt">
+          <defs><radialGradient id="g4" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#3a2e2a"/><stop offset="100%" stop-color="#0e0b0a"/></radialGradient></defs>
+          <rect width="400" height="320" fill="url(#g4)"/>
+          <ellipse cx="200" cy="150" rx="60" ry="75" fill="#1c1512"/>
+          <ellipse cx="200" cy="110" rx="34" ry="40" fill="#2a201a"/>
+          <path d="M160 230 Q200 200 240 230 L240 320 L160 320 Z" fill="#241b16"/>
+          <circle cx="120" cy="70" r="24" fill="#c98a5a" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="cap"><h3>Studio, nr. 07</h3><span class="m">DIGITAL · 2024</span></div>
+    </article>
+
+    <article class="card c-third reveal">
+      <div class="frame">
+        <span class="tag">Abstrakt</span>
+        <svg viewBox="0 0 400 320" role="img" aria-label="Abstrakt ljus">
+          <defs><linearGradient id="g5" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2b1f2c"/><stop offset="100%" stop-color="#0c0a0d"/></linearGradient></defs>
+          <rect width="400" height="320" fill="url(#g5)"/>
+          <g opacity="0.7">
+            <path d="M-20 260 Q150 60 420 200" stroke="#d4574a" stroke-width="3" fill="none"/>
+            <path d="M-20 300 Q200 120 420 260" stroke="#c98a5a" stroke-width="2" fill="none" opacity="0.6"/>
+          </g>
+          <circle cx="280" cy="120" r="50" fill="none" stroke="#f3f1ea" stroke-width="1" opacity="0.2"/>
+        </svg>
+      </div>
+      <div class="cap"><h3>Ljusspår</h3><span class="m">EXPERIMENT · 2023</span></div>
+    </article>
+
+    <!-- halves -->
+    <article class="card c-half reveal">
+      <div class="frame">
+        <span class="tag">Stilleben</span>
+        <svg viewBox="0 0 600 380" role="img" aria-label="Stilleben">
+          <defs><radialGradient id="g6" cx="40%" cy="35%" r="65%"><stop offset="0%" stop-color="#3a352c"/><stop offset="100%" stop-color="#100e0b"/></radialGradient></defs>
+          <rect width="600" height="380" fill="url(#g6)"/>
+          <rect x="0" y="270" width="600" height="110" fill="#181510"/>
+          <ellipse cx="240" cy="270" rx="70" ry="16" fill="#0c0a08"/>
+          <path d="M210 270 Q205 180 240 170 Q275 180 270 270 Z" fill="#2a2119"/>
+          <circle cx="240" cy="165" r="18" fill="#c98a5a" opacity="0.5"/>
+          <rect x="360" y="200" width="80" height="70" fill="#241d15"/>
+        </svg>
+      </div>
+      <div class="cap"><h3>Morgonljus</h3><span class="m">4×5 · 2024</span></div>
+    </article>
+
+    <article class="card c-half reveal">
+      <div class="frame">
+        <span class="tag">Arkitektur</span>
+        <svg viewBox="0 0 600 380" role="img" aria-label="Arkitektur">
+          <defs><linearGradient id="g7" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22262b"/><stop offset="100%" stop-color="#0a0c0e"/></linearGradient></defs>
+          <rect width="600" height="380" fill="url(#g7)"/>
+          <g fill="#2e353c">
+            <rect x="60" y="80" width="120" height="300"/>
+            <rect x="220" y="140" width="140" height="240"/>
+            <rect x="400" y="60" width="130" height="320"/>
+          </g>
+          <g fill="#d4574a" opacity="0.5">
+            <rect x="80" y="120" width="20" height="20"/><rect x="120" y="180" width="20" height="20"/>
+            <rect x="250" y="180" width="24" height="24"/><rect x="440" y="120" width="24" height="24"/>
+          </g>
+          <line x1="0" y1="380" x2="600" y2="200" stroke="#5a6670" stroke-width="1" opacity="0.25"/>
+        </svg>
+      </div>
+      <div class="cap"><h3>Geometrier</h3><span class="m">DIGITAL · 2024</span></div>
+    </article>
+  </div>
 </section>
 
+<!-- ABOUT -->
 <section id="about" class="about">
-  <div class="about-statement reveal">Work shot in Sweden, mostly on foot. No formal training. Just a camera and consistent practice.</div>
-  <div class="about-body reveal">
-    <p>Based in Sweden. Each image is numbered as it was taken—nothing is reordered or edited after the fact. The archive grows with every roll of film.</p>
+  <div class="shell">
+    <div class="sec-head reveal">
+      <h2 class="sec-title">Om Julian</h2>
+      <span class="sec-idx">02 / STUDIO</span>
+    </div>
+    <div class="about-grid">
+      <div class="reveal">
+        <p class="about-lead">Jag fotograferar det som <em>brinner tyst</em> — mellanrummen, andetagen, ljuset strax innan det försvinner.</p>
+        <div class="about-body">
+          <p>Med bas i Stockholm arbetar jag i skärningspunkten mellan porträtt, gatufoto och redaktionell fotografi. Analogt och digitalt, alltid med fokus på stämning framför perfektion.</p>
+          <p>Sedan 2016 har mina bilder publicerats i tidskrifter, gallerier och privata samlingar runt om i Norden. Varje serie är ett försök att bevara ett ögonblick precis som det kändes.</p>
+        </div>
+      </div>
+      <div class="stats reveal">
+        <div class="stat"><div class="n">8+</div><div class="k label">År bakom kameran</div></div>
+        <div class="stat"><div class="n">120</div><div class="k label">Uppdrag levererade</div></div>
+        <div class="stat"><div class="n">24</div><div class="k label">Utställningar &amp; publiceringar</div></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<section id="contact" class="contact">
-  <div class="label reveal">Get in touch</div>
-  <div class="contact-links reveal">
-    <a href="https://instagram.com/shot_by_julian_" target="_blank">Instagram</a>
-    <a href="https://ig.me/m/shot_by_julian_" target="_blank">Message</a>
+<!-- SERVICES -->
+<section id="services" class="shell">
+  <div class="sec-head reveal">
+    <h2 class="sec-title">Tjänster</h2>
+    <span class="sec-idx">03 / OFFERING</span>
+  </div>
+  <div class="services">
+    <article class="svc reveal">
+      <div class="no">01</div>
+      <h3>Porträtt</h3>
+      <p>Personliga sessioner i studio eller på plats, där ljus och närvaro får ta plats.</p>
+      <ul><li>Studio &amp; miljö</li><li>Analog &amp; digital</li><li>Retusch inkluderad</li></ul>
+    </article>
+    <article class="svc reveal">
+      <div class="no">02</div>
+      <h3>Redaktionellt</h3>
+      <p>Berättande bildserier för magasin, varumärken och kulturprojekt.</p>
+      <ul><li>Koncept &amp; regi</li><li>Team &amp; casting</li><li>Fullständig leverans</li></ul>
+    </article>
+    <article class="svc reveal">
+      <div class="no">03</div>
+      <h3>Print &amp; arkiv</h3>
+      <p>Handgjorda tryck och kurerade samlingar för utställning och hemmet.</p>
+      <ul><li>Fine art-tryck</li><li>Limiterade upplagor</li><li>Signerade verk</li></ul>
+    </article>
   </div>
 </section>
 
-<footer class="legal">
-  <span>SBJ ARCHIVE — ALL RIGHTS RESERVED © <span id="year"></span></span>
-  <span>NO UNAUTHORIZED REPRODUCTION</span>
-</footer>
-
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" id="lbClose">Close</button>
-  <img id="lbImg" src="" alt="">
-  <div class="lightbox-info">
-    <div class="t" id="lbTitle"></div>
-    <div class="m" id="lbMeta"></div>
-  </div>
-</div>
-
-<script>
-  // Font mapping for descriptions - matching character to font
-  const fontMap = {
-    "AMICUS": "font-elegant",      // Elegant serif
-    "EQUUS": "font-mono",          // Clean mono
-    "SPIRITUS": "font-serif",      // Classic serif italic
-    "AURUM": "font-modern",        // Modern sans
-    "FERRUM": "font-tech",         // Tech mono
-    "VELOX": "font-compact",       // Compact mono
-    "對稱": "font-display",        // Display serif
-    "閃光": "font-geometric",      // Geometric sans
-    "METALLUM": "font-mono",       // Mono
-    "FORMA": "font-elegant",       // Elegant serif
-    "LUMEN": "font-tech",          // Tech mono
-    "ROTA": "font-modern",         // Modern sans
-    "TAURO": "font-classic",       // Classic mono
-    "ALBUS": "font-serif",         // Serif italic
-    "MACHINA": "font-compact",     // Compact mono
-    "ITER": "font-elegant",        // Elegant serif
-    "NOCTIS": "font-display",      // Display serif
-    "VIA": "font-modern",          // Modern sans
-    "VETUSTUS": "font-tech",       // Tech mono
-    "IGNIS": "font-geometric",     // Geometric sans
-    "木漏れ日": "font-serif",       // Serif italic
-    "SILVA": "font-elegant",       // Elegant serif
-    "FOLIUM": "font-mono",         // Mono
-    "VIRIDIS": "font-modern",      // Modern sans
-    "VORS": "font-tech",           // Tech mono
-    "CANUS": "font-classic",       // Classic mono
-    "URBS": "font-compact",        // Compact mono
-    "SILENT": "font-elegant",      // Elegant serif
-    "VESPER": "font-serif",        // Serif italic
-    "暗闇": "font-display",        // Display serif
-    "UMBRA": "font-geometric",     // Geometric sans
-    "LUX": "font-mono",            // Mono
-    "魂": "font-modern",           // Modern sans
-    "ARBOR": "font-tech",          // Tech mono
-    "AETHER": "font-elegant",      // Elegant serif
-    "BERLIN01": "font-compact",    // Compact mono
-    "BERLIN02": "font-modern",     // Modern sans
-    "BERLIN03": "font-tech",       // Tech mono
-    "BERLIN04": "font-geometric",  // Geometric sans
-    "BERLIN05": "font-serif",      // Serif italic
-    "BERLIN06": "font-elegant"     // Elegant serif
-  };
-
-  // ---------- DATA ----------
-  const IMAGES = [
-    { n: "1", w: "AMICUS", a: "MISC", top: true }, { n: "2", w: "EQUUS", a: "VROOM" },
-    { n: "3", w: "SPIRITUS", a: "VROOM" }, { n: "4", w: "AURUM", a: "VROOM" },
-    { n: "5", w: "FERRUM", a: "VROOM", top: true }, { n: "6", w: "VELOX", a: "VROOM" },
-    { n: "7", w: "對稱", a: "VROOM" }, { n: "8", w: "閃光", a: "VROOM", top: true },
-    { n: "9", w: "METALLUM", a: "VROOM" }, { n: "10", w: "FORMA", a: "VROOM", top: true },
-    { n: "11", w: "LUMEN", a: "VROOM" }, { n: "12", w: "ROTA", a: "VROOM" },
-    { n: "14", w: "TAURO", a: "VROOM", top: true }, { n: "15", w: "ALBUS", a: "VROOM" },
-    { n: "16", w: "MACHINA", a: "VROOM" }, { n: "17", w: "ITER", a: "VROOM", top: true },
-    { n: "18", w: "NOCTIS", a: "VROOM" }, { n: "19", w: "VIA", a: "VROOM" },
-    { n: "20", w: "VETUSTUS", a: "VROOM" }, { n: "22", w: "IGNIS", a: "VROOM", top: true },
-    { n: "23", w: "木漏れ日", a: "NATURE", top: true }, { n: "24", w: "SILVA", a: "NATURE", top: true },
-    { n: "25", w: "FOLIUM", a: "NATURE" }, { n: "26", w: "VIRIDIS", a: "NATURE" },
-    { n: "27", w: "VORS", a: "VROOM" }, { n: "28", w: "CANUS", a: "VROOM" },
-    { n: "29", w: "URBS", a: "VROOM" }, { n: "30", w: "SILENT", a: "VROOM" },
-    { n: "31", w: "VESPER", a: "VROOM" }, { n: "32", w: "暗闇", a: "NOIR", top: true },
-    { n: "33", w: "UMBRA", a: "NOIR" }, { n: "34", w: "LUX", a: "NOIR" },
-    { n: "35", w: "魂", a: "NOIR", top: true }, { n: "36", w: "ARBOR", a: "NATURE" },
-    { n: "37", w: "AETHER", a: "MISC", top: true },
-    { n: "38", file: "IMG_9234.jpeg", w: "BERLIN01", a: "BERLIN", top: true },
-    { n: "39", file: "IMG_9235.jpeg", w: "BERLIN02", a: "BERLIN" },
-    { n: "40", file: "IMG_9236.jpeg", w: "BERLIN03", a: "BERLIN" },
-    { n: "41", file: "IMG_9237.jpeg", w: "BERLIN04", a: "BERLIN" },
-    { n: "42", file: "IMG_9238.jpeg", w: "BERLIN05", a: "BERLIN" },
-    { n: "43", file: "IMG_9239.jpeg", w: "BERLIN06", a: "BERLIN", top: true }
-  ];
-  const CATS = ["ALL","VROOM","NATURE","NOIR","MISC","BERLIN"];
-
-  function imgSrc(img){ return img.file ? `images/${img.file}` : `images/bild (${img.n}).jpg`; }
-  function getFontClass(title){ return fontMap[title] || "font-serif"; }
-
-  // ---------- hero ----------
-  const heroCandidates = IMAGES.filter(i => i.top);
-  const heroImg = heroCandidates[Math.floor(Math.random() * heroCandidates.length)] || IMAGES[0];
-  document.getElementById('heroImg').src = imgSrc(heroImg);
-  document.getElementById('heroImg').alt = heroImg.w;
-  document.getElementById('heroDate').textContent = new Date().getFullYear();
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  // ---------- filters ----------
-  const filtersEl = document.getElementById('filters');
-  let active = 'ALL';
-  CATS.forEach(cat => {
-    const btn = document.createElement('button');
-    btn.textContent = cat;
-    btn.setAttribute('aria-current', cat === active ? 'true' : 'false');
-    btn.onclick = () => setFilter(cat);
-    filtersEl.appendChild(btn);
-  });
-
-  // ---------- spreads render ----------
-  const spreadsEl = document.getElementById('spreads');
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
-  }, { threshold: 0.15 });
-
-  function openLightbox(img){
-    document.getElementById('lbImg').src = imgSrc(img);
-    document.getElementById('lbImg').alt = img.w;
-    document.getElementById('lbTitle').textContent = img.w;
-    document.getElementById('lbMeta').textContent = `N° ${img.n.padStart(2,'0')} — ${img.a}`;
-    document.getElementById('lightbox').classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-  document.getElementById('lbClose').onclick = closeLightbox;
-  document.getElementById('lightbox').addEventListener('click', (e) => {
-    if (e.target.id === 'lightbox') closeLightbox();
-  });
-  function closeLightbox(){
-    document.getElementById('lightbox').classList.remove('active');
-    document.body.style.overflow = 'auto';
-  }
-
-  function renderSpreads(){
-    const list = active === 'ALL' ? IMAGES : IMAGES.filter(i => i.a === active);
-    spreadsEl.innerHTML = '';
-    list.forEach((img, i) => {
-      const spread = document.createElement('div');
-      spread.className = 'spread reveal' + (i % 2 === 1 ? ' reverse' : '');
-      const fontClass = getFontClass(img.w);
-      spread.innerHTML = `
-        <div class="spread-media" tabindex="0" role="button" aria-label="Open ${img.w}">
-          <img src="${imgSrc(img)}" alt="${img.w}" loading="lazy">
-          <div class="spread-hover-meta">
-            <div class="t">${img.w}</div>
-            <div class="m">N° ${img.n.padStart(2,'0')} — ${img.a}</div>
-          </div>
-        </div>
-        <div class="spread-copy">
-          <div class="spread-folio mono">N° ${img.n.padStart(2,'0')} / ${String(list.length).padStart(2,'0')}</div>
-          <div class="spread-title ${fontClass}">${img.w}</div>
-          <div class="spread-cat">${img.a}</div>
-          <div class="tap-hint">Tap image to expand</div>
-        </div>
-      `;
-      const media = spread.querySelector('.spread-media');
-      media.addEventListener('click', () => openLightbox(img));
-      media.addEventListener('keypress', (e) => { if (e.key === 'Enter') openLightbox(img); });
-      spreadsEl.appendChild(spread);
-      revealObserver.observe(spread);
-    });
-  }
-
-  function setFilter(cat){
-    if (cat === active) return;
-    active = cat;
-    document.querySelectorAll('.filters button').forEach(b => b.setAttribute('aria-current', b.textContent === cat ? 'true' : 'false'));
-    spreadsEl.classList.add('switching');
-    setTimeout(() => {
-      renderSpreads();
-      spreadsEl.classList.remove('switching');
-      spreadsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 260);
-  }
-
-  renderSpreads();
-
-  // ---------- generic reveal-on-scroll for non-spread blocks ----------
-  document.querySelectorAll('.reveal:not(.spread)').forEach(el => revealObserver.observe(el));
-</script>
-</body>
-</html>
+<!-- QUOTE -->
+<section class="shell">
+  <div class="quote reveal">
+    <blockquote>“Ett fotografi är inte det du ser — det är det du kände i
