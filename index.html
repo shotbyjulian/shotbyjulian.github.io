@@ -6,7 +6,7 @@
 <title>SHOT BY JULIAN — ARCHIVE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500;1,9..144,600&family=Archivo:wght@400;500;600;700&family=Archivo+Expanded:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500;1,9..144,600&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;600&family=Courier+Prime:wght@400;700&family=Inconsolata:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Crimson+Text:ital,wght@0,400;1,400&family=Lora:ital,wght@0,400;1,400&family=Roboto+Mono:wght@400;600&family=Work+Sans:wght@400;600&family=Inter:wght@400;600&family=DM+Mono:wght@400;500&family=Source+Code+Pro:wght@400;600&family=Poppins:wght@400;600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#0b0b0a;
@@ -37,9 +37,21 @@
   .serif{font-family:'Fraunces',serif}
   .mono{font-family:'IBM Plex Mono',monospace}
   .label{
-    font-family:'Archivo Expanded',sans-serif;font-weight:700;
-    font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);
+    font-family:'Archivo',sans-serif;font-weight:600;
+    font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);
   }
+
+  /* Font families for descriptions */
+  .font-serif{font-family:'Fraunces',serif;font-style:italic;font-weight:500}
+  .font-mono{font-family:'IBM Plex Mono',monospace;font-weight:400}
+  .font-compact{font-family:'Space Mono',monospace;font-weight:400}
+  .font-elegant{font-family:'Crimson Text',serif;font-style:italic;font-weight:400}
+  .font-modern{font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.02em}
+  .font-tech{font-family:'JetBrains Mono',monospace;font-weight:500}
+  .font-bold{font-family:'Poppins',sans-serif;font-weight:600}
+  .font-classic{font-family:'Courier Prime',monospace;font-weight:400}
+  .font-display{font-family:'Playfair Display',serif;font-weight:600}
+  .font-geometric{font-family:'Montserrat',sans-serif;font-weight:500;letter-spacing:0.03em}
 
   /* ---------- reveal-on-scroll ---------- */
   .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s var(--ease),transform 0.8s var(--ease)}
@@ -56,7 +68,7 @@
   .mark{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:1.15rem;letter-spacing:0.01em}
   nav.primary{display:flex;gap:clamp(14px,2.5vw,34px)}
   nav.primary a{
-    font-family:'Archivo Expanded',sans-serif;font-weight:600;
+    font-family:'Archivo',sans-serif;font-weight:600;
     font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;
     padding-bottom:3px;border-bottom:1px solid transparent;
     transition:border-color 0.3s var(--ease),color 0.3s var(--ease);
@@ -85,7 +97,7 @@
     text-shadow:0 6px 30px rgba(0,0,0,0.4);
   }
   .hero-sub{
-    margin-top:18px;max-width:34ch;font-size:0.95rem;line-height:1.6;color:var(--paper);opacity:0.78;
+    margin-top:18px;max-width:40ch;font-size:0.95rem;line-height:1.6;color:var(--paper);opacity:0.78;
   }
   .scroll-cue{
     position:absolute;bottom:24px;left:clamp(16px,4vw,48px);
@@ -153,7 +165,7 @@
 
   .spread-media{
     position:relative;overflow:hidden;background:var(--ink-2);
-    aspect-ratio:4/5;
+    aspect-ratio:4/5;cursor:pointer;
   }
   @media (min-width:860px){ .spread-media{aspect-ratio:auto;height:70vh;max-height:820px} }
   .spread-media img{
@@ -215,11 +227,14 @@
     font-family:'Fraunces',serif;font-style:italic;font-weight:500;
     font-size:clamp(2.4rem,7vw,5rem);line-height:1.02;
     display:inline-block;position:relative;width:fit-content;
+    transition:color 0.3s var(--ease);
+    padding-bottom:4px;
   }
   .contact-links a::after{
-    content:'';position:absolute;left:0;bottom:2%;width:100%;height:1px;background:var(--paper);
+    content:'';position:absolute;left:0;bottom:0;width:100%;height:2px;background:var(--paper);
     transform:scaleX(0);transform-origin:left;transition:transform 0.5s var(--ease);
   }
+  .contact-links a:hover{color:var(--accent-2)}
   .contact-links a:hover::after{transform:scaleX(1)}
 
   footer.legal{
@@ -242,7 +257,10 @@
   .lightbox-close{
     position:absolute;top:22px;right:26px;background:none;border:none;color:var(--paper);
     font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;cursor:pointer;
+    padding:8px 12px;transition:color 0.3s var(--ease),opacity 0.3s var(--ease);
+    opacity:0.7;
   }
+  .lightbox-close:hover{opacity:1;color:var(--accent-2)}
 </style>
 </head>
 <body>
@@ -266,14 +284,14 @@
   </div>
   <div class="hero-title-wrap">
     <h1 class="hero-title reveal">Shot by<br>Julian</h1>
-    <p class="hero-sub reveal">A running archive of cars, quiet landscapes and night streets — shot on the move, kept in order.</p>
+    <p class="hero-sub reveal">Photography archive. Cars, streets, landscapes. Shot on film, kept in order.</p>
   </div>
   <div class="scroll-cue"><div class="stem"></div><span class="label">Scroll</span></div>
 </section>
 
 <section class="intro">
   <div class="kicker reveal label">Statement</div>
-  <p class="reveal"><span class="cap">Every</span> frame here is kept as it was taken — no set, no studio, just what was in front of the camera. The archive is organised by subject, not by trip, so a plate from Berlin can sit beside one from home.</p>
+  <p class="reveal">Every image is kept as shot—no staging, no edits. The work is organized by subject and archived chronologically. This is a direct record of what the camera saw.</p>
 </section>
 
 <section id="gallery">
@@ -285,18 +303,17 @@
 </section>
 
 <section id="about" class="about">
-  <div class="about-statement reveal">I shoot what's near — cars, coastlines, the city after dark — and let the archive grow plate by plate.</div>
+  <div class="about-statement reveal">Work shot in Sweden, mostly on foot. No formal training. Just a camera and consistent practice.</div>
   <div class="about-body reveal">
-    <p>Based in Sweden, working mostly on foot and between trips. No formal training — just a habit of carrying a camera and a preference for grain over gloss.</p>
-    <p>Every image in this archive is numbered as it's added, in the order it was shot. Nothing is staged after the fact.</p>
+    <p>Based in Sweden. Each image is numbered as it was taken—nothing is reordered or edited after the fact. The archive grows with every roll of film.</p>
   </div>
 </section>
 
 <section id="contact" class="contact">
   <div class="label reveal">Get in touch</div>
   <div class="contact-links reveal">
-    <a href="https://instagram.com/shot_by_julian_" target="_blank">Instagram ↗</a>
-    <a href="https://ig.me/m/shot_by_julian_" target="_blank">Message ↗</a>
+    <a href="https://instagram.com/shot_by_julian_" target="_blank">Instagram</a>
+    <a href="https://ig.me/m/shot_by_julian_" target="_blank">Message</a>
   </div>
 </section>
 
@@ -306,7 +323,7 @@
 </footer>
 
 <div class="lightbox" id="lightbox">
-  <button class="lightbox-close" id="lbClose">CLOSE ✕</button>
+  <button class="lightbox-close" id="lbClose">Close</button>
   <img id="lbImg" src="" alt="">
   <div class="lightbox-info">
     <div class="t" id="lbTitle"></div>
@@ -315,12 +332,57 @@
 </div>
 
 <script>
-  // ---------- DATA (paths untouched — same folders/filenames as before) ----------
+  // Font mapping for descriptions - matching character to font
+  const fontMap = {
+    "AMICUS": "font-elegant",      // Elegant serif
+    "EQUUS": "font-mono",          // Clean mono
+    "SPIRITUS": "font-serif",      // Classic serif italic
+    "AURUM": "font-modern",        // Modern sans
+    "FERRUM": "font-tech",         // Tech mono
+    "VELOX": "font-compact",       // Compact mono
+    "対称": "font-display",        // Display serif
+    "閃光": "font-geometric",      // Geometric sans
+    "METALLUM": "font-mono",       // Mono
+    "FORMA": "font-elegant",       // Elegant serif
+    "LUMEN": "font-tech",          // Tech mono
+    "ROTA": "font-modern",         // Modern sans
+    "TAURO": "font-classic",       // Classic mono
+    "ALBUS": "font-serif",         // Serif italic
+    "MACHINA": "font-compact",     // Compact mono
+    "ITER": "font-elegant",        // Elegant serif
+    "NOCTIS": "font-display",      // Display serif
+    "VIA": "font-modern",          // Modern sans
+    "VETUSTUS": "font-tech",       // Tech mono
+    "IGNIS": "font-geometric",     // Geometric sans
+    "木漏れ日": "font-serif",       // Serif italic
+    "SILVA": "font-elegant",       // Elegant serif
+    "FOLIUM": "font-mono",         // Mono
+    "VIRIDIS": "font-modern",      // Modern sans
+    "VORS": "font-tech",           // Tech mono
+    "CANUS": "font-classic",       // Classic mono
+    "URBS": "font-compact",        // Compact mono
+    "SILENT": "font-elegant",      // Elegant serif
+    "VESPER": "font-serif",        // Serif italic
+    "暗闇": "font-display",        // Display serif
+    "UMBRA": "font-geometric",     // Geometric sans
+    "LUX": "font-mono",            // Mono
+    "魂": "font-modern",           // Modern sans
+    "ARBOR": "font-tech",          // Tech mono
+    "AETHER": "font-elegant",      // Elegant serif
+    "BERLIN01": "font-compact",    // Compact mono
+    "BERLIN02": "font-modern",     // Modern sans
+    "BERLIN03": "font-tech",       // Tech mono
+    "BERLIN04": "font-geometric",  // Geometric sans
+    "BERLIN05": "font-serif",      // Serif italic
+    "BERLIN06": "font-elegant"     // Elegant serif
+  };
+
+  // ---------- DATA ----------
   const IMAGES = [
     { n: "1", w: "AMICUS", a: "MISC", top: true }, { n: "2", w: "EQUUS", a: "VROOM" },
     { n: "3", w: "SPIRITUS", a: "VROOM" }, { n: "4", w: "AURUM", a: "VROOM" },
     { n: "5", w: "FERRUM", a: "VROOM", top: true }, { n: "6", w: "VELOX", a: "VROOM" },
-    { n: "7", w: "対称", a: "VROOM" }, { n: "8", w: "閃光", a: "VROOM", top: true },
+    { n: "7", w: "對稱", a: "VROOM" }, { n: "8", w: "閃光", a: "VROOM", top: true },
     { n: "9", w: "METALLUM", a: "VROOM" }, { n: "10", w: "FORMA", a: "VROOM", top: true },
     { n: "11", w: "LUMEN", a: "VROOM" }, { n: "12", w: "ROTA", a: "VROOM" },
     { n: "14", w: "TAURO", a: "VROOM", top: true }, { n: "15", w: "ALBUS", a: "VROOM" },
@@ -345,6 +407,7 @@
   const CATS = ["ALL","VROOM","NATURE","NOIR","MISC","BERLIN"];
 
   function imgSrc(img){ return img.file ? `images/${img.file}` : `images/bild (${img.n}).jpg`; }
+  function getFontClass(title){ return fontMap[title] || "font-serif"; }
 
   // ---------- hero ----------
   const heroCandidates = IMAGES.filter(i => i.top);
@@ -394,6 +457,7 @@
     list.forEach((img, i) => {
       const spread = document.createElement('div');
       spread.className = 'spread reveal' + (i % 2 === 1 ? ' reverse' : '');
+      const fontClass = getFontClass(img.w);
       spread.innerHTML = `
         <div class="spread-media" tabindex="0" role="button" aria-label="Open ${img.w}">
           <img src="${imgSrc(img)}" alt="${img.w}" loading="lazy">
@@ -404,9 +468,9 @@
         </div>
         <div class="spread-copy">
           <div class="spread-folio mono">N° ${img.n.padStart(2,'0')} / ${String(list.length).padStart(2,'0')}</div>
-          <div class="spread-title">${img.w}</div>
+          <div class="spread-title ${fontClass}">${img.w}</div>
           <div class="spread-cat">${img.a}</div>
-          <div class="tap-hint">TAP IMAGE TO EXPAND</div>
+          <div class="tap-hint">Tap image to expand</div>
         </div>
       `;
       const media = spread.querySelector('.spread-media');
