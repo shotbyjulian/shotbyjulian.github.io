@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Archivo:wght@300;400;600&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #e8e4df; /* Greige bas */
+    --bg: #e8e4df;
     --text: #1a1a18;
     --text-muted: #878480;
     --line: rgba(0,0,0,0.08);
@@ -23,140 +23,150 @@
     --line: rgba(255,255,255,0.08);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background-color: var(--bg);
     color: var(--text);
     font-family: 'Archivo', sans-serif;
-    transition: background-color 0.6s var(--ease), color 0.6s var(--ease);
+    transition: background-color 0.6s var(--ease);
     overflow-x: hidden;
   }
 
-  button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
-
-  .serif { font-family: 'Fraunces', serif; }
   .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; }
-  
-  .reveal { opacity: 0; transform: translateY(30px); transition: all 1s var(--ease); }
-  .reveal.is-visible { opacity: 1; transform: translateY(0); }
+  .serif { font-family: 'Fraunces', serif; }
 
-  header {
-    position: fixed; top: 0; width: 100%; z-index: 1000;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 30px clamp(20px, 5vw, 60px);
-    mix-blend-mode: difference; color: #fff;
-  }
-  
-  .theme-toggle {
-    width: 40px; height: 20px; border: 1px solid currentColor; border-radius: 20px;
-    position: relative;
-  }
-  .theme-toggle::after {
-    content: ''; position: absolute; top: 3px; left: 3px;
-    width: 12px; height: 12px; background: currentColor; border-radius: 50%;
-    transition: transform 0.3s var(--ease);
-  }
-  [data-theme="dark"] .theme-toggle::after { transform: translateX(20px); }
-
+  /* --- Hero med Flash-effekt --- */
   .hero {
     height: 100svh; width: 100%; position: relative;
-    display: flex; align-items: flex-end; padding: 100px clamp(20px, 5vw, 60px);
-    overflow: hidden;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    overflow: hidden; background: #000;
   }
-  .hero-bg { position: absolute; inset: 0; z-index: -1; }
-  .hero-bg img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85); }
+  #heroImg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: 0.7; transition: opacity 0.1s steps(2);
+  }
+  .hero-content { position: relative; z-index: 10; text-align: center; color: #fff; }
+  .hero-title { font-family: 'Fraunces', serif; font-size: clamp(3rem, 10vw, 8rem); font-style: italic; font-weight: 300; line-height: 0.9; }
   
-  .hero-title {
-    font-family: 'Fraunces', serif; font-weight: 300; font-style: italic;
-    font-size: clamp(3.5rem, 12vw, 10rem); line-height: 0.85; color: #fff;
+  /* Scroll Indikator */
+  .scroll-indicator {
+    position: absolute; bottom: 40px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+    color: #fff; opacity: 0.6; animation: nudge 2s infinite;
   }
+  @keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+  .line { width: 1px; height: 40px; background: currentColor; }
 
+  /* --- Navigation --- */
   .gallery-nav {
-    padding: 80px clamp(20px, 5vw, 60px) 20px;
+    padding: 60px clamp(20px, 5vw, 60px) 20px;
     border-bottom: 1px solid var(--line);
-    position: sticky; top: 0; background: var(--bg); z-index: 90;
+    position: sticky; top: 0; background: var(--bg); z-index: 100;
     display: flex; justify-content: space-between; align-items: baseline;
-    transition: background 0.6s var(--ease);
   }
-  .filters { display: flex; gap: 25px; }
+  .filters { display: flex; gap: clamp(15px, 3vw, 30px); flex-wrap: wrap; }
   .filters button {
-    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em;
-    color: var(--text-muted); transition: color 0.3s;
+    cursor: pointer; border: none; background: none; font-family: inherit;
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--text-muted); padding: 5px 0; transition: 0.3s;
   }
   .filters button.active { color: var(--text); border-bottom: 1px solid var(--text); }
 
+  /* --- Grid (Snyggare layout) --- */
   .gallery-grid {
-    padding: 60px clamp(20px, 5vw, 60px);
-    display: grid; grid-template-columns: repeat(12, 1fr); gap: 80px 20px;
+    padding: 40px clamp(20px, 5vw, 60px);
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px 20px;
   }
-  .item { grid-column: span 12; }
+  .item { grid-column: span 12; opacity: 0; transform: translateY(20px); transition: 0.8s var(--ease); }
+  .item.is-visible { opacity: 1; transform: translateY(0); }
+  
   @media (min-width: 768px) {
-    .item { grid-column: span 6; }
-    .item:nth-child(even) { margin-top: 100px; }
+    .item { grid-column: span 4; }
+    .item.large { grid-column: span 8; }
+    .item.tall { grid-row: span 2; }
   }
 
-  .item-img {
-    width: 100%; aspect-ratio: 4/5; overflow: hidden; background: var(--line);
-    margin-bottom: 15px; cursor: pointer;
-  }
-  .item-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
-  .item:hover img { transform: scale(1.03); }
+  .item-img { width: 100%; aspect-ratio: 4/5; overflow: hidden; background: var(--line); margin-bottom: 12px; }
+  .item.tall .item-img { aspect-ratio: 2/3; }
+  .item-img img { width: 100%; height: 100%; object-fit: cover; transition: 1.2s var(--ease); }
+  .item:hover img { transform: scale(1.05); }
+  .item-meta { display: flex; justify-content: space-between; font-size: 0.9rem; }
 
-  .item-meta { display: flex; justify-content: space-between; }
-  .item-name { font-family: 'Fraunces', serif; font-style: italic; font-size: 1.1rem; }
+  header { position: fixed; top: 30px; left: 0; width: 100%; padding: 0 clamp(20px, 5vw, 60px); z-index: 200; display: flex; justify-content: space-between; mix-blend-mode: difference; color: #fff; }
 
-  footer {
-    padding: 120px clamp(20px, 5vw, 60px) 60px;
-    border-top: 1px solid var(--line);
-    display: flex; justify-content: space-between; align-items: flex-end;
-  }
+  footer { padding: 100px clamp(20px, 5vw, 60px) 40px; border-top: 1px solid var(--line); text-align: center; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="serif" style="font-size: 1.2rem; font-style: italic;">SBJ</div>
-  <button class="theme-toggle" id="themeBtn"></button>
+  <div class="serif">SBJ</div>
+  <div class="mono" id="themeToggle" style="cursor:pointer">Dark/Light</div>
 </header>
 
-<section class="hero reveal">
-  <div class="hero-bg"><img id="heroImg" src="" alt=""></div>
-  <h1 class="hero-title">Shot by<br>Julian</h1>
+<section class="hero">
+  <img id="heroImg" src="" alt="Flash">
+  <div class="hero-content">
+    <h1 class="hero-title">Shot by<br>Julian</h1>
+  </div>
+  <div class="scroll-indicator">
+    <span class="mono">Scroll</span>
+    <div class="line"></div>
+  </div>
 </section>
 
 <div class="gallery-nav">
-  <div class="mono" id="count">00 Images</div>
   <div class="filters" id="filters"></div>
+  <div class="mono" id="count">00 Plates</div>
 </div>
 
 <main class="gallery-grid" id="grid"></main>
 
 <footer>
-  <div class="serif" style="font-size: clamp(2rem, 5vw, 4rem); font-style: italic;">Julian ↗</div>
-  <div class="mono" style="text-align: right;">©<span id="year"></span><br>Archive</div>
+  <div class="serif" style="font-size: 2rem; font-style: italic; margin-bottom: 20px;">Julian ↗</div>
+  <div class="mono">© 2024 Archive</div>
 </footer>
 
 <script>
-  // TILLBAKASTÄLLDA NAMN
-  const CATS = ["ALL", "VROOM", "NATURE", "NOIR", "MISC", "BERLIN"];
-
-  const IMAGES = [
-    { n: "1", w: "AMICUS", a: "MISC" }, { n: "2", w: "EQUUS", a: "VROOM" },
-    { n: "5", w: "FERRUM", a: "VROOM" }, { n: "10", w: "FORMA", a: "VROOM" },
-    { n: "14", w: "TAURO", a: "VROOM" }, { n: "23", w: "木漏れ日", a: "NATURE" },
-    { n: "24", w: "SILVA", a: "NATURE" }, { n: "32", w: "暗闇", a: "NOIR" },
-    { n: "35", w: "魂", a: "NOIR" }, { n: "38", file: "IMG_9234.jpeg", w: "BERLIN 01", a: "BERLIN" },
-    { n: "43", file: "IMG_9239.jpeg", w: "BERLIN 02", a: "BERLIN" }
+  // Bilder med nya Berlin-namn
+  const RAW_IMAGES = [
+    { n: "1", w: "Amicus", a: "MISC" }, { n: "2", w: "Equus", a: "VROOM" },
+    { n: "5", w: "Ferrum", a: "VROOM" }, { n: "10", w: "Forma", a: "VROOM" },
+    { n: "14", w: "Tauro", a: "VROOM" }, { n: "23", w: "Komorebi", a: "NATURE" },
+    { n: "24", w: "Silva", a: "NATURE" }, { n: "32", w: "Kurayami", a: "NOIR" },
+    { n: "35", w: "Tamashii", a: "NOIR" },
+    // Berlin-uppdatering
+    { n: "38", file: "IMG_9234.jpeg", w: "Kreuzberg 01", a: "BERLIN", type: "large" },
+    { n: "39", file: "IMG_9235.jpeg", w: "Mitte District", a: "BERLIN" },
+    { n: "40", file: "IMG_9236.jpeg", w: "U-Bahn Transit", a: "BERLIN", type: "tall" },
+    { n: "41", file: "IMG_9237.jpeg", w: "Tempelhof Sky", a: "BERLIN" },
+    { n: "42", file: "IMG_9238.jpeg", w: "Spree River", a: "BERLIN" },
+    { n: "43", file: "IMG_9239.jpeg", w: "Westside Night", a: "BERLIN", type: "large" }
   ];
 
-  let currentFilter = "ALL";
+  // Blanda bilderna för slumpmässig känsla
+  const IMAGES = RAW_IMAGES.sort(() => Math.random() - 0.5);
 
-  const themeBtn = document.getElementById('themeBtn');
-  themeBtn.onclick = () => {
+  // Tab-ordning: Kategorier först, ALL sist
+  const CATS = ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC", "ALL"];
+  let currentFilter = "BERLIN"; // Starta på Berlin så de slipper skrolla direkt
+
+  function getSrc(img) { return img.file ? `images/${img.file}` : `images/bild (${img.n}).jpg`; }
+
+  // --- Hero Flash Effekt ---
+  const heroImg = document.getElementById('heroImg');
+  let flashIndex = 0;
+  setInterval(() => {
+    flashIndex = (flashIndex + 1) % IMAGES.length;
+    heroImg.src = getSrc(IMAGES[flashIndex]);
+  }, 150); // Hastighet på flashen
+
+  // --- Theme ---
+  document.getElementById('themeToggle').onclick = () => {
     const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', theme);
   };
 
+  // --- Navigation & Grid ---
   const filtersEl = document.getElementById('filters');
   CATS.forEach(cat => {
     const btn = document.createElement('button');
@@ -171,22 +181,22 @@
     filtersEl.appendChild(btn);
   });
 
-  function getSrc(img) { return img.file ? `images/${img.file}` : `images/bild (${img.n}).jpg`; }
-
   function renderGrid() {
     const grid = document.getElementById('grid');
     const filtered = currentFilter === 'ALL' ? IMAGES : IMAGES.filter(i => i.a === currentFilter);
     grid.innerHTML = '';
     document.getElementById('count').textContent = `${filtered.length} Plates`;
 
-    filtered.forEach(img => {
+    filtered.forEach((img, idx) => {
       const el = document.createElement('div');
-      el.className = 'item reveal';
+      // Mixa in lite olika storlekar för dynamik
+      const sizeClass = img.type || (idx % 5 === 0 ? 'large' : idx % 3 === 0 ? 'tall' : '');
+      el.className = `item ${sizeClass}`;
       el.innerHTML = `
         <div class="item-img"><img src="${getSrc(img)}" loading="lazy"></div>
         <div class="item-meta">
-          <span class="item-name">${img.w}</span>
-          <span class="mono" style="color: var(--text-muted)">${img.a}</span>
+          <span class="serif" style="font-style:italic">${img.w}</span>
+          <span class="mono" style="color:var(--text-muted)">${img.a}</span>
         </div>
       `;
       grid.appendChild(el);
@@ -198,8 +208,6 @@
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); });
   }, { threshold: 0.1 });
 
-  document.getElementById('heroImg').src = getSrc(IMAGES[0]);
-  document.getElementById('year').textContent = new Date().getFullYear();
   renderGrid();
 </script>
 </body>
