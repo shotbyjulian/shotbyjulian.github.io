@@ -220,3 +220,68 @@
     const t = TEXTS[lang];
     document.getElementById('mainTitle').innerHTML = t.title;
     document.getElementById('infoTitle').textContent = t.guideTitle;
+    document.getElementById('infoText').innerHTML = t.guideText;
+    document.getElementById('closeInfo').textContent = t.close;
+    renderGrid();
+  }
+
+  // --- Info Overlay ---
+  const infoOverlay = document.getElementById('infoOverlay');
+  document.getElementById('infoBtn').onclick = () => infoOverlay.classList.add('active');
+  document.getElementById('closeInfo').onclick = () => infoOverlay.classList.remove('active');
+
+  // --- Filters ---
+  const filtersEl = document.getElementById('filters');
+  CATS.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.textContent = cat;
+    btn.className = cat === currentFilter ? 'active' : '';
+    btn.onclick = () => {
+      currentFilter = cat;
+      document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderGrid();
+    };
+    filtersEl.appendChild(btn);
+  });
+
+  // --- Grid ---
+  function renderGrid() {
+    const grid = document.getElementById('grid');
+    const filtered = currentFilter === 'ALL' ? DATA : DATA.filter(i => i.a === currentFilter);
+    grid.innerHTML = '';
+    document.getElementById('count').textContent = `${filtered.length} ${TEXTS[lang].plates}`;
+
+    filtered.forEach((img, idx) => {
+      const el = document.createElement('div');
+      const isLarge = idx % 8 === 0 ? 'large' : '';
+      el.className = `item reveal ${isLarge}`;
+      el.innerHTML = `
+        <div class="item-img"><img src="${getSrc(img)}" loading="lazy"></div>
+        <div class="mono" style="color:var(--text-muted)">— ${img.n.padStart(2, '0')}</div>
+      `;
+      
+      el.onclick = () => {
+        if (el.classList.contains('focused')) {
+          el.classList.remove('focused');
+          document.body.style.overflow = 'auto';
+        } else {
+          document.querySelectorAll('.item.focused').forEach(i => i.classList.remove('focused'));
+          el.classList.add('focused');
+          document.body.style.overflow = 'hidden';
+        }
+      };
+
+      grid.appendChild(el);
+      observer.observe(el);
+    });
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); });
+  }, { threshold: 0.1 });
+
+  updateLanguage();
+</script>
+</body>
+</html>
