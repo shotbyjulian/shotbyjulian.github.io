@@ -18,7 +18,7 @@
     --line: rgba(255,255,255,0.08); --concrete: #2a2a28;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body {
     background-color: var(--bg); color: var(--text);
     font-family: 'Archivo', sans-serif; transition: background-color 0.8s var(--ease);
@@ -28,82 +28,72 @@
   .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; }
   .serif { font-family: 'Fraunces', serif; }
 
-  /* --- Navigation --- */
+  /* --- Top Header --- */
   header {
-    position: fixed; top: 0; width: 100%; z-index: 1000;
+    position: fixed; top: 0; width: 100%; z-index: 2000; /* Alltid högst upp */
     display: flex; justify-content: space-between; align-items: center;
-    padding: 30px clamp(20px, 5vw, 60px); mix-blend-mode: difference; color: #fff;
+    padding: 20px clamp(20px, 5vw, 60px); mix-blend-mode: difference; color: #fff;
   }
-  .nav-group { display: flex; gap: 15px; }
+  .nav-group { display: flex; gap: 15px; align-items: center; }
   .nav-btn { cursor: pointer; border: 1px solid rgba(255,255,255,0.3); padding: 5px 12px; border-radius: 4px; transition: 0.3s; }
-  .nav-btn:hover { background: #fff; color: #000; }
 
   /* --- Hero --- */
   .hero { height: 100svh; width: 100%; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; background: #000; }
-  #heroImg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.45; }
+  #heroImg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.45; pointer-events: none; }
   .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3rem, 15vw, 12rem); font-style: italic; color: #fff; text-align: center; line-height: 0.8; pointer-events: none; }
 
-  /* --- Filter Bar --- */
+  /* --- Sticky Filter Bar --- */
   .gallery-nav {
-    padding: 80px clamp(20px, 5vw, 60px) 20px;
+    padding: 25px clamp(20px, 5vw, 60px);
     border-bottom: 1px solid var(--line); position: sticky; top: 0;
-    background: var(--bg); z-index: 900; display: flex; justify-content: space-between; align-items: baseline;
-    transition: background 0.8s var(--ease);
+    background: var(--bg); z-index: 1500; /* Lägre än top header men över bilder */
+    display: flex; justify-content: space-between; align-items: center;
+    backdrop-filter: blur(10px); background: rgba(var(--bg-rgb), 0.8);
   }
-  .filters { display: flex; gap: 20px; flex-wrap: wrap; }
-  .filters button { cursor: pointer; border: none; background: none; color: var(--text-muted); font-size: 0.65rem; text-transform: uppercase; transition: 0.3s; }
-  .filters button.active { color: var(--text); font-weight: 600; border-bottom: 1px solid var(--text); }
+  .filters { display: flex; gap: 18px; flex-wrap: wrap; }
+  .filters button { cursor: pointer; border: none; background: none; color: var(--text-muted); font-size: 0.65rem; text-transform: uppercase; transition: 0.3s; padding: 5px 0; }
+  .filters button.active { color: var(--text); border-bottom: 1px solid var(--text); }
 
-  /* --- Betongram & Grid --- */
-  .gallery-grid { padding: 60px clamp(20px, 5vw, 60px); display: grid; grid-template-columns: repeat(12, 1fr); gap: 80px 40px; }
-  .item { grid-column: span 12; cursor: pointer; position: relative; transition: opacity 0.5s var(--ease); }
+  /* --- Grid --- */
+  .gallery-grid { padding: 40px clamp(20px, 5vw, 60px) 100px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 60px 30px; }
+  .item { grid-column: span 12; cursor: pointer; position: relative; transition: opacity 0.5s; z-index: 1; }
   @media (min-width: 768px) { .item { grid-column: span 4; } .item.large { grid-column: span 8; } }
 
+  /* Betongrammen */
   .item-img-wrap {
-    position: relative; overflow: hidden;
-    padding: 12px; /* Betongrammen */
-    background-color: var(--concrete);
-    border: 1px solid rgba(0,0,0,0.05);
-    box-shadow: 0 15px 45px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease-out;
-    transform-style: preserve-3d;
+    padding: 10px; background-color: var(--concrete);
+    border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    transition: transform 0.15s ease-out; transform-style: preserve-3d;
   }
-
-  .item-img { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; background: #222; }
-  .item.tall .item-img { aspect-ratio: 2/3; }
-  .item-img img { width: 100%; height: 100%; object-fit: cover; transition: 1.2s var(--ease); }
-
-  /* --- Statiskt Korn (Endast på bilder) --- */
+  .item-img { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; background: #333; }
+  .item-img img { width: 100%; height: 100%; object-fit: cover; transition: 1s var(--ease); }
+  
+  /* Still korn */
   .item-img::after {
     content: ""; position: absolute; inset: 0; pointer-events: none;
     background-image: url("https://upload.wikimedia.org/wikipedia/commons/7/76/Noise_600x600.png");
     opacity: 0.08; mix-blend-mode: overlay; z-index: 2;
   }
 
-  .item:hover img { transform: scale(1.08); }
-
-  /* --- Fokusläge Fix --- */
+  /* --- Fokusläge --- */
   .item.focused {
-    position: fixed; inset: 0; z-index: 2000; padding: 5vh 5vw; background: var(--bg);
+    position: fixed; inset: 0; z-index: 3000; padding: 40px; background: var(--bg);
     display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh;
   }
-  .item.focused .item-img-wrap { width: auto; height: 100%; transform: none !important; }
-  .item.focused .item-img { height: 100%; aspect-ratio: auto; width: auto; }
+  .item.focused .item-img-wrap { height: 85vh; width: auto; transform: none !important; }
   .item.focused img { height: 100%; width: auto; max-width: 90vw; object-fit: contain; }
 
   /* --- Info Popup --- */
   .info-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 3000;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 4000;
     display: none; align-items: center; justify-content: center; padding: 40px;
   }
-  .info-overlay.active { display: flex; animation: fadeIn 0.4s var(--ease); }
-  .info-content { max-width: 450px; text-align: center; background: #fff; color: #000; padding: 40px; border-radius: 4px; }
-  .close-btn { background: #000; color: #fff; border: none; padding: 12px 30px; margin-top: 20px; cursor: pointer; }
+  .info-overlay.active { display: flex; }
+  .info-content { max-width: 400px; text-align: center; background: #fff; color: #000; padding: 40px; border-radius: 4px; }
+  .close-btn { background: #000; color: #fff; border: none; padding: 12px 30px; margin-top: 20px; cursor: pointer; border-radius: 4px; }
 
-  .reveal { opacity: 0; transform: translateY(40px); transition: 1s var(--ease); }
+  .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s var(--ease); }
   .reveal.is-visible { opacity: 1; transform: translateY(0); }
-
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 </style>
 </head>
 <body>
@@ -131,36 +121,35 @@
 
 <div class="info-overlay" id="infoOverlay">
   <div class="info-content">
-    <h2 class="serif" id="infoTitle" style="font-size: 2rem; margin-bottom: 15px;">Interaktion</h2>
-    <p class="mono" id="infoText" style="line-height: 1.8; opacity: 0.8;"></p>
-    <button class="close-btn mono" id="closeInfo">STÄNG</button>
+    <h2 class="serif" id="infoTitle" style="font-size: 2rem; margin-bottom: 15px;">Interaction</h2>
+    <p class="mono" id="infoText" style="line-height: 1.8; opacity: 0.8; font-size: 0.75rem;"></p>
+    <button class="close-btn mono" id="closeInfo">OK</button>
   </div>
 </div>
 
 <script>
   // FULLSTÄNDIGT ARKIV (1-43)
-  const ALL_PLATES = [
-    { n: "1", a: "MISC" }, { n: "2", a: "VROOM" }, { n: "3", a: "VROOM" }, { n: "4", a: "VROOM" },
-    { n: "5", a: "VROOM" }, { n: "6", a: "VROOM" }, { n: "7", a: "VROOM" }, { n: "8", a: "VROOM" },
-    { n: "9", a: "VROOM" }, { n: "10", a: "VROOM" }, { n: "11", a: "VROOM" }, { n: "12", a: "VROOM" },
-    { n: "14", a: "VROOM" }, { n: "15", a: "VROOM" }, { n: "16", a: "VROOM" }, { n: "17", a: "VROOM" },
-    { n: "18", a: "VROOM" }, { n: "19", a: "VROOM" }, { n: "20", a: "VROOM" }, { n: "22", a: "VROOM" },
-    { n: "23", a: "NATURE" }, { n: "24", a: "NATURE" }, { n: "25", a: "NATURE" }, { n: "26", a: "NATURE" },
-    { n: "27", a: "VROOM" }, { n: "28", a: "VROOM" }, { n: "29", a: "VROOM" }, { n: "30", a: "VROOM" },
-    { n: "31", a: "VROOM" }, { n: "32", a: "NOIR" }, { n: "33", a: "NOIR" }, { n: "34", a: "NOIR" },
-    { n: "35", a: "NOIR" }, { n: "36", a: "NATURE" }, { n: "37", a: "MISC" },
-    { n: "38", f: "IMG_9234.jpeg", a: "BERLIN" }, { n: "39", f: "IMG_9235.jpeg", a: "BERLIN" },
-    { n: "40", f: "IMG_9236.jpeg", a: "BERLIN" }, { n: "41", f: "IMG_9237.jpeg", a: "BERLIN" },
-    { n: "42", f: "IMG_9238.jpeg", a: "BERLIN" }, { n: "43", f: "IMG_9239.jpeg", a: "BERLIN" }
-  ];
-
-  // Shuffla alla bilder för "ALL"
-  const DATA = ALL_PLATES.sort(() => Math.random() - 0.5);
+  const DATA = Array.from({length: 43}, (_, i) => {
+    const n = i + 1;
+    let a = "VROOM"; // Default
+    if ([23,24,25,26,36].includes(n)) a = "NATURE";
+    if ([32,33,34,35].includes(n)) a = "NOIR";
+    if ([1,37].includes(n)) a = "MISC";
+    if (n >= 38) a = "BERLIN";
+    const img = { n: String(n), a: a };
+    if (n === 38) img.f = "IMG_9234.jpeg";
+    if (n === 39) img.f = "IMG_9235.jpeg";
+    if (n === 40) img.f = "IMG_9236.jpeg";
+    if (n === 41) img.f = "IMG_9237.jpeg";
+    if (n === 42) img.f = "IMG_9238.jpeg";
+    if (n === 43) img.f = "IMG_9239.jpeg";
+    return img;
+  }).sort(() => Math.random() - 0.5);
 
   let lang = 'SV';
   const TEXTS = {
-    SV: { guideTitle: "Interaktion", guideText: "[MUS] — Luta bilderna för perspektiv<br>[MOBIL] — Gyroskopet vinklar bilderna när du rör telefonen<br>[KLICK] — Fokusläge (större/mindre)", close: "FÖRSTÅTT", plates: "Plåtar" },
-    EN: { guideTitle: "Interaction", guideText: "[MOUSE] — Tilt images for perspective<br>[MOBILE] — Gyroscope tilts images as you move phone<br>[CLICK] — Focus mode (expand/minimize)", close: "GOT IT", plates: "Plates" }
+    SV: { title: "Shot by Julian", guideTitle: "Rörelse", guideText: "Vinkla telefonen för att flytta perspektivet i bilderna. Klicka på en bild för att fokusera.", close: "STARTA", plates: "Plåtar" },
+    EN: { title: "Shot by Julian", guideTitle: "Motion", guideText: "Tilt your phone to shift the image perspective. Click any image to focus.", close: "START", plates: "Plates" }
   };
 
   const CATS = ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC", "ALL"];
@@ -168,7 +157,7 @@
 
   function getSrc(img) { return img.f ? `images/${img.f}` : `images/bild (${img.n}).jpg`; }
 
-  // --- Tilt Logik ---
+  // --- PC Tilt ---
   function initTilt(el) {
     el.addEventListener('mousemove', (e) => {
       if(window.innerWidth < 768 || el.classList.contains('focused')) return;
@@ -182,25 +171,38 @@
     });
   }
 
-  // --- Mobil Gyro ---
-  window.addEventListener('deviceorientation', (e) => {
+  // --- Gyroskop Permission (iPhone Fix) ---
+  async function requestGyro() {
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      try {
+        const response = await DeviceOrientationEvent.requestPermission();
+        if (response === 'granted') {
+          window.addEventListener('deviceorientation', handleGyro);
+        }
+      } catch (e) { console.error(e); }
+    } else {
+      window.addEventListener('deviceorientation', handleGyro);
+    }
+  }
+
+  function handleGyro(e) {
     if(window.innerWidth > 768) return;
-    const x = Math.min(Math.max(e.beta, -30), 30) / 1.5;
-    const y = Math.min(Math.max(e.gamma, -30), 30) / 1.5;
+    const x = Math.min(Math.max(e.beta, -30), 30) / 2;
+    const y = Math.min(Math.max(e.gamma, -30), 30) / 2;
     document.querySelectorAll('.item-img-wrap').forEach(wrap => {
       if(!wrap.closest('.focused')) wrap.style.transform = `rotateX(${x}deg) rotateY(${y}deg)`;
     });
-  });
+  }
 
-  // --- Hero Flash ---
+  // --- Hero ---
   const heroImg = document.getElementById('heroImg');
-  let flashIdx = 0;
+  let fIdx = 0;
   setInterval(() => {
-    flashIdx = (flashIdx + 1) % DATA.length;
-    heroImg.src = getSrc(DATA[flashIdx]);
-  }, 130);
+    fIdx = (fIdx + 1) % DATA.length;
+    heroImg.src = getSrc(DATA[fIdx]);
+  }, 110);
 
-  // --- Menyer ---
+  // --- UI ---
   document.getElementById('themeBtn').onclick = () => {
     const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', t);
@@ -227,12 +229,12 @@
 
     filtered.forEach((img, idx) => {
       const el = document.createElement('div');
-      el.className = `item reveal ${idx % 7 === 0 ? 'large' : ''} ${idx % 4 === 0 ? 'tall' : ''}`;
+      el.className = `item reveal ${idx % 8 === 0 ? 'large' : ''}`;
       el.innerHTML = `
         <div class="item-img-wrap">
           <div class="item-img"><img src="${getSrc(img)}" loading="lazy"></div>
         </div>
-        <div class="mono" style="margin-top:12px; color:var(--text-muted)">— PLATE ${img.n.padStart(2, '0')}</div>
+        <div class="mono" style="margin-top:10px; opacity:0.6">— PL ${img.n.padStart(2, '0')}</div>
       `;
       el.onclick = () => {
         el.classList.toggle('focused');
@@ -258,13 +260,19 @@
       document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderGrid();
-      window.scrollTo({top: 0, behavior: 'smooth'});
+      window.scrollTo({top: window.innerHeight - 80, behavior: 'smooth'});
     };
     filtersEl.appendChild(btn);
   });
 
-  document.getElementById('infoBtn').onclick = () => document.getElementById('infoOverlay').classList.add('active');
-  document.getElementById('closeInfo').onclick = () => document.getElementById('infoOverlay').classList.remove('active');
+  document.getElementById('infoBtn').onclick = () => {
+    document.getElementById('infoOverlay').classList.add('active');
+    requestGyro();
+  };
+  document.getElementById('closeInfo').onclick = () => {
+    document.getElementById('infoOverlay').classList.remove('active');
+    requestGyro();
+  };
 
   updateLanguage();
 </script>
