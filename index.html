@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="sv" data-theme="dark">
+<html lang="sv" data-theme="dark" style="background-color: #0a0a0a;">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
 <title>SHOT BY JULIAN — ARCHIVE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +18,7 @@
     --line: rgba(255,255,255,0.08);
   }
 
-  html, body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; transition: background-color 0.8s var(--ease); overflow-x: hidden; }
+  html, body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; transition: background-color 0.8s var(--ease); scroll-behavior: smooth; }
   .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; }
   .serif { font-family: 'Fraunces', serif; }
 
@@ -27,65 +28,63 @@
     display: flex; justify-content: space-between; align-items: center;
     padding: 30px clamp(20px, 5vw, 60px); mix-blend-mode: difference; color: #fff;
   }
-  .header-btn { cursor: pointer; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.1em; border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; }
+  .theme-btn { cursor: pointer; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.1em; border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; }
 
-  /* --- Hero: Diagonal Netflix Wall --- */
+  /* --- Hero: Full Screen Netflix Wall --- */
   .hero {
-    height: 100svh; width: 100%; position: relative; overflow: hidden; background: #000;
+    height: 100vh; width: 100%; position: relative; overflow: hidden; background: #000;
     display: flex; align-items: center; justify-content: center;
   }
   .wall-container {
-    position: absolute; width: 160%; height: 160%;
-    display: flex; flex-direction: column; gap: 15px;
-    transform: rotate(-12deg) translateY(-10%);
+    position: absolute; width: 180%; height: 180%;
+    display: flex; flex-direction: column; gap: 25px;
+    transform: rotate(-10deg) translateY(-5%);
   }
-  .wall-row { display: flex; gap: 15px; width: 300%; animation: wallScroll 80s linear infinite; }
+  .wall-row { display: flex; gap: 25px; width: 400%; animation: wallScroll 90s linear infinite; }
   .wall-row:nth-child(even) { animation-direction: reverse; }
-  .wall-img { width: 22vw; aspect-ratio: 4/5; object-fit: cover; filter: brightness(0.5); flex-shrink: 0; }
+  /* Större bilder i väggen */
+  .wall-img { width: 35vw; aspect-ratio: 4/5; object-fit: cover; filter: brightness(0.6); flex-shrink: 0; }
   
   @keyframes wallScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3.5rem, 12vw, 11rem); font-style: italic; color: #fff; text-align: center; line-height: 0.8; pointer-events: none; }
+  .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3.5rem, 15vw, 13rem); font-style: italic; color: #fff; text-align: center; line-height: 0.8; pointer-events: none; }
 
-  /* --- Skiss-inspirerad Meny Overlay --- */
-  .menu-overlay {
-    position: fixed; inset: 0; z-index: 3000; background: var(--bg);
-    display: none; flex-direction: column; padding: 100px clamp(20px, 10vw, 100px) 60px;
-    overflow-y: auto;
+  /* --- Category Menu Section (Under Hero) --- */
+  .category-section {
+    padding: 120px clamp(20px, 10vw, 100px);
+    background: var(--bg);
+    display: flex; flex-direction: column; align-items: center;
+    min-height: 100vh;
   }
-  .menu-overlay.active { display: flex; }
+  .menu-grid { display: flex; flex-direction: column; gap: 60px; max-width: 900px; width: 100%; }
   
-  .menu-grid { display: flex; flex-direction: column; gap: 40px; max-width: 800px; margin: 0 auto; width: 100%; }
-  
-  /* Raden från din skiss */
-  .menu-row { display: flex; align-items: center; gap: 30px; cursor: pointer; transition: 0.3s var(--ease); }
-  .menu-row:hover { transform: translateX(15px); }
+  .menu-row { display: flex; align-items: center; gap: clamp(20px, 5vw, 50px); cursor: pointer; transition: 0.4s var(--ease); }
+  .menu-row:hover { transform: translateX(20px); }
 
-  /* Rutan som flashar */
+  /* Rutan som flashar automatiskt */
   .menu-box { 
-    width: clamp(80px, 15vw, 160px); 
+    width: clamp(100px, 20vw, 220px); 
     aspect-ratio: 3/4; 
     background: var(--line); 
     overflow: hidden;
     position: relative;
     flex-shrink: 0;
   }
-  .menu-box img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); position: absolute; opacity: 0; transition: opacity 0.1s; }
+  .menu-box img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1); position: absolute; opacity: 0; transition: opacity 0.15s; }
   .menu-box img.active { opacity: 1; }
 
-  .menu-info { display: flex; flex-direction: column; gap: 4px; }
-  .menu-cat { font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 4vw, 3.5rem); font-style: italic; text-transform: capitalize; }
-  .menu-count { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--text-muted); }
-
-  .close-menu { position: absolute; top: 40px; right: 40px; cursor: pointer; font-size: 0.8rem; }
+  .menu-info { display: flex; flex-direction: column; gap: 6px; }
+  .menu-cat { font-family: 'Fraunces', serif; font-size: clamp(2rem, 5vw, 4.5rem); font-style: italic; text-transform: capitalize; line-height: 1; }
+  .menu-count { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--text-muted); }
 
   /* --- Gallery Grid --- */
-  .gallery-grid { padding: 80px clamp(20px, 5vw, 60px); display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; }
-  .item { grid-column: span 12; }
+  .gallery-container { display: none; padding: 100px clamp(20px, 5vw, 60px); background: var(--bg); min-height: 100vh; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; }
+  .item { grid-column: span 12; cursor: pointer; }
   @media (min-width: 768px) { .item { grid-column: span 4; } .item.large { grid-column: span 8; } }
-  .item img { width: 100%; height: auto; display: block; }
-  .item-meta { margin-top: 12px; font-size: 0.65rem; color: var(--text-muted); }
+  .item img { width: 100%; height: auto; display: block; filter: brightness(0.95); }
+  .item-meta { margin-top: 15px; font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
 
-  /* --- Fullscreen View --- */
+  /* --- Fullscreen Focus --- */
   .focus-overlay {
     position: fixed; inset: 0; z-index: 4000; background: var(--bg);
     display: none; align-items: center; justify-content: center; padding: 40px;
@@ -99,10 +98,7 @@
 
 <header>
   <div class="serif" style="font-size: 1.2rem; font-style: italic;">SBJ</div>
-  <div style="display:flex; gap:20px;">
-    <div class="mono header-btn" id="themeBtn">Mode</div>
-    <div class="mono header-btn" id="openMenu">Menu</div>
-  </div>
+  <div class="mono theme-btn" id="themeBtn">Mode</div>
 </header>
 
 <section class="hero" id="hero">
@@ -110,19 +106,20 @@
   <h1 class="hero-title">Shot by Julian</h1>
 </section>
 
-<div class="menu-overlay" id="menuOverlay">
-  <div class="mono close-menu" id="closeMenu">Stäng ✕</div>
+<section class="category-section" id="menuSection">
   <div class="menu-grid" id="menuGrid"></div>
-</div>
+</section>
 
-<main class="gallery-grid" id="grid"></main>
+<section class="gallery-container" id="galleryContainer">
+  <div class="mono" style="margin-bottom: 40px; cursor: pointer;" id="backToMenu">← Tillbaka</div>
+  <div class="gallery-grid" id="grid"></div>
+</section>
 
 <div class="focus-overlay" id="focusOverlay">
   <img id="focusImg" src="" alt="">
 </div>
 
 <script>
-  // --- Databas ---
   const DATA = Array.from({length: 43}, (_, i) => {
     const n = i + 1;
     let a = "VROOM";
@@ -142,18 +139,16 @@
 
   function getSrc(img) { return img.f ? `images/${img.f}` : `images/bild (${img.n}).jpg`; }
 
-  // --- Theme Memory ---
+  // --- Theme ---
   const savedTheme = localStorage.getItem('sbj_theme') || 'dark';
   document.body.setAttribute('data-theme', savedTheme);
-
   document.getElementById('themeBtn').onclick = () => {
-    const current = document.body.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
+    const next = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     document.body.setAttribute('data-theme', next);
     localStorage.setItem('sbj_theme', next);
   };
 
-  // --- Netflix Wall ---
+  // --- Netflix Wall Build ---
   const wall = document.getElementById('wall');
   for (let r = 0; r < 6; r++) {
     const row = document.createElement('div');
@@ -163,33 +158,28 @@
       const i = document.createElement('img');
       i.className = 'wall-img';
       i.src = getSrc(img);
+      i.loading = "eager"; // Ladda hero-bilder direkt
       row.appendChild(i);
     });
     wall.appendChild(row);
   }
 
-  // --- Meny Logic ---
-  const menuOverlay = document.getElementById('menuOverlay');
+  // --- Menu Build & Auto-Flash ---
   const menuGrid = document.getElementById('menuGrid');
-  
-  // Kategorier: Slumpa alla utom ALL, lägg ALL sist
   const rawCats = ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC"];
   const sortedCats = rawCats.sort(() => Math.random() - 0.5);
   sortedCats.push("ALL");
 
   sortedCats.forEach(cat => {
     const filtered = cat === "ALL" ? DATA : DATA.filter(i => i.a === cat);
-    
     const row = document.createElement('div');
     row.className = 'menu-row';
     
-    // Skapa rutan (boxen)
     const box = document.createElement('div');
     box.className = 'menu-box';
     
-    // Förbered bilder för flash
     const flashImgs = [];
-    filtered.slice(0, 8).forEach((img, idx) => {
+    filtered.slice(0, 10).forEach((img, idx) => {
       const i = document.createElement('img');
       i.src = getSrc(img);
       if(idx === 0) i.className = 'active';
@@ -197,19 +187,14 @@
       flashImgs.push(i);
     });
 
-    // Flash-effekt vid hover
-    let flashTimer;
-    row.onmouseenter = () => {
-      let currentIdx = 0;
-      flashTimer = setInterval(() => {
-        flashImgs.forEach(img => img.classList.remove('active'));
-        currentIdx = (currentIdx + 1) % flashImgs.length;
-        flashImgs[currentIdx].classList.add('active');
-      }, 180);
-    };
-    row.onmouseleave = () => clearInterval(flashTimer);
+    // Automatiskt Flashing
+    let flashIdx = 0;
+    setInterval(() => {
+      flashImgs.forEach(img => img.classList.remove('active'));
+      flashIdx = (flashIdx + 1) % flashImgs.length;
+      flashImgs[flashIdx].classList.add('active');
+    }, 250);
 
-    // Info till höger
     const info = document.createElement('div');
     info.className = 'menu-info';
     info.innerHTML = `
@@ -219,8 +204,9 @@
 
     row.onclick = () => {
       renderGallery(cat);
-      menuOverlay.classList.remove('active');
       document.getElementById('hero').style.display = 'none';
+      document.getElementById('menuSection').style.display = 'none';
+      document.getElementById('galleryContainer').style.display = 'block';
       window.scrollTo(0,0);
     };
 
@@ -229,21 +215,17 @@
     menuGrid.appendChild(row);
   });
 
-  document.getElementById('openMenu').onclick = () => menuOverlay.classList.add('active');
-  document.getElementById('closeMenu').onclick = () => menuOverlay.classList.remove('active');
-
-  // --- Gallery Grid Render ---
+  // --- Gallery Logic ---
   function renderGallery(cat) {
     const grid = document.getElementById('grid');
     const filtered = cat === "ALL" ? DATA : DATA.filter(i => i.a === cat);
     grid.innerHTML = '';
-    
     filtered.forEach((img, idx) => {
       const el = document.createElement('div');
       el.className = `item ${idx % 7 === 0 ? 'large' : ''}`;
       el.innerHTML = `
         <img src="${getSrc(img)}" loading="lazy">
-        <div class="item-meta mono">— Index ${img.n}</div>
+        <div class="item-meta mono">— PL ${img.n.padStart(2, '0')}</div>
       `;
       el.onclick = () => {
         document.getElementById('focusImg').src = getSrc(img);
@@ -252,6 +234,13 @@
       grid.appendChild(el);
     });
   }
+
+  document.getElementById('backToMenu').onclick = () => {
+    document.getElementById('hero').style.display = 'flex';
+    document.getElementById('menuSection').style.display = 'flex';
+    document.getElementById('galleryContainer').style.display = 'none';
+    window.scrollTo(0,0);
+  };
 
   document.getElementById('focusOverlay').onclick = function() { this.classList.remove('active'); };
 </script>
