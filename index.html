@@ -28,7 +28,6 @@
     display: flex; justify-content: space-between; align-items: center;
     padding: 30px clamp(20px, 5vw, 60px); mix-blend-mode: difference; color: #fff;
   }
-  .theme-btn { cursor: pointer; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.1em; border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; }
 
   /* --- Hero: Full Screen Netflix Wall --- */
   .hero {
@@ -42,13 +41,12 @@
   }
   .wall-row { display: flex; gap: 25px; width: 400%; animation: wallScroll 90s linear infinite; }
   .wall-row:nth-child(even) { animation-direction: reverse; }
-  /* Större bilder i väggen */
   .wall-img { width: 35vw; aspect-ratio: 4/5; object-fit: cover; filter: brightness(0.6); flex-shrink: 0; }
   
   @keyframes wallScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3.5rem, 15vw, 13rem); font-style: italic; color: #fff; text-align: center; line-height: 0.8; pointer-events: none; }
 
-  /* --- Category Menu Section (Under Hero) --- */
+  /* --- Category Menu Section --- */
   .category-section {
     padding: 120px clamp(20px, 10vw, 100px);
     background: var(--bg);
@@ -60,7 +58,6 @@
   .menu-row { display: flex; align-items: center; gap: clamp(20px, 5vw, 50px); cursor: pointer; transition: 0.4s var(--ease); }
   .menu-row:hover { transform: translateX(20px); }
 
-  /* Rutan som flashar automatiskt */
   .menu-box { 
     width: clamp(100px, 20vw, 220px); 
     aspect-ratio: 3/4; 
@@ -98,7 +95,6 @@
 
 <header>
   <div class="serif" style="font-size: 1.2rem; font-style: italic;">SBJ</div>
-  <div class="mono theme-btn" id="themeBtn">Mode</div>
 </header>
 
 <section class="hero" id="hero">
@@ -111,7 +107,7 @@
 </section>
 
 <section class="gallery-container" id="galleryContainer">
-  <div class="mono" style="margin-bottom: 40px; cursor: pointer;" id="backToMenu">← Tillbaka</div>
+  <div class="mono" style="margin-bottom: 40px; cursor: pointer;" id="backToMenu">← Back</div>
   <div class="gallery-grid" id="grid"></div>
 </section>
 
@@ -139,14 +135,9 @@
 
   function getSrc(img) { return img.f ? `images/${img.f}` : `images/bild (${img.n}).jpg`; }
 
-  // --- Theme ---
+  // --- Persistent Theme Memory ---
   const savedTheme = localStorage.getItem('sbj_theme') || 'dark';
   document.body.setAttribute('data-theme', savedTheme);
-  document.getElementById('themeBtn').onclick = () => {
-    const next = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.body.setAttribute('data-theme', next);
-    localStorage.setItem('sbj_theme', next);
-  };
 
   // --- Netflix Wall Build ---
   const wall = document.getElementById('wall');
@@ -158,7 +149,7 @@
       const i = document.createElement('img');
       i.className = 'wall-img';
       i.src = getSrc(img);
-      i.loading = "eager"; // Ladda hero-bilder direkt
+      i.loading = "eager";
       row.appendChild(i);
     });
     wall.appendChild(row);
@@ -187,7 +178,6 @@
       flashImgs.push(i);
     });
 
-    // Automatiskt Flashing
     let flashIdx = 0;
     setInterval(() => {
       flashImgs.forEach(img => img.classList.remove('active'));
