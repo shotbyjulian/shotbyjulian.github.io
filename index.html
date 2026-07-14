@@ -27,7 +27,7 @@
     display: flex; justify-content: space-between; align-items: center;
     padding: 30px clamp(20px, 5vw, 60px); mix-blend-mode: difference; color: #fff;
   }
-  .menu-trigger { cursor: pointer; font-weight: 600; font-size: 0.8rem; }
+  .header-btn { cursor: pointer; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.1em; border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; }
 
   /* --- Hero: Diagonal Netflix Wall --- */
   .hero {
@@ -35,53 +35,63 @@
     display: flex; align-items: center; justify-content: center;
   }
   .wall-container {
-    position: absolute; width: 150%; height: 150%;
-    display: flex; flex-direction: column; gap: 20px;
-    transform: rotate(-15deg) scale(1.2);
+    position: absolute; width: 160%; height: 160%;
+    display: flex; flex-direction: column; gap: 15px;
+    transform: rotate(-12deg) translateY(-10%);
   }
-  .wall-row { display: flex; gap: 20px; width: 200%; animation: wallScroll 60s linear infinite; }
+  .wall-row { display: flex; gap: 15px; width: 300%; animation: wallScroll 80s linear infinite; }
   .wall-row:nth-child(even) { animation-direction: reverse; }
-  .wall-img { width: 300px; height: 200px; object-fit: cover; filter: brightness(0.4); flex-shrink: 0; }
+  .wall-img { width: 22vw; aspect-ratio: 4/5; object-fit: cover; filter: brightness(0.5); flex-shrink: 0; }
   
   @keyframes wallScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3rem, 12vw, 10rem); font-style: italic; color: #fff; text-align: center; line-height: 0.8; pointer-events: none; }
+  .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3.5rem, 12vw, 11rem); font-style: italic; color: #fff; text-align: center; line-height: 0.8; pointer-events: none; }
 
-  /* --- Fullscreen Menu --- */
+  /* --- Skiss-inspirerad Meny Overlay --- */
   .menu-overlay {
     position: fixed; inset: 0; z-index: 3000; background: var(--bg);
-    display: none; grid-template-columns: 1fr 1fr;
+    display: none; flex-direction: column; padding: 100px clamp(20px, 10vw, 100px) 60px;
+    overflow-y: auto;
   }
-  .menu-overlay.active { display: grid; }
+  .menu-overlay.active { display: flex; }
   
-  .menu-list { display: flex; flex-direction: column; justify-content: center; padding: 60px; gap: 30px; }
-  .menu-item { font-family: 'Fraunces', serif; font-size: clamp(2rem, 5vw, 4rem); font-style: italic; cursor: pointer; opacity: 0.4; transition: 0.3s; }
-  .menu-item:hover { opacity: 1; transform: translateX(20px); }
-  .menu-item .count { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; vertical-align: middle; margin-left: 15px; font-style: normal; }
+  .menu-grid { display: flex; flex-direction: column; gap: 40px; max-width: 800px; margin: 0 auto; width: 100%; }
+  
+  /* Raden från din skiss */
+  .menu-row { display: flex; align-items: center; gap: 30px; cursor: pointer; transition: 0.3s var(--ease); }
+  .menu-row:hover { transform: translateX(15px); }
 
-  .menu-preview { 
-    position: relative; overflow: hidden; background: #000;
-    display: flex; align-items: center; justify-content: center;
+  /* Rutan som flashar */
+  .menu-box { 
+    width: clamp(80px, 15vw, 160px); 
+    aspect-ratio: 3/4; 
+    background: var(--line); 
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
   }
-  #previewImg { width: 80%; height: 80%; object-fit: contain; filter: grayscale(1); transition: opacity 0.1s; }
+  .menu-box img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); position: absolute; opacity: 0; transition: opacity 0.1s; }
+  .menu-box img.active { opacity: 1; }
 
-  .close-menu { position: absolute; top: 30px; right: 60px; cursor: pointer; z-index: 3001; }
+  .menu-info { display: flex; flex-direction: column; gap: 4px; }
+  .menu-cat { font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 4vw, 3.5rem); font-style: italic; text-transform: capitalize; }
+  .menu-count { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--text-muted); }
 
-  /* --- Grid (Clean) --- */
+  .close-menu { position: absolute; top: 40px; right: 40px; cursor: pointer; font-size: 0.8rem; }
+
+  /* --- Gallery Grid --- */
   .gallery-grid { padding: 80px clamp(20px, 5vw, 60px); display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; }
-  .item { grid-column: span 12; cursor: pointer; }
+  .item { grid-column: span 12; }
   @media (min-width: 768px) { .item { grid-column: span 4; } .item.large { grid-column: span 8; } }
-  
-  .item img { width: 100%; height: auto; display: block; transition: transform 0.8s var(--ease); }
-  .item:hover img { transform: scale(1.02); }
-  .item-meta { margin-top: 15px; opacity: 0.5; font-size: 0.7rem; }
+  .item img { width: 100%; height: auto; display: block; }
+  .item-meta { margin-top: 12px; font-size: 0.65rem; color: var(--text-muted); }
 
-  /* --- Focus Mode --- */
+  /* --- Fullscreen View --- */
   .focus-overlay {
     position: fixed; inset: 0; z-index: 4000; background: var(--bg);
     display: none; align-items: center; justify-content: center; padding: 40px;
   }
   .focus-overlay.active { display: flex; }
-  .focus-overlay img { max-height: 90vh; max-width: 90vw; object-fit: contain; }
+  .focus-overlay img { max-height: 90vh; max-width: 95vw; object-fit: contain; }
 
 </style>
 </head>
@@ -89,23 +99,20 @@
 
 <header>
   <div class="serif" style="font-size: 1.2rem; font-style: italic;">SBJ</div>
-  <div style="display:flex; gap:30px;">
-    <div class="mono menu-trigger" id="themeBtn">Mode</div>
-    <div class="mono menu-trigger" id="openMenu">Menu</div>
+  <div style="display:flex; gap:20px;">
+    <div class="mono header-btn" id="themeBtn">Mode</div>
+    <div class="mono header-btn" id="openMenu">Menu</div>
   </div>
 </header>
 
-<section class="hero">
+<section class="hero" id="hero">
   <div class="wall-container" id="wall"></div>
   <h1 class="hero-title">Shot by Julian</h1>
 </section>
 
 <div class="menu-overlay" id="menuOverlay">
-  <div class="mono close-menu" id="closeMenu">Close ✕</div>
-  <div class="menu-list" id="menuList"></div>
-  <div class="menu-preview">
-    <img id="previewImg" src="" alt="">
-  </div>
+  <div class="mono close-menu" id="closeMenu">Stäng ✕</div>
+  <div class="menu-grid" id="menuGrid"></div>
 </div>
 
 <main class="gallery-grid" id="grid"></main>
@@ -115,7 +122,7 @@
 </div>
 
 <script>
-  // --- Data ---
+  // --- Databas ---
   const DATA = Array.from({length: 43}, (_, i) => {
     const n = i + 1;
     let a = "VROOM";
@@ -124,7 +131,6 @@
     if ([1,37].includes(n)) a = "MISC";
     if (n >= 38) a = "BERLIN";
     const img = { n: String(n), a: a };
-    if (n >= 38) img.f = `IMG_923${n-4}.jpeg`;
     if (n === 38) img.f = "IMG_9234.jpeg";
     if (n === 39) img.f = "IMG_9235.jpeg";
     if (n === 40) img.f = "IMG_9236.jpeg";
@@ -134,22 +140,20 @@
     return img;
   });
 
-  const CATS = ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC", "ALL"];
-  let currentFilter = "ALL";
-
   function getSrc(img) { return img.f ? `images/${img.f}` : `images/bild (${img.n}).jpg`; }
 
-  // --- Persistent Theme ---
-  const savedTheme = localStorage.getItem('theme') || 'dark';
+  // --- Theme Memory ---
+  const savedTheme = localStorage.getItem('sbj_theme') || 'dark';
   document.body.setAttribute('data-theme', savedTheme);
 
   document.getElementById('themeBtn').onclick = () => {
-    const newTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.body.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
+    const current = document.body.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.body.setAttribute('data-theme', next);
+    localStorage.setItem('sbj_theme', next);
   };
 
-  // --- Diagonal Wall ---
+  // --- Netflix Wall ---
   const wall = document.getElementById('wall');
   for (let r = 0; r < 6; r++) {
     const row = document.createElement('div');
@@ -164,52 +168,82 @@
     wall.appendChild(row);
   }
 
-  // --- Menu Logic ---
+  // --- Meny Logic ---
   const menuOverlay = document.getElementById('menuOverlay');
-  const previewImg = document.getElementById('previewImg');
-  let flashInterval;
+  const menuGrid = document.getElementById('menuGrid');
+  
+  // Kategorier: Slumpa alla utom ALL, lägg ALL sist
+  const rawCats = ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC"];
+  const sortedCats = rawCats.sort(() => Math.random() - 0.5);
+  sortedCats.push("ALL");
+
+  sortedCats.forEach(cat => {
+    const filtered = cat === "ALL" ? DATA : DATA.filter(i => i.a === cat);
+    
+    const row = document.createElement('div');
+    row.className = 'menu-row';
+    
+    // Skapa rutan (boxen)
+    const box = document.createElement('div');
+    box.className = 'menu-box';
+    
+    // Förbered bilder för flash
+    const flashImgs = [];
+    filtered.slice(0, 8).forEach((img, idx) => {
+      const i = document.createElement('img');
+      i.src = getSrc(img);
+      if(idx === 0) i.className = 'active';
+      box.appendChild(i);
+      flashImgs.push(i);
+    });
+
+    // Flash-effekt vid hover
+    let flashTimer;
+    row.onmouseenter = () => {
+      let currentIdx = 0;
+      flashTimer = setInterval(() => {
+        flashImgs.forEach(img => img.classList.remove('active'));
+        currentIdx = (currentIdx + 1) % flashImgs.length;
+        flashImgs[currentIdx].classList.add('active');
+      }, 180);
+    };
+    row.onmouseleave = () => clearInterval(flashTimer);
+
+    // Info till höger
+    const info = document.createElement('div');
+    info.className = 'menu-info';
+    info.innerHTML = `
+      <div class="menu-cat">${cat.toLowerCase()}</div>
+      <div class="mono menu-count">${filtered.length} Plates</div>
+    `;
+
+    row.onclick = () => {
+      renderGallery(cat);
+      menuOverlay.classList.remove('active');
+      document.getElementById('hero').style.display = 'none';
+      window.scrollTo(0,0);
+    };
+
+    row.appendChild(box);
+    row.appendChild(info);
+    menuGrid.appendChild(row);
+  });
 
   document.getElementById('openMenu').onclick = () => menuOverlay.classList.add('active');
   document.getElementById('closeMenu').onclick = () => menuOverlay.classList.remove('active');
 
-  const menuList = document.getElementById('menuList');
-  CATS.forEach(cat => {
-    const item = document.createElement('div');
-    item.className = 'menu-item';
-    const count = cat === 'ALL' ? DATA.length : DATA.filter(i => i.a === cat).length;
-    item.innerHTML = `${cat} <span class="count">${count}</span>`;
-    
-    item.onmouseenter = () => {
-      const filtered = cat === 'ALL' ? DATA : DATA.filter(i => i.a === cat);
-      let idx = 0;
-      flashInterval = setInterval(() => {
-        previewImg.src = getSrc(filtered[idx]);
-        idx = (idx + 1) % filtered.length;
-      }, 150);
-    };
-    
-    item.onmouseleave = () => clearInterval(flashInterval);
-    
-    item.onclick = () => {
-      currentFilter = cat;
-      renderGrid();
-      menuOverlay.classList.remove('active');
-      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-    };
-    menuList.appendChild(item);
-  });
-
-  // --- Grid Render ---
-  function renderGrid() {
+  // --- Gallery Grid Render ---
+  function renderGallery(cat) {
     const grid = document.getElementById('grid');
-    const filtered = currentFilter === 'ALL' ? DATA : DATA.filter(i => i.a === currentFilter);
+    const filtered = cat === "ALL" ? DATA : DATA.filter(i => i.a === cat);
     grid.innerHTML = '';
+    
     filtered.forEach((img, idx) => {
       const el = document.createElement('div');
       el.className = `item ${idx % 7 === 0 ? 'large' : ''}`;
       el.innerHTML = `
         <img src="${getSrc(img)}" loading="lazy">
-        <div class="item-meta mono">— PL ${img.n.padStart(2, '0')}</div>
+        <div class="item-meta mono">— Index ${img.n}</div>
       `;
       el.onclick = () => {
         document.getElementById('focusImg').src = getSrc(img);
@@ -220,8 +254,6 @@
   }
 
   document.getElementById('focusOverlay').onclick = function() { this.classList.remove('active'); };
-
-  renderGrid();
 </script>
 </body>
 </html>
