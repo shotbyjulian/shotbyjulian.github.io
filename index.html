@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="sv" data-theme="light">
+<html lang="sv" data-theme="dark" style="background-color: #121211;">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" id="metaTheme" content="#121211">
 <title>SHOT BY JULIAN — ARCHIVE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,10 +19,18 @@
     --line: rgba(255,255,255,0.08); --concrete: #2a2a28;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  /* Fixar vita kanter i topp/botten */
+  html, body { 
+    background-color: var(--bg); 
+    color: var(--text);
+    margin: 0; padding: 0;
+    min-height: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
-    background-color: var(--bg); color: var(--text);
-    font-family: 'Archivo', sans-serif; transition: background-color 0.8s var(--ease);
+    font-family: 'Archivo', sans-serif; 
+    transition: background-color 0.8s var(--ease);
     overflow-x: hidden; perspective: 1200px;
   }
 
@@ -30,9 +39,10 @@
 
   /* --- Top Header --- */
   header {
-    position: fixed; top: 0; width: 100%; z-index: 2000; /* Alltid högst upp */
+    position: fixed; top: 0; width: 100%; z-index: 2000;
     display: flex; justify-content: space-between; align-items: center;
-    padding: 20px clamp(20px, 5vw, 60px); mix-blend-mode: difference; color: #fff;
+    padding: env(safe-area-inset-top, 20px) clamp(20px, 5vw, 60px) 20px; 
+    mix-blend-mode: difference; color: #fff;
   }
   .nav-group { display: flex; gap: 15px; align-items: center; }
   .nav-btn { cursor: pointer; border: 1px solid rgba(255,255,255,0.3); padding: 5px 12px; border-radius: 4px; transition: 0.3s; }
@@ -46,9 +56,9 @@
   .gallery-nav {
     padding: 25px clamp(20px, 5vw, 60px);
     border-bottom: 1px solid var(--line); position: sticky; top: 0;
-    background: var(--bg); z-index: 1500; /* Lägre än top header men över bilder */
+    background: var(--bg); z-index: 1500;
     display: flex; justify-content: space-between; align-items: center;
-    backdrop-filter: blur(10px); background: rgba(var(--bg-rgb), 0.8);
+    backdrop-filter: blur(10px);
   }
   .filters { display: flex; gap: 18px; flex-wrap: wrap; }
   .filters button { cursor: pointer; border: none; background: none; color: var(--text-muted); font-size: 0.65rem; text-transform: uppercase; transition: 0.3s; padding: 5px 0; }
@@ -56,19 +66,17 @@
 
   /* --- Grid --- */
   .gallery-grid { padding: 40px clamp(20px, 5vw, 60px) 100px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 60px 30px; }
-  .item { grid-column: span 12; cursor: pointer; position: relative; transition: opacity 0.5s; z-index: 1; }
+  .item { grid-column: span 12; cursor: pointer; position: relative; z-index: 1; }
   @media (min-width: 768px) { .item { grid-column: span 4; } .item.large { grid-column: span 8; } }
 
-  /* Betongrammen */
   .item-img-wrap {
     padding: 10px; background-color: var(--concrete);
-    border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.15);
     transition: transform 0.15s ease-out; transform-style: preserve-3d;
   }
-  .item-img { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; background: #333; }
+  .item-img { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; background: #222; }
   .item-img img { width: 100%; height: 100%; object-fit: cover; transition: 1s var(--ease); }
   
-  /* Still korn */
   .item-img::after {
     content: ""; position: absolute; inset: 0; pointer-events: none;
     background-image: url("https://upload.wikimedia.org/wikipedia/commons/7/76/Noise_600x600.png");
@@ -80,17 +88,26 @@
     position: fixed; inset: 0; z-index: 3000; padding: 40px; background: var(--bg);
     display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh;
   }
-  .item.focused .item-img-wrap { height: 85vh; width: auto; transform: none !important; }
+  .item.focused .item-img-wrap { height: 80vh; width: auto; transform: none !important; }
   .item.focused img { height: 100%; width: auto; max-width: 90vw; object-fit: contain; }
 
-  /* --- Info Popup --- */
+  /* --- Info Popup (Fixad kontrast) --- */
   .info-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 4000;
+    position: fixed; inset: 0; z-index: 4000;
     display: none; align-items: center; justify-content: center; padding: 40px;
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
   }
   .info-overlay.active { display: flex; }
-  .info-content { max-width: 400px; text-align: center; background: #fff; color: #000; padding: 40px; border-radius: 4px; }
-  .close-btn { background: #000; color: #fff; border: none; padding: 12px 30px; margin-top: 20px; cursor: pointer; border-radius: 4px; }
+  .info-content { 
+    max-width: 400px; width: 100%; text-align: center; 
+    background: var(--bg); color: var(--text); 
+    padding: 40px; border-radius: 8px; border: 1px solid var(--line);
+  }
+  .close-btn { 
+    background: var(--text); color: var(--bg); 
+    border: none; padding: 15px 40px; margin-top: 25px; 
+    cursor: pointer; border-radius: 4px; font-weight: 600;
+  }
 
   .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s var(--ease); }
   .reveal.is-visible { opacity: 1; transform: translateY(0); }
@@ -121,9 +138,9 @@
 
 <div class="info-overlay" id="infoOverlay">
   <div class="info-content">
-    <h2 class="serif" id="infoTitle" style="font-size: 2rem; margin-bottom: 15px;">Interaction</h2>
+    <h2 class="serif" id="infoTitle" style="font-size: 2rem; margin-bottom: 15px;">Motion</h2>
     <p class="mono" id="infoText" style="line-height: 1.8; opacity: 0.8; font-size: 0.75rem;"></p>
-    <button class="close-btn mono" id="closeInfo">OK</button>
+    <button class="close-btn mono" id="closeInfo">STARTA</button>
   </div>
 </div>
 
@@ -131,12 +148,13 @@
   // FULLSTÄNDIGT ARKIV (1-43)
   const DATA = Array.from({length: 43}, (_, i) => {
     const n = i + 1;
-    let a = "VROOM"; // Default
+    let a = "VROOM";
     if ([23,24,25,26,36].includes(n)) a = "NATURE";
     if ([32,33,34,35].includes(n)) a = "NOIR";
     if ([1,37].includes(n)) a = "MISC";
     if (n >= 38) a = "BERLIN";
     const img = { n: String(n), a: a };
+    if (n >= 38) img.f = `IMG_923${n-4}.jpeg`; // Beräknar filnamn för Berlin
     if (n === 38) img.f = "IMG_9234.jpeg";
     if (n === 39) img.f = "IMG_9235.jpeg";
     if (n === 40) img.f = "IMG_9236.jpeg";
@@ -148,32 +166,17 @@
 
   let lang = 'SV';
   const TEXTS = {
-    SV: { title: "Shot by Julian", guideTitle: "Rörelse", guideText: "Vinkla telefonen för att flytta perspektivet i bilderna. Klicka på en bild för att fokusera.", close: "STARTA", plates: "Plåtar" },
-    EN: { title: "Shot by Julian", guideTitle: "Motion", guideText: "Tilt your phone to shift the image perspective. Click any image to focus.", close: "START", plates: "Plates" }
+    SV: { guideTitle: "Rörelse", guideText: "Vinkla telefonen för att flytta perspektivet i bilderna. Klicka på en bild för att fokusera.", close: "STARTA", plates: "Plåtar" },
+    EN: { guideTitle: "Motion", guideText: "Tilt your phone to shift the image perspective. Click any image to focus.", close: "START", plates: "Plates" }
   };
 
-  const CATS = ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC", "ALL"];
   let currentFilter = "BERLIN";
 
   function getSrc(img) { return img.f ? `images/${img.f}` : `images/bild (${img.n}).jpg`; }
 
-  // --- PC Tilt ---
-  function initTilt(el) {
-    el.addEventListener('mousemove', (e) => {
-      if(window.innerWidth < 768 || el.classList.contains('focused')) return;
-      const box = el.getBoundingClientRect();
-      const x = (e.clientX - box.left) / box.width - 0.5;
-      const y = (e.clientY - box.top) / box.height - 0.5;
-      el.querySelector('.item-img-wrap').style.transform = `rotateY(${x * 20}deg) rotateX(${y * -20}deg)`;
-    });
-    el.addEventListener('mouseleave', () => {
-      el.querySelector('.item-img-wrap').style.transform = `rotateY(0deg) rotateX(0deg)`;
-    });
-  }
-
-  // --- Gyroskop Permission (iPhone Fix) ---
+  // --- Gyro Permission ---
   async function requestGyro() {
-    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
       try {
         const response = await DeviceOrientationEvent.requestPermission();
         if (response === 'granted') {
@@ -194,19 +197,32 @@
     });
   }
 
-  // --- Hero ---
-  const heroImg = document.getElementById('heroImg');
-  let fIdx = 0;
-  setInterval(() => {
-    fIdx = (fIdx + 1) % DATA.length;
-    heroImg.src = getSrc(DATA[fIdx]);
-  }, 110);
+  // --- PC Tilt ---
+  function initTilt(el) {
+    el.addEventListener('mousemove', (e) => {
+      if(window.innerWidth < 768 || el.classList.contains('focused')) return;
+      const box = el.getBoundingClientRect();
+      const x = (e.clientX - box.left) / box.width - 0.5;
+      const y = (e.clientY - box.top) / box.height - 0.5;
+      el.querySelector('.item-img-wrap').style.transform = `rotateY(${x * 20}deg) rotateX(${y * -20}deg)`;
+    });
+    el.addEventListener('mouseleave', () => {
+      el.querySelector('.item-img-wrap').style.transform = `rotateY(0deg) rotateX(0deg)`;
+    });
+  }
 
-  // --- UI ---
-  document.getElementById('themeBtn').onclick = () => {
+  // --- UI Functions ---
+  const themeBtn = document.getElementById('themeBtn');
+  const metaTheme = document.getElementById('metaTheme');
+  
+  themeBtn.onclick = () => {
     const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', t);
+    const bgCol = t === 'dark' ? '#121211' : '#e8e4df';
+    document.documentElement.style.backgroundColor = bgCol;
+    metaTheme.setAttribute('content', bgCol);
   };
+
   document.getElementById('langBtn').onclick = function() {
     lang = lang === 'SV' ? 'EN' : 'SV';
     this.textContent = lang === 'SV' ? 'EN' : 'SV';
@@ -251,7 +267,7 @@
   }, { threshold: 0.1 });
 
   const filtersEl = document.getElementById('filters');
-  CATS.forEach(cat => {
+  ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC", "ALL"].forEach(cat => {
     const btn = document.createElement('button');
     btn.textContent = cat;
     btn.className = cat === currentFilter ? 'active' : '';
@@ -260,19 +276,20 @@
       document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderGrid();
-      window.scrollTo({top: window.innerHeight - 80, behavior: 'smooth'});
     };
     filtersEl.appendChild(btn);
   });
 
-  document.getElementById('infoBtn').onclick = () => {
-    document.getElementById('infoOverlay').classList.add('active');
-    requestGyro();
-  };
+  document.getElementById('infoBtn').onclick = () => document.getElementById('infoOverlay').classList.add('active');
   document.getElementById('closeInfo').onclick = () => {
     document.getElementById('infoOverlay').classList.remove('active');
     requestGyro();
   };
+
+  // Hero Flash
+  const hImg = document.getElementById('heroImg');
+  let hi = 0;
+  setInterval(() => { hi = (hi + 1) % DATA.length; hImg.src = getSrc(DATA[hi]); }, 120);
 
   updateLanguage();
 </script>
