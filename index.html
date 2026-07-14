@@ -18,18 +18,16 @@
     --line: rgba(255,255,255,0.08);
   }
 
-  html, body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; transition: background-color 0.8s var(--ease); scroll-behavior: smooth; }
+  html, body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; transition: background-color 0.8s var(--ease); scroll-behavior: auto; }
   .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; }
   .serif { font-family: 'Fraunces', serif; }
 
-  /* --- Header --- */
   header {
     position: fixed; top: 0; width: 100%; z-index: 2000;
     display: flex; justify-content: space-between; align-items: center;
     padding: 30px clamp(20px, 5vw, 60px); mix-blend-mode: difference; color: #fff;
   }
 
-  /* --- Hero: Full Screen Netflix Wall --- */
   .hero {
     height: 100vh; width: 100%; position: relative; overflow: hidden; background: #000;
     display: flex; align-items: center; justify-content: center;
@@ -46,7 +44,6 @@
   @keyframes wallScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3.5rem, 15vw, 13rem); font-style: italic; color: #fff; text-align: center; line-height: 0.8; pointer-events: none; }
 
-  /* --- Category Menu Section --- */
   .category-section {
     padding: 120px clamp(20px, 10vw, 100px);
     background: var(--bg);
@@ -54,7 +51,6 @@
     min-height: 100vh;
   }
   .menu-grid { display: flex; flex-direction: column; gap: 60px; max-width: 900px; width: 100%; }
-  
   .menu-row { display: flex; align-items: center; gap: clamp(20px, 5vw, 50px); cursor: pointer; transition: 0.4s var(--ease); }
   .menu-row:hover { transform: translateX(20px); }
 
@@ -73,22 +69,19 @@
   .menu-cat { font-family: 'Fraunces', serif; font-size: clamp(2rem, 5vw, 4.5rem); font-style: italic; text-transform: capitalize; line-height: 1; }
   .menu-count { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--text-muted); }
 
-  /* --- Gallery Grid --- */
-  .gallery-container { display: none; padding: 100px clamp(20px, 5vw, 60px); background: var(--bg); min-height: 100vh; }
+  .gallery-container { display: none; padding: 60px clamp(20px, 5vw, 60px) 100px; background: var(--bg); min-height: 100vh; }
   .gallery-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; }
   .item { grid-column: span 12; cursor: pointer; }
   @media (min-width: 768px) { .item { grid-column: span 4; } .item.large { grid-column: span 8; } }
   .item img { width: 100%; height: auto; display: block; filter: brightness(0.95); }
   .item-meta { margin-top: 15px; font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
 
-  /* --- Fullscreen Focus --- */
   .focus-overlay {
     position: fixed; inset: 0; z-index: 4000; background: var(--bg);
     display: none; align-items: center; justify-content: center; padding: 40px;
   }
   .focus-overlay.active { display: flex; }
   .focus-overlay img { max-height: 90vh; max-width: 95vw; object-fit: contain; }
-
 </style>
 </head>
 <body data-theme="dark">
@@ -107,7 +100,7 @@
 </section>
 
 <section class="gallery-container" id="galleryContainer">
-  <div class="mono" style="margin-bottom: 40px; cursor: pointer;" id="backToMenu">← Back</div>
+  <div class="mono" style="margin-bottom: 60px; cursor: pointer; font-weight: 600;" id="backToMenu">← BACK TO INDEX</div>
   <div class="gallery-grid" id="grid"></div>
 </section>
 
@@ -135,11 +128,9 @@
 
   function getSrc(img) { return img.f ? `images/${img.f}` : `images/bild (${img.n}).jpg`; }
 
-  // --- Persistent Theme Memory ---
   const savedTheme = localStorage.getItem('sbj_theme') || 'dark';
   document.body.setAttribute('data-theme', savedTheme);
 
-  // --- Netflix Wall Build ---
   const wall = document.getElementById('wall');
   for (let r = 0; r < 6; r++) {
     const row = document.createElement('div');
@@ -149,26 +140,21 @@
       const i = document.createElement('img');
       i.className = 'wall-img';
       i.src = getSrc(img);
-      i.loading = "eager";
       row.appendChild(i);
     });
     wall.appendChild(row);
   }
 
-  // --- Menu Build & Auto-Flash ---
   const menuGrid = document.getElementById('menuGrid');
-  const rawCats = ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC"];
-  const sortedCats = rawCats.sort(() => Math.random() - 0.5);
+  const sortedCats = ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC"].sort(() => Math.random() - 0.5);
   sortedCats.push("ALL");
 
   sortedCats.forEach(cat => {
     const filtered = cat === "ALL" ? DATA : DATA.filter(i => i.a === cat);
     const row = document.createElement('div');
     row.className = 'menu-row';
-    
     const box = document.createElement('div');
     box.className = 'menu-box';
-    
     const flashImgs = [];
     filtered.slice(0, 10).forEach((img, idx) => {
       const i = document.createElement('img');
@@ -187,17 +173,15 @@
 
     const info = document.createElement('div');
     info.className = 'menu-info';
-    info.innerHTML = `
-      <div class="menu-cat">${cat.toLowerCase()}</div>
-      <div class="mono menu-count">${filtered.length} Plates</div>
-    `;
+    info.innerHTML = `<div class="menu-cat">${cat.toLowerCase()}</div><div class="mono menu-count">${filtered.length} Plates</div>`;
 
     row.onclick = () => {
       renderGallery(cat);
       document.getElementById('hero').style.display = 'none';
       document.getElementById('menuSection').style.display = 'none';
       document.getElementById('galleryContainer').style.display = 'block';
-      window.scrollTo(0,0);
+      // TVINGA SKROLL TILL TOPPEN
+      window.scrollTo(0, 0);
     };
 
     row.appendChild(box);
@@ -205,7 +189,6 @@
     menuGrid.appendChild(row);
   });
 
-  // --- Gallery Logic ---
   function renderGallery(cat) {
     const grid = document.getElementById('grid');
     const filtered = cat === "ALL" ? DATA : DATA.filter(i => i.a === cat);
@@ -213,10 +196,7 @@
     filtered.forEach((img, idx) => {
       const el = document.createElement('div');
       el.className = `item ${idx % 7 === 0 ? 'large' : ''}`;
-      el.innerHTML = `
-        <img src="${getSrc(img)}" loading="lazy">
-        <div class="item-meta mono">— PL ${img.n.padStart(2, '0')}</div>
-      `;
+      el.innerHTML = `<img src="${getSrc(img)}" loading="lazy"><div class="item-meta mono">— PL ${img.n.padStart(2, '0')}</div>`;
       el.onclick = () => {
         document.getElementById('focusImg').src = getSrc(img);
         document.getElementById('focusOverlay').classList.add('active');
@@ -229,7 +209,7 @@
     document.getElementById('hero').style.display = 'flex';
     document.getElementById('menuSection').style.display = 'flex';
     document.getElementById('galleryContainer').style.display = 'none';
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   };
 
   document.getElementById('focusOverlay').onclick = function() { this.classList.remove('active'); };
