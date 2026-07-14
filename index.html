@@ -10,12 +10,12 @@
 <style>
   :root {
     --bg: #e8e4df; --text: #1a1a18; --text-muted: #878480;
-    --line: rgba(0,0,0,0.08); --accent: #b23a2a;
+    --line: rgba(0,0,0,0.08); --accent: #1a1a18;
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
   }
   [data-theme="dark"] {
     --bg: #121211; --text: #e8e4df; --text-muted: #6b6965;
-    --line: rgba(255,255,255,0.08);
+    --line: rgba(255,255,255,0.08); --accent: #e8e4df;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -28,34 +28,38 @@
   .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; }
   .serif { font-family: 'Fraunces', serif; }
 
-  /* --- UI Elements --- */
+  /* --- Navigation --- */
   header {
     position: fixed; top: 0; width: 100%; z-index: 500;
     display: flex; justify-content: space-between; align-items: center;
     padding: 30px clamp(20px, 5vw, 60px); mix-blend-mode: difference; color: #fff;
   }
 
+  .nav-group { display: flex; gap: 20px; align-items: center; }
+  .nav-btn { cursor: pointer; border: 1px solid rgba(255,255,255,0.3); padding: 4px 8px; border-radius: 4px; transition: 0.3s; }
+  .nav-btn:hover { background: #fff; color: #000; }
+
   .info-trigger {
     width: 32px; height: 32px; border: 1px solid #fff; border-radius: 50%;
     display: flex; align-items: center; justify-content: center; cursor: pointer;
-    transition: 0.3s; animation: pulse 2s infinite;
+    animation: pulse 2s infinite;
   }
   @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); } 70% { box-shadow: 0 0 0 10px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
 
-  /* --- Hero Flash --- */
+  /* --- Hero --- */
   .hero {
     height: 100svh; width: 100%; position: relative;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    display: flex; justify-content: center; align-items: center;
     overflow: hidden; background: #000;
   }
   #heroImg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-  .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3rem, 12vw, 10rem); font-style: italic; color: #fff; line-height: 0.8; text-align: center; pointer-events: none; }
+  .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3rem, 12vw, 10rem); font-style: italic; color: #fff; text-align: center; line-height: 0.85; pointer-events: none; }
 
-  /* --- Navigation --- */
+  /* --- Gallery Filter Bar --- */
   .gallery-nav {
     padding: 80px clamp(20px, 5vw, 60px) 20px;
     border-bottom: 1px solid var(--line); position: sticky; top: 0;
-    background: var(--bg); z-index: 400; display: flex; justify-content: space-between;
+    background: var(--bg); z-index: 400; display: flex; justify-content: space-between; align-items: baseline;
   }
   .filters { display: flex; gap: 20px; flex-wrap: wrap; }
   .filters button {
@@ -65,68 +69,69 @@
   }
   .filters button.active { color: var(--text); border-bottom-color: var(--text); }
 
-  /* --- Grid & Items --- */
+  /* --- Grid --- */
   .gallery-grid {
     padding: 60px clamp(20px, 5vw, 60px);
     display: grid; grid-template-columns: repeat(12, 1fr); gap: 60px 30px;
   }
-  .item { grid-column: span 12; cursor: pointer; transition: transform 0.8s var(--ease); }
+  .item { grid-column: span 12; cursor: pointer; transition: 0.8s var(--ease); }
   @media (min-width: 768px) {
     .item { grid-column: span 4; }
     .item.large { grid-column: span 8; }
-    .item.tall { grid-row: span 2; }
   }
 
   .item-img {
     width: 100%; aspect-ratio: 4/5; overflow: hidden; background: var(--line);
-    margin-bottom: 15px; position: relative; transition: 0.6s var(--ease);
+    margin-bottom: 12px; position: relative; transition: 0.6s var(--ease);
   }
-  .item.tall .item-img { aspect-ratio: 2/3; }
   .item-img img { width: 100%; height: 100%; object-fit: cover; transition: 1.2s var(--ease); }
-  
-  .item:hover .item-img { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+  .item:hover .item-img { transform: translateY(-10px); }
   .item:hover img { transform: scale(1.05); }
 
-  /* --- Focus Mode (Bigger/Smaller) --- */
+  /* --- Focus Mode --- */
   .item.focused {
-    position: fixed; inset: 0; z-index: 1000; grid-column: auto; grid-row: auto;
-    padding: 40px; background: var(--bg); display: flex; flex-direction: column;
-    align-items: center; justify-content: center; margin: 0 !important;
+    position: fixed; inset: 0; z-index: 1000; padding: 40px; background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
   }
   .item.focused .item-img { width: auto; height: 100%; aspect-ratio: auto; margin: 0; }
   .item.focused img { width: auto; height: 100%; max-width: 90vw; object-fit: contain; }
-  .item.focused .item-meta { position: absolute; bottom: 40px; }
 
   /* --- Info Overlay --- */
   .info-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000;
     display: none; align-items: center; justify-content: center; color: #fff; padding: 40px;
   }
   .info-overlay.active { display: flex; animation: fadeIn 0.4s var(--ease); }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .info-content { max-width: 500px; text-align: center; }
-  .info-content h2 { font-family: 'Fraunces', serif; font-size: 2.5rem; margin-bottom: 20px; font-style: italic; }
-  .info-content p { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; line-height: 2; opacity: 0.8; margin-bottom: 30px; }
+  .info-content { max-width: 500px; text-align: center; background: #fff; color: #000; padding: 40px; border-radius: 8px; }
+  .info-content h2 { font-family: 'Fraunces', serif; font-size: 2rem; margin-bottom: 15px; font-style: italic; }
+  .info-content p { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; line-height: 1.8; margin-bottom: 30px; }
+  
+  .close-btn { 
+    background: #000; color: #fff; border: none; padding: 12px 30px; 
+    cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; border-radius: 4px;
+    transition: 0.3s;
+  }
+  .close-btn:hover { transform: scale(1.05); opacity: 0.9; }
 
-  /* --- Reveal Animations --- */
-  .reveal { opacity: 0; transform: translateY(40px) rotate(1deg); transition: 1s var(--ease); }
-  .reveal.is-visible { opacity: 1; transform: translateY(0) rotate(0); }
-
+  .reveal { opacity: 0; transform: translateY(40px); transition: 1s var(--ease); }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
 
 <header>
   <div class="serif" style="font-size: 1.2rem;">SBJ</div>
-  <div style="display:flex; gap:30px; align-items:center;">
-    <div class="mono" id="themeBtn" style="cursor:pointer">Mode</div>
+  <div class="nav-group">
+    <div class="mono nav-btn" id="langBtn">EN</div>
+    <div class="mono nav-btn" id="themeBtn">Mode</div>
     <div class="info-trigger" id="infoBtn">?</div>
   </div>
 </header>
 
 <section class="hero">
   <img id="heroImg" src="" alt="">
-  <h1 class="hero-title">Archive<br>Volume 01</h1>
+  <h1 class="hero-title" id="mainTitle">Archive<br>Chronicles</h1>
 </section>
 
 <div class="gallery-nav">
@@ -138,19 +143,19 @@
 
 <div class="info-overlay" id="infoOverlay">
   <div class="info-content">
-    <h2>Interaktioner</h2>
-    <p>
+    <h2 id="infoTitle">Guide</h2>
+    <p id="infoText">
       [KLICKA PÅ BILD] — Fokusläge (Större)<br>
       [KLICKA IGEN] — Minimera<br>
       [MODE] — Växla mellan ljust & mörkt läge<br>
       [FILTERS] — Sortera efter kategori
     </p>
-    <button class="mono" style="border: 1px solid #fff; padding: 10px 20px; color:#fff; cursor:pointer" id="closeInfo">Stäng guide</button>
+    <button class="close-btn" id="closeInfo">STÄNG GUIDE</button>
   </div>
 </div>
 
 <script>
-  // FULLSTÄNDIG DATA (1-43)
+  // KRONOLOGISK DATA (Sorterad efter nummer 1-43)
   const DATA = [
     { n: "1", a: "MISC" }, { n: "2", a: "VROOM" }, { n: "3", a: "VROOM" }, { n: "4", a: "VROOM" },
     { n: "5", a: "VROOM" }, { n: "6", a: "VROOM" }, { n: "7", a: "VROOM" }, { n: "8", a: "VROOM" },
@@ -164,22 +169,39 @@
     { n: "38", f: "IMG_9234.jpeg", a: "BERLIN" }, { n: "39", f: "IMG_9235.jpeg", a: "BERLIN" },
     { n: "40", f: "IMG_9236.jpeg", a: "BERLIN" }, { n: "41", f: "IMG_9237.jpeg", a: "BERLIN" },
     { n: "42", f: "IMG_9238.jpeg", a: "BERLIN" }, { n: "43", f: "IMG_9239.jpeg", a: "BERLIN" }
-  ];
+  ].sort((a, b) => parseInt(a.n) - parseInt(b.n)); // Säkerställer kronologisk ordning
 
-  // Blanda bilderna slumpmässigt
-  const ALL_IMAGES = DATA.sort(() => Math.random() - 0.5);
+  // Språkinställningar
+  let lang = 'SV';
+  const TEXTS = {
+    SV: {
+      title: "Arkiv<br>Kronologin",
+      guideTitle: "Guide",
+      guideText: "[KLICKA PÅ BILD] — Fokusläge<br>[KLICKA IGEN] — Minimera<br>[MODE] — Ljust/Mörkt läge<br>[FILTERS] — Sortera kategorier",
+      close: "STÄNG GUIDE",
+      plates: "Plåtar"
+    },
+    EN: {
+      title: "Archive<br>Chronology",
+      guideTitle: "Instructions",
+      guideText: "[CLICK IMAGE] — Focus Mode<br>[CLICK AGAIN] — Minimize<br>[MODE] — Light/Dark Mode<br>[FILTERS] — Sort Categories",
+      close: "CLOSE GUIDE",
+      plates: "Plates"
+    }
+  };
+
   const CATS = ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC", "ALL"];
   let currentFilter = "BERLIN";
 
   function getSrc(img) { return img.f ? `images/${img.f}` : `images/bild (${img.n}).jpg`; }
 
-  // --- Hero Flash ---
+  // --- Flash Hero ---
   const heroImg = document.getElementById('heroImg');
   let flashIdx = 0;
   setInterval(() => {
-    flashIdx = (flashIdx + 1) % ALL_IMAGES.length;
-    heroImg.src = getSrc(ALL_IMAGES[flashIdx]);
-  }, 120);
+    flashIdx = (flashIdx + 1) % DATA.length;
+    heroImg.src = getSrc(DATA[flashIdx]);
+  }, 130);
 
   // --- Theme ---
   document.getElementById('themeBtn').onclick = () => {
@@ -187,63 +209,14 @@
     document.documentElement.setAttribute('data-theme', theme);
   };
 
-  // --- Info Overlay ---
-  const infoOverlay = document.getElementById('infoOverlay');
-  document.getElementById('infoBtn').onclick = () => infoOverlay.classList.add('active');
-  document.getElementById('closeInfo').onclick = () => infoOverlay.classList.remove('active');
+  // --- Language ---
+  document.getElementById('langBtn').onclick = function() {
+    lang = lang === 'SV' ? 'EN' : 'SV';
+    this.textContent = lang === 'SV' ? 'EN' : 'SV'; // Knappen visar nästa val
+    updateLanguage();
+  };
 
-  // --- Filters ---
-  const filtersEl = document.getElementById('filters');
-  CATS.forEach(cat => {
-    const btn = document.createElement('button');
-    btn.textContent = cat;
-    btn.className = cat === currentFilter ? 'active' : '';
-    btn.onclick = () => {
-      currentFilter = cat;
-      document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderGrid();
-    };
-    filtersEl.appendChild(btn);
-  });
-
-  // --- Grid Render ---
-  function renderGrid() {
-    const grid = document.getElementById('grid');
-    const filtered = currentFilter === 'ALL' ? ALL_IMAGES : ALL_IMAGES.filter(i => i.a === currentFilter);
-    grid.innerHTML = '';
-    document.getElementById('count').textContent = `${filtered.length} Plates`;
-
-    filtered.forEach((img, idx) => {
-      const el = document.createElement('div');
-      const sizeClass = idx % 7 === 0 ? 'large' : idx % 4 === 0 ? 'tall' : '';
-      el.className = `item reveal ${sizeClass}`;
-      el.innerHTML = `
-        <div class="item-img"><img src="${getSrc(img)}" loading="lazy"></div>
-        <div class="item-meta mono" style="color:var(--text-muted)">— ${img.n.padStart(2, '0')}</div>
-      `;
-      
-      el.onclick = (e) => {
-        if (el.classList.contains('focused')) {
-          el.classList.remove('focused');
-          document.body.style.overflow = 'auto';
-        } else {
-          document.querySelectorAll('.item.focused').forEach(i => i.classList.remove('focused'));
-          el.classList.add('focused');
-          document.body.style.overflow = 'hidden';
-        }
-      };
-
-      grid.appendChild(el);
-      observer.observe(el);
-    });
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); });
-  }, { threshold: 0.1 });
-
-  renderGrid();
-</script>
-</body>
-</html>
+  function updateLanguage() {
+    const t = TEXTS[lang];
+    document.getElementById('mainTitle').innerHTML = t.title;
+    document.getElementById('infoTitle').textContent = t.guideTitle;
