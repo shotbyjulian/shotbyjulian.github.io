@@ -19,7 +19,6 @@
     --line: rgba(255,255,255,0.08); --concrete: #2a2a28;
   }
 
-  /* Fixar vita kanter i topp/botten */
   html, body { 
     background-color: var(--bg); 
     color: var(--text);
@@ -37,22 +36,23 @@
   .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; }
   .serif { font-family: 'Fraunces', serif; }
 
-  /* --- Top Header --- */
+  /* --- Utspridd Header --- */
   header {
     position: fixed; top: 0; width: 100%; z-index: 2000;
     display: flex; justify-content: space-between; align-items: center;
     padding: env(safe-area-inset-top, 20px) clamp(20px, 5vw, 60px) 20px; 
     mix-blend-mode: difference; color: #fff;
   }
-  .nav-group { display: flex; gap: 15px; align-items: center; }
-  .nav-btn { cursor: pointer; border: 1px solid rgba(255,255,255,0.3); padding: 5px 12px; border-radius: 4px; transition: 0.3s; }
+  .header-item { cursor: pointer; transition: 0.3s; }
+  .nav-btn-outline { border: 1px solid rgba(255,255,255,0.3); padding: 5px 12px; border-radius: 4px; }
+  .nav-btn-outline:hover { background: #fff; color: #000; }
 
   /* --- Hero --- */
   .hero { height: 100svh; width: 100%; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; background: #000; }
   #heroImg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.45; pointer-events: none; }
   .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3rem, 15vw, 12rem); font-style: italic; color: #fff; text-align: center; line-height: 0.8; pointer-events: none; }
 
-  /* --- Sticky Filter Bar --- */
+  /* --- Filter Bar --- */
   .gallery-nav {
     padding: 25px clamp(20px, 5vw, 60px);
     border-bottom: 1px solid var(--line); position: sticky; top: 0;
@@ -91,7 +91,7 @@
   .item.focused .item-img-wrap { height: 80vh; width: auto; transform: none !important; }
   .item.focused img { height: 100%; width: auto; max-width: 90vw; object-fit: contain; }
 
-  /* --- Info Popup (Fixad kontrast) --- */
+  /* --- Info Popup --- */
   .info-overlay {
     position: fixed; inset: 0; z-index: 4000;
     display: none; align-items: center; justify-content: center; padding: 40px;
@@ -116,12 +116,10 @@
 <body>
 
 <header>
-  <div class="serif" style="font-size: 1.2rem; font-style: italic;">SBJ</div>
-  <div class="nav-group">
-    <div class="mono nav-btn" id="langBtn">EN</div>
-    <div class="mono nav-btn" id="themeBtn">Mode</div>
-    <div class="nav-btn" id="infoBtn">?</div>
-  </div>
+  <div class="serif header-item" style="font-size: 1.2rem; font-style: italic;">SBJ</div>
+  <div class="mono header-item nav-btn-outline" id="langBtn">EN</div>
+  <div class="mono header-item nav-btn-outline" id="themeBtn">Mode</div>
+  <div class="header-item nav-btn-outline" id="infoBtn" style="border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;">?</div>
 </header>
 
 <section class="hero">
@@ -154,7 +152,6 @@
     if ([1,37].includes(n)) a = "MISC";
     if (n >= 38) a = "BERLIN";
     const img = { n: String(n), a: a };
-    if (n >= 38) img.f = `IMG_923${n-4}.jpeg`; // Beräknar filnamn för Berlin
     if (n === 38) img.f = "IMG_9234.jpeg";
     if (n === 39) img.f = "IMG_9235.jpeg";
     if (n === 40) img.f = "IMG_9236.jpeg";
@@ -211,11 +208,9 @@
     });
   }
 
-  // --- UI Functions ---
-  const themeBtn = document.getElementById('themeBtn');
+  // --- Theme & Lang ---
   const metaTheme = document.getElementById('metaTheme');
-  
-  themeBtn.onclick = () => {
+  document.getElementById('themeBtn').onclick = () => {
     const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', t);
     const bgCol = t === 'dark' ? '#121211' : '#e8e4df';
@@ -266,6 +261,7 @@
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); });
   }, { threshold: 0.1 });
 
+  // Filters
   const filtersEl = document.getElementById('filters');
   ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC", "ALL"].forEach(cat => {
     const btn = document.createElement('button');
@@ -278,6 +274,13 @@
       renderGrid();
     };
     filtersEl.appendChild(btn);
+  });
+
+  // Start-up Info Overlay
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      document.getElementById('infoOverlay').classList.add('active');
+    }, 600);
   });
 
   document.getElementById('infoBtn').onclick = () => document.getElementById('infoOverlay').classList.add('active');
