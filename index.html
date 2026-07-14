@@ -10,82 +10,75 @@
 <style>
   :root {
     --bg: #e8e4df; --text: #1a1a18; --text-muted: #878480;
-    --line: rgba(0,0,0,0.08); --accent: #1a1a18;
-    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --line: rgba(0,0,0,0.08); --concrete: #d1d1d1;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
   }
   [data-theme="dark"] {
     --bg: #121211; --text: #e8e4df; --text-muted: #6b6965;
-    --line: rgba(255,255,255,0.08); --accent: #e8e4df;
+    --line: rgba(255,255,255,0.08); --concrete: #3a3a38;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background-color: var(--bg); color: var(--text);
     font-family: 'Archivo', sans-serif; transition: background-color 0.8s var(--ease);
-    overflow-x: hidden;
+    overflow-x: hidden; perspective: 1000px;
   }
 
-  .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; }
+  .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; }
   .serif { font-family: 'Fraunces', serif; }
 
-  /* --- Navigation --- */
+  /* --- Header --- */
   header {
     position: fixed; top: 0; width: 100%; z-index: 500;
     display: flex; justify-content: space-between; align-items: center;
     padding: 30px clamp(20px, 5vw, 60px); mix-blend-mode: difference; color: #fff;
   }
 
-  .nav-group { display: flex; gap: 20px; align-items: center; }
-  .nav-btn { cursor: pointer; border: 1px solid rgba(255,255,255,0.3); padding: 4px 8px; border-radius: 4px; transition: 0.3s; }
-  .nav-btn:hover { background: #fff; color: #000; }
-
-  .info-trigger {
-    width: 32px; height: 32px; border: 1px solid #fff; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; cursor: pointer;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); } 70% { box-shadow: 0 0 0 10px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
+  .nav-group { display: flex; gap: 15px; }
+  .nav-btn { cursor: pointer; border: 1px solid rgba(255,255,255,0.3); padding: 5px 12px; border-radius: 4px; transition: 0.3s; }
 
   /* --- Hero --- */
-  .hero {
-    height: 100svh; width: 100%; position: relative;
-    display: flex; justify-content: center; align-items: center;
-    overflow: hidden; background: #000;
-  }
-  #heroImg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-  .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3rem, 12vw, 10rem); font-style: italic; color: #fff; text-align: center; line-height: 0.85; pointer-events: none; }
+  .hero { height: 100svh; width: 100%; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; background: #000; }
+  #heroImg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+  .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3rem, 15vw, 12rem); font-style: italic; color: #fff; text-align: center; line-height: 0.8; }
 
-  /* --- Gallery Filter Bar --- */
+  /* --- Gallery Nav --- */
   .gallery-nav {
     padding: 80px clamp(20px, 5vw, 60px) 20px;
     border-bottom: 1px solid var(--line); position: sticky; top: 0;
-    background: var(--bg); z-index: 400; display: flex; justify-content: space-between; align-items: baseline;
+    background: var(--bg); z-index: 400; display: flex; justify-content: space-between;
   }
   .filters { display: flex; gap: 20px; flex-wrap: wrap; }
-  .filters button {
-    cursor: pointer; border: none; background: none; color: var(--text-muted);
-    font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em;
-    transition: 0.4s var(--ease); padding: 5px 0; border-bottom: 1px solid transparent;
-  }
-  .filters button.active { color: var(--text); border-bottom-color: var(--text); }
+  .filters button { cursor: pointer; border: none; background: none; color: var(--text-muted); font-size: 0.65rem; text-transform: uppercase; transition: 0.3s; }
+  .filters button.active { color: var(--text); font-weight: 600; }
 
-  /* --- Grid --- */
-  .gallery-grid {
-    padding: 60px clamp(20px, 5vw, 60px);
-    display: grid; grid-template-columns: repeat(12, 1fr); gap: 60px 30px;
-  }
-  .item { grid-column: span 12; cursor: pointer; transition: 0.8s var(--ease); }
-  @media (min-width: 768px) {
-    .item { grid-column: span 4; }
-    .item.large { grid-column: span 8; }
+  /* --- Betongram & Grid --- */
+  .gallery-grid { padding: 60px clamp(20px, 5vw, 60px); display: grid; grid-template-columns: repeat(12, 1fr); gap: 60px 30px; }
+  .item { grid-column: span 12; transition: 0.4s var(--ease); }
+  @media (min-width: 768px) { .item { grid-column: span 4; } .item.large { grid-column: span 8; } }
+
+  .item-img-wrap {
+    position: relative; overflow: hidden;
+    padding: 8px; /* Ramens tjocklek */
+    background-color: var(--concrete);
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05), 0 10px 30px rgba(0,0,0,0.05);
+    transition: transform 0.1s ease-out;
+    transform-style: preserve-3d;
   }
 
-  .item-img {
-    width: 100%; aspect-ratio: 4/5; overflow: hidden; background: var(--line);
-    margin-bottom: 12px; position: relative; transition: 0.6s var(--ease);
+  .item-img { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; }
+  .item.tall .item-img { aspect-ratio: 2/3; }
+  .item-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s var(--ease); }
+
+  /* --- Still Film Grain (Endast på bilder) --- */
+  .item-img::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/7/76/Noise_600x600.png");
+    opacity: 0.06; mix-blend-mode: overlay;
   }
-  .item-img img { width: 100%; height: 100%; object-fit: cover; transition: 1.2s var(--ease); }
-  .item:hover .item-img { transform: translateY(-10px); }
+
   .item:hover img { transform: scale(1.05); }
 
   /* --- Focus Mode --- */
@@ -93,45 +86,35 @@
     position: fixed; inset: 0; z-index: 1000; padding: 40px; background: var(--bg);
     display: flex; align-items: center; justify-content: center;
   }
-  .item.focused .item-img { width: auto; height: 100%; aspect-ratio: auto; margin: 0; }
-  .item.focused img { width: auto; height: 100%; max-width: 90vw; object-fit: contain; }
+  .item.focused .item-img-wrap { width: auto; height: 100%; transform: none !important; }
 
-  /* --- Info Overlay --- */
+  /* --- Info Popup --- */
   .info-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000;
-    display: none; align-items: center; justify-content: center; color: #fff; padding: 40px;
+    display: none; align-items: center; justify-content: center; padding: 40px;
   }
-  .info-overlay.active { display: flex; animation: fadeIn 0.4s var(--ease); }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .info-content { max-width: 500px; text-align: center; background: #fff; color: #000; padding: 40px; border-radius: 8px; }
-  .info-content h2 { font-family: 'Fraunces', serif; font-size: 2rem; margin-bottom: 15px; font-style: italic; }
-  .info-content p { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; line-height: 1.8; margin-bottom: 30px; }
-  
-  .close-btn { 
-    background: #000; color: #fff; border: none; padding: 12px 30px; 
-    cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; border-radius: 4px;
-    transition: 0.3s;
-  }
-  .close-btn:hover { transform: scale(1.05); opacity: 0.9; }
+  .info-overlay.active { display: flex; }
+  .info-content { max-width: 450px; text-align: center; background: #fff; color: #000; padding: 40px; border-radius: 4px; }
+  .close-btn { background: #000; color: #fff; border: none; padding: 12px 30px; margin-top: 20px; cursor: pointer; border-radius: 2px; }
 
-  .reveal { opacity: 0; transform: translateY(40px); transition: 1s var(--ease); }
+  .reveal { opacity: 0; transform: translateY(30px); transition: 1s var(--ease); }
   .reveal.is-visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="serif" style="font-size: 1.2rem;">SBJ</div>
+  <div class="serif" style="font-size: 1.2rem; font-style: italic;">SBJ</div>
   <div class="nav-group">
     <div class="mono nav-btn" id="langBtn">EN</div>
     <div class="mono nav-btn" id="themeBtn">Mode</div>
-    <div class="info-trigger" id="infoBtn">?</div>
+    <div class="nav-btn" id="infoBtn">?</div>
   </div>
 </header>
 
 <section class="hero">
   <img id="heroImg" src="" alt="">
-  <h1 class="hero-title" id="mainTitle">Archive<br>Chronicles</h1>
+  <h1 class="hero-title" id="mainTitle">Shot by Julian</h1>
 </section>
 
 <div class="gallery-nav">
@@ -143,57 +126,54 @@
 
 <div class="info-overlay" id="infoOverlay">
   <div class="info-content">
-    <h2 id="infoTitle">Guide</h2>
-    <p id="infoText">
-      [KLICKA PÅ BILD] — Fokusläge (Större)<br>
-      [KLICKA IGEN] — Minimera<br>
-      [MODE] — Växla mellan ljust & mörkt läge<br>
-      [FILTERS] — Sortera efter kategori
-    </p>
-    <button class="close-btn" id="closeInfo">STÄNG GUIDE</button>
+    <h2 class="serif" id="infoTitle" style="font-size: 2rem; margin-bottom: 15px;">Interaktion</h2>
+    <p class="mono" id="infoText" style="line-height: 1.8; opacity: 0.8;"></p>
+    <button class="close-btn mono" id="closeInfo">STÄNG</button>
   </div>
 </div>
 
 <script>
-  // KRONOLOGISK DATA (Sorterad efter nummer 1-43)
   const DATA = [
-    { n: "1", a: "MISC" }, { n: "2", a: "VROOM" }, { n: "3", a: "VROOM" }, { n: "4", a: "VROOM" },
-    { n: "5", a: "VROOM" }, { n: "6", a: "VROOM" }, { n: "7", a: "VROOM" }, { n: "8", a: "VROOM" },
-    { n: "9", a: "VROOM" }, { n: "10", a: "VROOM" }, { n: "11", a: "VROOM" }, { n: "12", a: "VROOM" },
-    { n: "14", a: "VROOM" }, { n: "15", a: "VROOM" }, { n: "16", a: "VROOM" }, { n: "17", a: "VROOM" },
-    { n: "18", a: "VROOM" }, { n: "19", a: "VROOM" }, { n: "20", a: "VROOM" }, { n: "22", a: "VROOM" },
-    { n: "23", a: "NATURE" }, { n: "24", a: "NATURE" }, { n: "25", a: "NATURE" }, { n: "26", a: "NATURE" },
-    { n: "27", a: "VROOM" }, { n: "28", a: "VROOM" }, { n: "29", a: "VROOM" }, { n: "30", a: "VROOM" },
-    { n: "31", a: "VROOM" }, { n: "32", a: "NOIR" }, { n: "33", a: "NOIR" }, { n: "34", a: "NOIR" },
-    { n: "35", a: "NOIR" }, { n: "36", a: "NATURE" }, { n: "37", a: "MISC" },
-    { n: "38", f: "IMG_9234.jpeg", a: "BERLIN" }, { n: "39", f: "IMG_9235.jpeg", a: "BERLIN" },
-    { n: "40", f: "IMG_9236.jpeg", a: "BERLIN" }, { n: "41", f: "IMG_9237.jpeg", a: "BERLIN" },
-    { n: "42", f: "IMG_9238.jpeg", a: "BERLIN" }, { n: "43", f: "IMG_9239.jpeg", a: "BERLIN" }
-  ].sort((a, b) => parseInt(a.n) - parseInt(b.n)); // Säkerställer kronologisk ordning
+    { n: "1", a: "MISC" }, { n: "2", a: "VROOM" }, { n: "5", a: "VROOM" }, { n: "10", a: "VROOM" },
+    { n: "23", a: "NATURE" }, { n: "24", a: "NATURE" }, { n: "32", a: "NOIR" }, { n: "35", a: "NOIR" },
+    { n: "38", f: "IMG_9234.jpeg", a: "BERLIN" }, { n: "43", f: "IMG_9239.jpeg", a: "BERLIN" },
+    { n: "14", a: "VROOM" }, { n: "40", f: "IMG_9236.jpeg", a: "BERLIN" }
+  ].sort(() => Math.random() - 0.5);
 
-  // Språkinställningar
   let lang = 'SV';
   const TEXTS = {
-    SV: {
-      title: "Arkiv",
-      guideTitle: "Guide",
-      guideText: "[KLICKA PÅ BILD] — Fokusläge<br>[KLICKA IGEN] — Minimera<br>[MODE] — Ljust/Mörkt läge<br>[FILTERS] — Sortera kategorier",
-      close: "STÄNG GUIDE",
-      plates: "Plåtar"
-    },
-    EN: {
-      title: "Archive",
-      guideTitle: "Instructions",
-      guideText: "[CLICK IMAGE] — Focus Mode<br>[CLICK AGAIN] — Minimize<br>[MODE] — Light/Dark Mode<br>[FILTERS] — Sort Categories",
-      close: "CLOSE GUIDE",
-      plates: "Plates"
-    }
+    SV: { guideTitle: "Interaction", guideText: "[MUS] — Luta bilderna<br>[MOBIL] — Vinkla telefonen för att se perspektiv<br>[KLICK] — Fullskärmsläge", close: "TACK", plates: "Plåtar" },
+    EN: { guideTitle: "Interaction", guideText: "[MOUSE] — Tilt images<br>[MOBILE] — Tilt phone to see perspective shift<br>[CLICK] — Fullscreen mode", close: "GOT IT", plates: "Plates" }
   };
 
   const CATS = ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC", "ALL"];
-  let currentFilter = "BERLIN";
+  let currentFilter = "ALL";
 
   function getSrc(img) { return img.f ? `images/${img.f}` : `images/bild (${img.n}).jpg`; }
+
+  // --- Tilt Effect (PC) ---
+  function initTilt(el) {
+    el.addEventListener('mousemove', (e) => {
+      if(window.innerWidth < 768) return;
+      const box = el.getBoundingClientRect();
+      const x = (e.clientX - box.left) / box.width - 0.5;
+      const y = (e.clientY - box.top) / box.height - 0.5;
+      el.querySelector('.item-img-wrap').style.transform = `rotateY(${x * 15}deg) rotateX(${y * -15}deg)`;
+    });
+    el.addEventListener('mouseleave', () => {
+      el.querySelector('.item-img-wrap').style.transform = `rotateY(0deg) rotateX(0deg)`;
+    });
+  }
+
+  // --- Gyro Effect (Mobil) ---
+  window.addEventListener('deviceorientation', (e) => {
+    if(window.innerWidth > 768) return;
+    const tiltX = Math.min(Math.max(e.beta, -30), 30) / 2; // Tilt fram/bak
+    const tiltY = Math.min(Math.max(e.gamma, -30), 30) / 2; // Tilt sida
+    document.querySelectorAll('.item-img-wrap').forEach(wrap => {
+      wrap.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+    });
+  });
 
   // --- Flash Hero ---
   const heroImg = document.getElementById('heroImg');
@@ -201,36 +181,56 @@
   setInterval(() => {
     flashIdx = (flashIdx + 1) % DATA.length;
     heroImg.src = getSrc(DATA[flashIdx]);
-  }, 130);
+  }, 120);
 
-  // --- Theme ---
+  // --- Theme & Lang ---
   document.getElementById('themeBtn').onclick = () => {
-    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', theme);
+    const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
   };
-
-  // --- Language ---
   document.getElementById('langBtn').onclick = function() {
     lang = lang === 'SV' ? 'EN' : 'SV';
-    this.textContent = lang === 'SV' ? 'EN' : 'SV'; // Knappen visar nästa val
+    this.textContent = lang === 'SV' ? 'EN' : 'SV';
     updateLanguage();
   };
 
   function updateLanguage() {
     const t = TEXTS[lang];
-    document.getElementById('mainTitle').innerHTML = t.title;
     document.getElementById('infoTitle').textContent = t.guideTitle;
     document.getElementById('infoText').innerHTML = t.guideText;
     document.getElementById('closeInfo').textContent = t.close;
     renderGrid();
   }
 
-  // --- Info Overlay ---
-  const infoOverlay = document.getElementById('infoOverlay');
-  document.getElementById('infoBtn').onclick = () => infoOverlay.classList.add('active');
-  document.getElementById('closeInfo').onclick = () => infoOverlay.classList.remove('active');
+  function renderGrid() {
+    const grid = document.getElementById('grid');
+    const filtered = currentFilter === 'ALL' ? DATA : DATA.filter(i => i.a === currentFilter);
+    grid.innerHTML = '';
+    document.getElementById('count').textContent = `${filtered.length} ${TEXTS[lang].plates}`;
 
-  // --- Filters ---
+    filtered.forEach((img, idx) => {
+      const el = document.createElement('div');
+      el.className = `item reveal ${idx % 5 === 0 ? 'large' : ''}`;
+      el.innerHTML = `
+        <div class="item-img-wrap">
+          <div class="item-img"><img src="${getSrc(img)}" loading="lazy"></div>
+        </div>
+        <div class="mono" style="margin-top:10px; color:var(--text-muted)">— ${img.n.padStart(2, '0')}</div>
+      `;
+      el.onclick = () => {
+        el.classList.toggle('focused');
+        document.body.style.overflow = el.classList.contains('focused') ? 'hidden' : 'auto';
+      };
+      grid.appendChild(el);
+      initTilt(el);
+      observer.observe(el);
+    });
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); });
+  }, { threshold: 0.1 });
+
   const filtersEl = document.getElementById('filters');
   CATS.forEach(cat => {
     const btn = document.createElement('button');
@@ -245,41 +245,8 @@
     filtersEl.appendChild(btn);
   });
 
-  // --- Grid ---
-  function renderGrid() {
-    const grid = document.getElementById('grid');
-    const filtered = currentFilter === 'ALL' ? DATA : DATA.filter(i => i.a === currentFilter);
-    grid.innerHTML = '';
-    document.getElementById('count').textContent = `${filtered.length} ${TEXTS[lang].plates}`;
-
-    filtered.forEach((img, idx) => {
-      const el = document.createElement('div');
-      const isLarge = idx % 8 === 0 ? 'large' : '';
-      el.className = `item reveal ${isLarge}`;
-      el.innerHTML = `
-        <div class="item-img"><img src="${getSrc(img)}" loading="lazy"></div>
-        <div class="mono" style="color:var(--text-muted)">— ${img.n.padStart(2, '0')}</div>
-      `;
-      
-      el.onclick = () => {
-        if (el.classList.contains('focused')) {
-          el.classList.remove('focused');
-          document.body.style.overflow = 'auto';
-        } else {
-          document.querySelectorAll('.item.focused').forEach(i => i.classList.remove('focused'));
-          el.classList.add('focused');
-          document.body.style.overflow = 'hidden';
-        }
-      };
-
-      grid.appendChild(el);
-      observer.observe(el);
-    });
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); });
-  }, { threshold: 0.1 });
+  document.getElementById('infoBtn').onclick = () => document.getElementById('infoOverlay').classList.add('active');
+  document.getElementById('closeInfo').onclick = () => document.getElementById('infoOverlay').classList.remove('active');
 
   updateLanguage();
 </script>
