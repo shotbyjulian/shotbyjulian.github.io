@@ -1,244 +1,264 @@
 <!DOCTYPE html>
-<html lang="sv" data-theme="dark" style="background-color: #0a0a0a;">
+<html lang="sv" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0a0a0a">
-<title>SHOT BY JULIAN — ARCHIVE</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Archivo:wght@300;400;600&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBJ</title>
 <style>
-  :root {
-    --bg: #e8e4df; --text: #1a1a18; --text-muted: #878480;
-    --line: rgba(0,0,0,0.08); --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  :root{
+    --bg:#171614; --bg-2:#211f1c; --fg:#e6e2d8; --rule:#3c3a35;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
   }
-  [data-theme="dark"] {
-    --bg: #0a0a0a; --text: #e8e4df; --text-muted: #6b6965;
-    --line: rgba(255,255,255,0.08);
-  }
+  [data-theme="light"]{ --bg:#d8d4c8; --bg-2:#ccc7b8; --fg:#17160f; --rule:#b8b2a0; }
 
-  html, body { 
-    background-color: var(--bg); color: var(--text); 
-    margin: 0; padding: 0; 
-    transition: background-color 0.8s var(--ease); 
-    overflow-x: hidden; width: 100%;
-  }
-  .mono { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; }
-  .serif { font-family: 'Fraunces', serif; }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} *{animation-duration:.01ms!important;transition-duration:.01ms!important} }
+  body{background:var(--bg);color:var(--fg);font-family:var(--sans);overflow-x:hidden;transition:background .3s,color .3s}
+  a{color:inherit}
+  img{display:block;max-width:100%}
+  button{font-family:inherit;background:none;border:none;color:inherit;cursor:pointer}
+  svg{display:block}
+  :focus-visible{outline:2px solid var(--fg);outline-offset:3px}
+  section{scroll-margin-top:66px}
 
-  header {
-    position: fixed; top: 0; left: 0; width: 100%; z-index: 2000;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 30px clamp(20px, 5vw, 60px); mix-blend-mode: difference; color: #fff;
-    box-sizing: border-box;
-  }
+  .grain{position:fixed;inset:0;pointer-events:none;z-index:998;filter:url(#grain);mix-blend-mode:overlay;opacity:.5}
 
-  /* --- Hero Wall (Netflix Style) --- */
-  .hero {
-    height: 100vh; width: 100vw; position: relative; overflow: hidden; background: #000;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .wall-container {
-    position: absolute; width: 200%; height: 200%;
-    display: flex; flex-direction: column; gap: 20px;
-    transform: rotate(-10deg);
-  }
-  .wall-row { display: flex; gap: 20px; width: 100%; animation: wallScroll 100s linear infinite; }
-  .wall-row:nth-child(even) { animation-direction: reverse; }
-  .wall-img { width: 30vw; aspect-ratio: 4/5; object-fit: cover; filter: brightness(0.5); flex-shrink: 0; }
-  
-  @keyframes wallScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  .hero-title { position: relative; z-index: 10; font-family: 'Fraunces', serif; font-size: clamp(3.5rem, 15vw, 12rem); font-style: italic; color: #fff; text-align: center; line-height: 0.8; pointer-events: none; }
+  header{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:16px clamp(16px,4vw,40px);background:linear-gradient(to bottom,var(--bg) 55%,transparent)}
+  .mark{width:26px;height:26px}
+  .mark circle{fill:none;stroke:var(--fg);stroke-width:1.4}
+  .mark line{stroke:var(--fg);stroke-width:1.4}
+  nav{display:flex;align-items:center;gap:20px}
+  nav button{width:22px;height:22px;opacity:.75;transition:opacity .2s}
+  nav button:hover{opacity:1}
+  nav svg{width:100%;height:100%;fill:none;stroke:var(--fg);stroke-width:1.5}
+  .toggle{width:26px;height:26px;border:1px solid var(--rule);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .4s ease}
+  .toggle svg{width:12px;height:12px;stroke:var(--fg);fill:none;stroke-width:1.5}
+  [data-theme="light"] .toggle{transform:rotate(180deg)}
 
-  /* --- Meny --- */
-  .category-section {
-    padding: 100px clamp(20px, 5vw, 100px);
-    background: var(--bg);
-    display: flex; flex-direction: column; align-items: center;
-    min-height: 100vh; box-sizing: border-box;
-  }
-  .menu-grid { display: flex; flex-direction: column; gap: 50px; max-width: 800px; width: 100%; }
-  .menu-row { display: flex; align-items: center; gap: 30px; cursor: pointer; transition: 0.4s var(--ease); }
-  .menu-row:hover { transform: translateX(15px); }
+  .hero{position:relative;height:100svh;min-height:480px;overflow:hidden}
+  .hero-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(.68);opacity:0;transition:opacity 1.4s ease}
+  .hero-layer.active{opacity:1}
+  .scrollcue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);width:16px;height:26px;border:1px solid var(--fg);border-radius:8px;opacity:.7}
+  .scrollcue::after{content:'';position:absolute;left:50%;top:5px;width:2px;height:6px;background:var(--fg);border-radius:1px;transform:translateX(-50%);animation:sc 1.6s ease-in-out infinite}
+  @keyframes sc{ 0%{opacity:1;top:5px} 70%{opacity:0;top:15px} 100%{opacity:0;top:5px} }
 
-  .menu-box { 
-    width: clamp(90px, 18vw, 180px); aspect-ratio: 3/4; 
-    background: var(--line); overflow: hidden; position: relative; flex-shrink: 0;
-  }
-  .menu-box img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); position: absolute; opacity: 0; transition: opacity 0.1s; }
-  .menu-box img.active { opacity: 1; }
+  .folders{max-width:1200px;margin:0 auto;padding:clamp(50px,9vh,90px) clamp(16px,4vw,40px);display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media (min-width:700px){ .folders{grid-template-columns:repeat(4,1fr);gap:18px} }
+  .folder{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:pointer;background:var(--bg-2);transition:transform .35s ease}
+  .folder:nth-child(odd){transform:rotate(-.6deg)}
+  .folder:nth-child(even){transform:rotate(.6deg)}
+  .folder:hover{transform:rotate(0) translateY(-4px)}
+  .folder::before{content:'';position:absolute;top:0;left:12%;width:36%;height:10%;background:var(--bg);clip-path:polygon(0 100%,15% 0,100% 0,85% 100%);z-index:2;opacity:.9}
+  .folder img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1) brightness(.75);transition:filter .3s ease,transform .5s ease}
+  .folder[aria-current="true"] img,.folder:hover img{filter:grayscale(.15) brightness(.95);transform:scale(1.03)}
 
-  .menu-info { display: flex; flex-direction: column; gap: 5px; }
-  .menu-cat { font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 4.5vw, 4rem); font-style: italic; text-transform: capitalize; line-height: 1; }
-  .menu-count { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--text-muted); }
+  .spreads{max-width:1300px;margin:0 auto;padding:0 clamp(16px,4vw,40px) 70px;display:grid;grid-template-columns:repeat(2,1fr);gap:2px;transition:opacity .3s}
+  @media (min-width:700px){ .spreads{grid-template-columns:repeat(3,1fr)} }
+  .spreads.switching{opacity:0}
+  .cell{position:relative;overflow:hidden;aspect-ratio:1/1;cursor:pointer;background:var(--bg-2)}
+  .cell img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1) brightness(.78);transition:transform .5s ease,filter .3s ease}
+  @media (hover:hover){ .cell:hover img{transform:scale(1.05);filter:grayscale(.1) brightness(1)} }
 
-  /* --- Galleri --- */
-  .gallery-container { display: none; padding: 80px clamp(20px, 5vw, 60px) 120px; background: var(--bg); min-height: 100vh; }
-  .gallery-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; width: 100%; }
-  .item { grid-column: span 12; cursor: pointer; }
-  @media (min-width: 768px) { .item { grid-column: span 4; } .item.large { grid-column: span 8; } }
-  .item img { width: 100%; height: auto; display: block; filter: brightness(0.95); }
-  .item-meta { margin-top: 15px; font-size: 0.65rem; color: var(--text-muted); }
+  .portrait{width:100%;height:70svh;min-height:380px;overflow:hidden}
+  .portrait img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1) brightness(.75)}
 
-  /* --- Helskärm / Focus --- */
-  .focus-overlay {
-    position: fixed; inset: 0; z-index: 5000; background: var(--bg);
-    display: none; align-items: center; justify-content: center; 
-    padding: 60px; /* Ger mellanrum så man ser hela bilden */
-    box-sizing: border-box;
-  }
-  .focus-overlay.active { display: flex; }
-  .focus-overlay img { 
-    max-height: 100%; max-width: 100%; 
-    object-fit: contain; 
-    box-shadow: 0 30px 90px rgba(0,0,0,0.2); 
-  }
+  .contact{display:flex;justify-content:center;gap:28px;padding:60px 20px 90px}
+  .contact a{width:30px;height:30px;opacity:.75;transition:opacity .2s}
+  .contact a:hover{opacity:1}
+  .contact svg{width:100%;height:100%;fill:none;stroke:var(--fg);stroke-width:1.4}
 
-  #backToMenu { display: inline-block; padding: 10px 0; font-weight: 700; transition: 0.3s; }
-  #backToMenu:hover { opacity: 0.6; }
+  .lightbox{position:fixed;inset:0;background:rgba(10,9,7,.96);z-index:900;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:20px}
+  .lightbox.active{opacity:1;pointer-events:auto}
+  .lightbox img{max-width:92vw;max-height:88vh;object-fit:contain;filter:grayscale(1) contrast(1.05)}
+  .lb-close{position:absolute;top:20px;right:22px;width:26px;height:26px}
+  .lb-close svg{width:100%;height:100%;stroke:#e6e2d8;fill:none;stroke-width:1.6}
 </style>
 </head>
 <body>
 
+<svg style="position:absolute;width:0;height:0">
+  <filter id="grain">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.07 0"/>
+  </filter>
+</svg>
+<div class="grain"></div>
+
 <header>
-  <div class="serif" style="font-size: 1.2rem; font-style: italic;">SBJ</div>
+  <a href="#home" aria-label="Home">
+    <svg class="mark" viewBox="0 0 26 26"><circle cx="13" cy="13" r="8"/><line x1="13" y1="3" x2="13" y2="7"/><line x1="13" y1="19" x2="13" y2="23"/><line x1="3" y1="13" x2="7" y2="13"/><line x1="19" y1="13" x2="23" y2="13"/></svg>
+  </a>
+  <nav>
+    <button onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})" aria-label="Gallery">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>
+    </button>
+    <button onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})" aria-label="About">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+    </button>
+    <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" aria-label="Contact">
+      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14"/><path d="M3 6l9 7 9-7"/></svg>
+    </button>
+    <button class="toggle" id="themeToggle" aria-label="Theme">
+      <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18 7 7 0 010-18z"/></svg>
+    </button>
+  </nav>
 </header>
 
-<section class="hero" id="hero">
-  <div class="wall-container" id="wall"></div>
-  <h1 class="hero-title">Shot<br>by Julian</h1>
+<section id="home" class="hero">
+  <img class="hero-layer active" id="heroA" alt="">
+  <img class="hero-layer" id="heroB" alt="">
+  <div class="scrollcue"></div>
 </section>
 
-<section class="category-section" id="menuSection">
-  <div class="menu-grid" id="menuGrid"></div>
+<section id="gallery">
+  <div class="folders" id="folders"></div>
+  <div class="spreads" id="spreads"></div>
 </section>
 
-<section class="gallery-container" id="galleryContainer">
-  <div class="mono" id="backToMenu" style="margin-bottom: 60px; cursor: pointer;">← INDEX</div>
-  <div class="gallery-grid" id="grid"></div>
+<section id="about" class="portrait">
+  <img id="aboutImg" alt="">
 </section>
 
-<div class="focus-overlay" id="focusOverlay">
-  <img id="focusImg" src="" alt="">
+<section id="contact" class="contact">
+  <a href="https://instagram.com/shot_by_julian_" target="_blank" aria-label="Instagram">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1"/></svg>
+  </a>
+  <a href="https://ig.me/m/shot_by_julian_" target="_blank" aria-label="Message">
+    <svg viewBox="0 0 24 24"><path d="M3 3l18 9-18 9 4-9-4-9z"/></svg>
+  </a>
+</section>
+
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose" aria-label="Close"><svg viewBox="0 0 24 24"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg></button>
+  <img id="lbImg" alt="">
 </div>
 
 <script>
-  // Fullständigt arkiv 1-43
-  const DATA = Array.from({length: 43}, (_, i) => {
-    const n = i + 1;
-    let a = "VROOM";
-    if ([23,24,25,26,36].includes(n)) a = "NATURE";
-    if ([32,33,34,35].includes(n)) a = "NOIR";
-    if ([1,37].includes(n)) a = "MISC";
-    if (n >= 38) a = "BERLIN";
-    const img = { n: String(n), a: a };
-    if (n === 38) img.f = "IMG_9234.jpeg";
-    if (n === 39) img.f = "IMG_9235.jpeg";
-    if (n === 40) img.f = "IMG_9236.jpeg";
-    if (n === 41) img.f = "IMG_9237.jpeg";
-    if (n === 42) img.f = "IMG_9238.jpeg";
-    if (n === 43) img.f = "IMG_9239.jpeg";
-    return img;
-  });
+  const IMAGES = [
+    { n:"1", w:"AMICUS", a:"MISC", top:true }, { n:"2", w:"EQUUS", a:"VROOM" },
+    { n:"3", w:"SPIRITUS", a:"VROOM" }, { n:"4", w:"AURUM", a:"VROOM" },
+    { n:"5", w:"FERRUM", a:"VROOM", top:true }, { n:"6", w:"VELOX", a:"VROOM" },
+    { n:"7", w:"対称", a:"VROOM" }, { n:"8", w:"閃光", a:"VROOM", top:true },
+    { n:"9", w:"METALLUM", a:"VROOM" }, { n:"10", w:"FORMA", a:"VROOM", top:true },
+    { n:"11", w:"LUMEN", a:"VROOM" }, { n:"12", w:"ROTA", a:"VROOM" },
+    { n:"14", w:"TAURO", a:"VROOM", top:true }, { n:"15", w:"ALBUS", a:"VROOM" },
+    { n:"16", w:"MACHINA", a:"VROOM" }, { n:"17", w:"ITER", a:"VROOM", top:true },
+    { n:"18", w:"NOCTIS", a:"VROOM" }, { n:"19", w:"VIA", a:"VROOM" },
+    { n:"20", w:"VETUSTUS", a:"VROOM" }, { n:"22", w:"IGNIS", a:"VROOM", top:true },
+    { n:"23", w:"木漏れ日", a:"NATURE", top:true }, { n:"24", w:"SILVA", a:"NATURE", top:true },
+    { n:"25", w:"FOLIUM", a:"NATURE" }, { n:"26", w:"VIRIDIS", a:"NATURE" },
+    { n:"27", w:"VORS", a:"VROOM" }, { n:"28", w:"CANUS", a:"VROOM" },
+    { n:"29", w:"URBS", a:"VROOM" }, { n:"30", w:"SILENT", a:"VROOM" },
+    { n:"31", w:"VESPER", a:"VROOM" }, { n:"32", w:"暗闇", a:"NOIR", top:true },
+    { n:"33", w:"UMBRA", a:"NOIR" }, { n:"34", w:"LUX", a:"NOIR" },
+    { n:"35", w:"魂", a:"NOIR", top:true }, { n:"36", w:"ARBOR", a:"NATURE" },
+    { n:"37", w:"AETHER", a:"MISC", top:true },
+    { n:"38", file:"IMG_9234.jpeg", w:"BERLIN01", a:"BERLIN", top:true },
+    { n:"39", file:"IMG_9235.jpeg", w:"BERLIN02", a:"BERLIN" },
+    { n:"40", file:"IMG_9236.jpeg", w:"BERLIN03", a:"BERLIN" },
+    { n:"41", file:"IMG_9237.jpeg", w:"BERLIN04", a:"BERLIN" },
+    { n:"42", file:"IMG_9238.jpeg", w:"BERLIN05", a:"BERLIN" },
+    { n:"43", file:"IMG_9239.jpeg", w:"BERLIN06", a:"BERLIN", top:true },
+    { n:"44", file:"IMG_9401.jpeg", w:"ALPEN01", a:"AUSTRIA", top:true },
+    { n:"45", file:"IMG_9233.jpeg", w:"ALPEN02", a:"AUSTRIA" },
+    { n:"46", file:"IMG_9232.jpeg", w:"ALPEN03", a:"AUSTRIA" },
+    { n:"47", file:"IMG_9231.jpeg", w:"ALPEN04", a:"AUSTRIA" },
+    { n:"48", file:"IMG_9230.jpeg", w:"ALPEN05", a:"AUSTRIA" },
+    { n:"49", file:"IMG_9229.jpeg", w:"ALPEN06", a:"AUSTRIA" },
+    { n:"50", file:"IMG_9227.jpeg", w:"ALPEN07", a:"AUSTRIA" },
+    { n:"51", file:"IMG_9228.jpeg", w:"ALPEN08", a:"AUSTRIA", top:true },
+    { n:"52", file:"IMG_9394.jpeg", w:"ITALIA01", a:"ITALY", top:true },
+    { n:"53", file:"IMG_9392.jpeg", w:"ITALIA02", a:"ITALY" },
+    { n:"54", file:"IMG_9387.jpeg", w:"ITALIA03", a:"ITALY" },
+    { n:"55", file:"IMG_9381.jpeg", w:"ITALIA04", a:"ITALY" },
+    { n:"56", file:"IMG_9383.jpeg", w:"ITALIA05", a:"ITALY" },
+    { n:"57", file:"IMG_9378.jpeg", w:"ITALIA06", a:"ITALY" },
+    { n:"58", file:"IMG_9379.jpeg", w:"ITALIA07", a:"ITALY" },
+    { n:"59", file:"IMG_9367.jpeg", w:"ITALIA08", a:"ITALY" },
+    { n:"60", file:"IMG_9368.jpeg", w:"ITALIA09", a:"ITALY" },
+    { n:"61", file:"IMG_9358.jpeg", w:"ITALIA10", a:"ITALY" },
+    { n:"62", file:"IMG_9364.jpeg", w:"ITALIA11", a:"ITALY" },
+    { n:"63", file:"IMG_9346.jpeg", w:"ITALIA12", a:"ITALY", top:true }
+  ];
+  const CATS = ["VROOM","NATURE","NOIR","MISC","BERLIN","AUSTRIA","ITALY"];
+  const imgSrc = i => i.file ? `images/${i.file}` : `images/bild (${i.n}).jpg`;
 
-  function getSrc(img) { return img.f ? `images/${img.f}` : `images/bild (${img.n}).jpg`; }
-
-  // Theme
-  const savedTheme = localStorage.getItem('sbj_theme') || 'dark';
-  document.body.setAttribute('data-theme', savedTheme);
-
-  // Netflix Wall
-  const wall = document.getElementById('wall');
-  for (let r = 0; r < 6; r++) {
-    const row = document.createElement('div');
-    row.className = 'wall-row';
-    const rowImgs = [...DATA].sort(() => Math.random() - 0.5);
-    rowImgs.concat(rowImgs).forEach(img => {
-      const i = document.createElement('img');
-      i.className = 'wall-img';
-      i.src = getSrc(img);
-      row.appendChild(i);
-    });
-    wall.appendChild(row);
-  }
-
-  // Meny Build
-  const menuGrid = document.getElementById('menuGrid');
-  const cats = ["BERLIN", "VROOM", "NATURE", "NOIR", "MISC"].sort(() => Math.random() - 0.5);
-  cats.push("ALL");
-
-  cats.forEach(cat => {
-    const filtered = cat === "ALL" ? DATA : DATA.filter(i => i.a === cat);
-    const row = document.createElement('div');
-    row.className = 'menu-row';
-    
-    const box = document.createElement('div');
-    box.className = 'menu-box';
-    
-    const flashImgs = [];
-    filtered.slice(0, 12).forEach((img, idx) => {
-      const i = document.createElement('img');
-      i.src = getSrc(img);
-      if(idx === 0) i.className = 'active';
-      box.appendChild(i);
-      flashImgs.push(i);
-    });
-
-    setInterval(() => {
-      const active = box.querySelector('img.active');
-      active.classList.remove('active');
-      const next = flashImgs[Math.floor(Math.random() * flashImgs.length)];
-      next.classList.add('active');
-    }, 250);
-
-    const info = document.createElement('div');
-    info.className = 'menu-info';
-    info.innerHTML = `<div class="menu-cat">${cat.toLowerCase()}</div><div class="mono menu-count">${filtered.length} Plates</div>`;
-
-    row.onclick = () => {
-      renderGallery(cat);
-      document.getElementById('hero').style.display = 'none';
-      document.getElementById('menuSection').style.display = 'none';
-      document.getElementById('galleryContainer').style.display = 'block';
-      window.scrollTo(0,0);
-    };
-
-    row.appendChild(box);
-    row.appendChild(info);
-    menuGrid.appendChild(row);
-  });
-
-  // Galleri Render (Slumpat)
-  function renderGallery(cat) {
-    const grid = document.getElementById('grid');
-    const filtered = (cat === "ALL" ? DATA : DATA.filter(i => i.a === cat)).sort(() => Math.random() - 0.5);
-    grid.innerHTML = '';
-    filtered.forEach((img, idx) => {
-      const el = document.createElement('div');
-      el.className = `item ${idx % 7 === 0 ? 'large' : ''}`;
-      el.innerHTML = `<img src="${getSrc(img)}" loading="lazy"><div class="item-meta mono">— PL ${img.n.padStart(2, '0')}</div>`;
-      el.onclick = () => {
-        document.getElementById('focusImg').src = getSrc(img);
-        document.getElementById('focusOverlay').classList.add('active');
-        document.body.style.overflow = 'hidden';
-      };
-      grid.appendChild(el);
-    });
-  }
-
-  // Back to index knappen fixad
-  document.getElementById('backToMenu').onclick = () => {
-    document.getElementById('hero').style.display = 'flex';
-    document.getElementById('menuSection').style.display = 'flex';
-    document.getElementById('galleryContainer').style.display = 'none';
-    window.scrollTo(0,0);
+  const root = document.documentElement;
+  try { const s = localStorage.getItem('sbj-theme'); if (s) root.setAttribute('data-theme', s); } catch(e) {}
+  document.getElementById('themeToggle').onclick = () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('sbj-theme', next); } catch(e) {}
   };
 
-  document.getElementById('focusOverlay').onclick = function() {
-    this.classList.remove('active');
-    document.body.style.overflow = 'auto';
-  };
+  // hero carousel
+  const heroPool = IMAGES.filter(i => i.top);
+  let hIdx = 0;
+  const heroA = document.getElementById('heroA'), heroB = document.getElementById('heroB');
+  heroA.src = imgSrc(heroPool[0]);
+  let showingA = true;
+  setInterval(() => {
+    hIdx = (hIdx + 1) % heroPool.length;
+    const next = showingA ? heroB : heroA;
+    next.src = imgSrc(heroPool[hIdx]);
+    next.classList.add('active');
+    (showingA ? heroA : heroB).classList.remove('active');
+    showingA = !showingA;
+  }, 4200);
+
+  // folders
+  const foldersEl = document.getElementById('folders');
+  let active = null;
+  CATS.forEach(cat => {
+    const rep = IMAGES.find(i => i.a === cat && i.top) || IMAGES.find(i => i.a === cat);
+    const d = document.createElement('div');
+    d.className = 'folder';
+    d.setAttribute('aria-label', cat);
+    d.innerHTML = `<img src="${imgSrc(rep)}" alt="">`;
+    d.onclick = () => setFilter(cat, d);
+    foldersEl.appendChild(d);
+  });
+
+  // spreads
+  const spreadsEl = document.getElementById('spreads');
+  function openLb(img){
+    document.getElementById('lbImg').src = imgSrc(img);
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  const closeLb = () => { document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow = 'auto'; };
+  document.getElementById('lbClose').onclick = closeLb;
+  document.getElementById('lightbox').addEventListener('click', e => { if (e.target.id === 'lightbox') closeLb(); });
+
+  function renderSpreads(){
+    const list = IMAGES.filter(i => i.a === active);
+    spreadsEl.innerHTML = '';
+    list.forEach(img => {
+      const c = document.createElement('div');
+      c.className = 'cell';
+      c.innerHTML = `<img src="${imgSrc(img)}" alt="" loading="lazy">`;
+      c.onclick = () => openLb(img);
+      spreadsEl.appendChild(c);
+    });
+  }
+
+  function setFilter(cat, el){
+    document.querySelectorAll('.folder').forEach(f => f.removeAttribute('aria-current'));
+    if (active === cat) { active = null; spreadsEl.innerHTML = ''; return; }
+    active = cat;
+    el.setAttribute('aria-current', 'true');
+    spreadsEl.classList.add('switching');
+    setTimeout(() => {
+      renderSpreads();
+      spreadsEl.classList.remove('switching');
+      spreadsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 180);
+  }
+
+  // about portrait — pick a NOIR/MISC frame
+  const aboutPool = IMAGES.filter(i => i.a === 'NOIR' || i.a === 'MISC');
+  document.getElementById('aboutImg').src = imgSrc(aboutPool[Math.floor(Math.random()*aboutPool.length)]);
 </script>
 </body>
 </html>
