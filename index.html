@@ -325,6 +325,9 @@
   document.getElementById('viewList').onclick = () => switchView('list');
   document.getElementById('viewGrid').onclick = () => switchView('grid');
   pagesDots.style.display = 'none';
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#plateJump')) viewMenu.classList.remove('open');
+  });
 
   // rails
   const railEl = document.getElementById('rail');
