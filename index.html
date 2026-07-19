@@ -79,7 +79,27 @@
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .18s linear,transform .18s linear}
   .reveal.in{opacity:1;transform:translateY(0)}
 
-  .plate-count{cursor:pointer}
+  .plate-count{cursor:pointer;position:relative}
+
+  .view-menu{position:absolute;left:0;bottom:calc(100% + 10px);display:flex;gap:6px;opacity:0;pointer-events:none;transition:opacity .12s linear}
+  .view-menu.open{opacity:1;pointer-events:auto}
+  .view-menu button{width:30px;height:30px;border:1px solid rgba(255,255,255,.5);background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center}
+  .view-menu button:hover{border-color:#fff;background:rgba(0,0,0,.75)}
+  .view-menu svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:1.5}
+
+  #all,#pages{display:none}
+  #all.active,#pages.active{display:block}
+
+  .pages-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .pages-track::-webkit-scrollbar{display:none}
+  .page{flex:0 0 100vw;scroll-snap-align:start;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(7,1fr);height:100svh;gap:2px}
+  @media (min-width:700px){ .page{grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(3,1fr)} }
+  .tile{position:relative;overflow:hidden;cursor:pointer;background:var(--panel)}
+  .tile img{width:100%;height:100%;object-fit:cover;filter:contrast(1.15) saturate(1.3) brightness(.92);transition:filter .12s linear}
+  @media (hover:hover){ .tile:hover img{filter:contrast(1.2) saturate(1.4) brightness(1)} }
+  .pages-dots{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:6px;z-index:400}
+  .pages-dots span{width:6px;height:6px;border-radius:50%;background:var(--rule)}
+  .pages-dots span.on{background:var(--fg)}
 
   .all-index{display:flex;flex-direction:column;gap:2px;padding-top:14px}
   .row{position:relative;width:100%;overflow:hidden;cursor:pointer;background:var(--panel)}
@@ -129,7 +149,13 @@
 
 <section id="top" class="hero">
   <img id="heroImg" alt="">
-  <div class="plate-count mono" id="plateJump"><span>PLATE</span><b id="plateNum">01</b><span id="plateTotal">/63</span></div>
+  <div class="plate-count mono" id="plateJump">
+    <span>PLATE</span><b id="plateNum">01</b><span id="plateTotal">/63</span>
+    <div class="view-menu" id="viewMenu">
+      <button id="viewList" aria-label="List"><svg viewBox="0 0 24 24"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+      <button id="viewGrid" aria-label="Grid"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="6" height="6"/><rect x="9.5" y="3" width="6" height="6"/><rect x="16" y="3" width="6" height="6"/><rect x="3" y="9.5" width="6" height="6"/><rect x="9.5" y="9.5" width="6" height="6"/><rect x="16" y="9.5" width="6" height="6"/></svg></button>
+    </div>
+  </div>
   <div class="scrollcue"></div>
 </section>
 
@@ -147,6 +173,11 @@
 </section>
 
 <section class="all-index" id="all"></section>
+
+<section id="pages">
+  <div class="pages-track" id="pagesTrack"></div>
+</section>
+<div class="pages-dots" id="pagesDots"></div>
 
 <div class="rail-m" id="railM"></div>
 
@@ -227,19 +258,73 @@
   }
   showHero(0);
   setInterval(() => { hIdx = (hIdx + 1) % heroPool.length; showHero(hIdx); }, 3200);
-  document.getElementById('plateJump').onclick = () => document.getElementById('all').scrollIntoView({ behavior: 'smooth' });
 
-  // full vertical index — every image, one after another
-  const allEl = document.getElementById('all');
-  allEl.innerHTML = IMAGES.map((img, i) => `
+  const viewMenu = document.getElementById('viewMenu');
+  document.getElementById('plateJump').addEventListener('click', (e) => {
+    if (e.target.closest('button')) return;
+    viewMenu.classList.toggle('open');
+  });
+
+  const allSection = document.getElementById('all');
+  const pagesSection = document.getElementById('pages');
+  const pagesDots = document.getElementById('pagesDots');
+
+  // full vertical index — every image, one after another, original size
+  allSection.innerHTML = IMAGES.map((img, i) => `
     <div class="row reveal" data-idx="${i}">
       <span class="idx mono">${String(i+1).padStart(2,'0')}</span>
       <img src="${imgSrc(img)}" alt="" loading="lazy">
     </div>`).join('');
-  allEl.addEventListener('click', e => {
+  allSection.addEventListener('click', e => {
     const row = e.target.closest('.row');
     if (row) openLb(parseInt(row.dataset.idx, 10));
   });
+
+  // 3-page contact-sheet grid — 21 images per page
+  const perPage = Math.ceil(IMAGES.length / 3);
+  const pagesTrack = document.getElementById('pagesTrack');
+  for (let p = 0; p < 3; p++) {
+    const chunk = IMAGES.slice(p * perPage, p * perPage + perPage);
+    const page = document.createElement('div');
+    page.className = 'page';
+    page.innerHTML = chunk.map((img) => {
+      const gi = IMAGES.indexOf(img);
+      return `<div class="tile" data-idx="${gi}"><img src="${imgSrc(img)}" alt="" loading="lazy"></div>`;
+    }).join('');
+    pagesTrack.appendChild(page);
+    const dot = document.createElement('span');
+    if (p === 0) dot.className = 'on';
+    pagesDots.appendChild(dot);
+  }
+  pagesTrack.addEventListener('click', e => {
+    const tile = e.target.closest('.tile');
+    if (tile) openLb(parseInt(tile.dataset.idx, 10));
+  });
+  const pageObserver = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = Array.from(pagesTrack.children).indexOf(e.target);
+        pagesDots.querySelectorAll('span').forEach((d,i) => d.classList.toggle('on', i === idx));
+      }
+    });
+  }, { threshold: 0.6, root: pagesTrack });
+  pagesTrack.querySelectorAll('.page').forEach(p => pageObserver.observe(p));
+
+  function switchView(mode){
+    viewMenu.classList.remove('open');
+    if (mode === 'list') {
+      pagesSection.classList.remove('active'); pagesDots.style.display = 'none';
+      allSection.classList.add('active');
+      allSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      allSection.classList.remove('active');
+      pagesSection.classList.add('active'); pagesDots.style.display = 'flex';
+      pagesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+  document.getElementById('viewList').onclick = () => switchView('list');
+  document.getElementById('viewGrid').onclick = () => switchView('grid');
+  pagesDots.style.display = 'none';
 
   // rails
   const railEl = document.getElementById('rail');
