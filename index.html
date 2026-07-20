@@ -81,13 +81,12 @@
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .18s linear,transform .18s linear}
   .reveal.in{opacity:1;transform:translateY(0)}
 
-  .plate-count{cursor:pointer;position:relative}
 
-  .view-menu{position:absolute;left:0;bottom:calc(100% + 10px);display:flex;gap:6px;opacity:0;pointer-events:none;transition:opacity .12s linear}
+  .view-menu{position:absolute;right:0;top:calc(100% + 10px);display:flex;gap:6px;opacity:0;pointer-events:none;transition:opacity .12s linear;z-index:601}
   .view-menu.open{opacity:1;pointer-events:auto}
-  .view-menu button{width:30px;height:30px;border:1px solid rgba(255,255,255,.5);background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center}
-  .view-menu button:hover{border-color:#fff;background:rgba(0,0,0,.75)}
-  .view-menu svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:1.5}
+  .view-menu button{width:30px;height:30px;border:1px solid var(--rule);background:var(--bg);display:flex;align-items:center;justify-content:center}
+  .view-menu button:hover{border-color:var(--fg)}
+  .view-menu svg{width:14px;height:14px;stroke:var(--fg);fill:none;stroke-width:1.5}
 
   #all,#pages{display:none}
   #all.active,#pages.active{display:block}
@@ -142,22 +141,27 @@
   <a href="#top" aria-label="Home">
     <svg class="mark" viewBox="0 0 26 26"><circle cx="13" cy="13" r="8"/><line x1="13" y1="3" x2="13" y2="7"/><line x1="13" y1="19" x2="13" y2="23"/><line x1="3" y1="13" x2="7" y2="13"/><line x1="19" y1="13" x2="23" y2="13"/></svg>
   </a>
-  <button class="toggle" id="themeToggle" aria-label="Theme">
-    <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18 7 7 0 010-18z"/></svg>
-  </button>
+  <div style="display:flex;align-items:center;gap:14px">
+    <button class="toggle" id="themeToggle" aria-label="Theme">
+      <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18 7 7 0 010-18z"/></svg>
+    </button>
+    <div style="position:relative">
+      <button class="toggle" id="menuTrigger" aria-label="Index">
+        <svg viewBox="0 0 24 24" stroke-width="1.5"><circle cx="6" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="18" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <div class="view-menu" id="viewMenu">
+        <button id="viewList" aria-label="List"><svg viewBox="0 0 24 24"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+        <button id="viewGrid" aria-label="Grid"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="6" height="6"/><rect x="9.5" y="3" width="6" height="6"/><rect x="16" y="3" width="6" height="6"/><rect x="3" y="9.5" width="6" height="6"/><rect x="9.5" y="9.5" width="6" height="6"/><rect x="16" y="9.5" width="6" height="6"/></svg></button>
+      </div>
+    </div>
+  </div>
 </header>
 
 <div class="rail" id="rail"></div>
 
 <section id="top" class="hero">
   <img id="heroImg" alt="">
-  <div class="plate-count mono" id="plateJump">
-    <span>PLATE</span><b id="plateNum">01</b><span id="plateTotal">/63</span>
-    <div class="view-menu" id="viewMenu">
-      <button id="viewList" aria-label="List"><svg viewBox="0 0 24 24"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
-      <button id="viewGrid" aria-label="Grid"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="6" height="6"/><rect x="9.5" y="3" width="6" height="6"/><rect x="16" y="3" width="6" height="6"/><rect x="3" y="9.5" width="6" height="6"/><rect x="9.5" y="9.5" width="6" height="6"/><rect x="16" y="9.5" width="6" height="6"/></svg></button>
-    </div>
-  </div>
+  <div class="plate-count mono"><span>PLATE</span><b id="plateNum">01</b><span id="plateTotal">/63</span></div>
   <div class="scrollcue"></div>
 </section>
 
@@ -262,8 +266,8 @@
   setInterval(() => { hIdx = (hIdx + 1) % heroPool.length; showHero(hIdx); }, 3200);
 
   const viewMenu = document.getElementById('viewMenu');
-  document.getElementById('plateJump').addEventListener('click', (e) => {
-    if (e.target.closest('button')) return;
+  document.getElementById('menuTrigger').addEventListener('click', (e) => {
+    e.stopPropagation();
     viewMenu.classList.toggle('open');
   });
 
@@ -328,7 +332,7 @@
   document.getElementById('viewGrid').onclick = () => switchView('grid');
   pagesDots.style.display = 'none';
   document.addEventListener('click', e => {
-    if (!e.target.closest('#plateJump')) viewMenu.classList.remove('open');
+    if (!e.target.closest('#menuTrigger')) viewMenu.classList.remove('open');
   });
 
   // rails
