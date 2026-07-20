@@ -30,8 +30,8 @@
   .mark{width:24px;height:24px}
   .mark circle{fill:none;stroke:var(--fg);stroke-width:1.4}
   .mark line{stroke:var(--fg);stroke-width:1.4}
-  .toggle{width:26px;height:26px;border:1px solid var(--rule);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .15s linear}
-  .toggle svg{width:12px;height:12px;stroke:var(--fg);fill:none;stroke-width:1.5}
+  .toggle{width:32px;height:32px;border:1px solid var(--rule);border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:transform .15s linear;box-shadow:0 1px 6px rgba(0,0,0,.35)}
+  .toggle svg{width:14px;height:14px;stroke:var(--fg);fill:none;stroke-width:1.5}
   [data-theme="light"] .toggle{transform:rotate(180deg)}
 
   /* left rail (desktop) */
@@ -147,7 +147,7 @@
     </button>
     <div style="position:relative">
       <button class="toggle" id="menuTrigger" aria-label="Index">
-        <svg viewBox="0 0 24 24" stroke-width="1.5"><circle cx="6" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="18" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
       </button>
       <div class="view-menu" id="viewMenu">
         <button id="viewList" aria-label="List"><svg viewBox="0 0 24 24"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
