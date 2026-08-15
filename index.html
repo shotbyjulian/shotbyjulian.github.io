@@ -1,312 +1,195 @@
 <!DOCTYPE html>
-<html lang="sv" data-theme="dark">
+<html lang="sv">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SBJ | PRECISION</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SBJ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    /* Schweizisk färgpalett: Gråskala med Porsche Guards Red som accent */
-    --bg:#0a0a0a; 
-    --panel:#111111; 
-    --fg:#ffffff; 
-    --rule:#222222;
-    --accent:#e4002b; /* Porsche Guards Red */
-    --sans:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    --mono:'SF Mono', ui-monospace, monospace;
-  }
-  [data-theme="light"]{ 
-    --bg:#f2f2f2; 
-    --panel:#ffffff; 
-    --fg:#000000; 
-    --rule:#e0e0e0; 
+  :root {
+    --bg: #000000;
+    --fg: #444444; /* Väldigt mörk text, Yeezy-style */
+    --active: #cccccc;
+    --sans: 'Inter', sans-serif;
   }
 
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  html{scroll-behavior:smooth}
-  body{
-    background:var(--bg);
-    color:var(--fg);
-    font-family:var(--sans);
-    overflow-x:hidden;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* Subtil kornighet för premiumkänsla */
-  .grain{position:fixed;inset:0;pointer-events:none;z-index:998;filter:url(#grain);mix-blend-mode:overlay;opacity:.15}
-
-  /* Header - Minimalistisk & Teknisk */
-  header{
-    position:fixed;top:0;left:0;right:0;z-index:600;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:24px clamp(20px, 5vw, 50px);
-    mix-blend-mode: difference;
-  }
-  .mark{
-    font-weight: 900;
-    font-size: 1.2rem;
-    letter-spacing: -0.05em;
-    text-decoration: none;
-    color: #fff;
-  }
-  .mark span{ color: var(--accent); }
-
-  .toggle{
-    width:40px;height:20px;
-    border:1px solid var(--rule);
-    background:transparent;
-    display:flex;align-items:center;justify-content:center;
-    transition:all .2s ease;
-    font-family: var(--mono);
-    font-size: 10px;
-  }
-  .toggle:hover{ border-color: var(--accent); }
-
-  /* Navigation Rail - Vertical Text (Swiss Style) */
-  .rail{
-    position:fixed;top:0;left:0;bottom:0;width:60px;z-index:550;
-    display:none;flex-direction:column;align-items:center;justify-content:center;
-    border-right: 1px solid var(--rule);
-    background: var(--bg);
-  }
-  @media (min-width:1024px){ .rail{display:flex} body{padding-left:60px} }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   
-  .rail button{
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    padding: 20px 0;
-    font-family: var(--mono);
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
     font-size: 10px;
-    letter-spacing: 0.2em;
+    letter-spacing: -0.01em;
     text-transform: uppercase;
-    opacity: 0.4;
-    transition: opacity .2s;
-  }
-  .rail button[aria-current="true"]{ opacity: 1; color: var(--accent); }
-
-  /* Hero Section */
-  .hero{position:relative;height:100svh;background:#000; overflow: hidden;}
-  .hero img{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    filter: grayscale(20%) brightness(0.8);
-    transition: transform 8s ease-out;
-  }
-  .hero:hover img{ transform: scale(1.05); }
-
-  .plate-count{
-    position:absolute; left: 40px; bottom: 40px;
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.3em;
-    z-index: 2;
-  }
-  .plate-count b{ font-size: 40px; font-weight: 700; display: block; letter-spacing: -0.05em; margin-top: 5px;}
-
-  /* Grid & Reels */
-  .reel-section{ padding: 80px 0 0; }
-  .section-label{
-    padding: 0 40px 20px;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--accent);
+    overflow-x: hidden;
   }
 
-  .sprockets{
-    height:1px;
-    background: var(--rule);
-    margin: 0 40px;
-  }
-
-  .reel{display:flex;gap:10px;padding: 20px 40px; overflow-x:auto; scrollbar-width:none}
-  .reel::-webkit-scrollbar{display:none}
+  /* DESKTOP LAYOUT (Default) */
+  #desktop-ui { display: none; }
   
-  .frame{
-    flex:0 0 300px;
-    aspect-ratio: 3/4;
-    position:relative;
-    overflow:hidden;
-    filter: saturate(0.8);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .frame:hover{ filter: saturate(1.1); }
-  .frame img{ width:100%; height:100%; object-fit:cover; }
+  @media (min-width: 1024px) {
+    #desktop-ui {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      height: 100vh;
+      padding: 40px;
+      gap: 40px;
+    }
+    #mobile-ui { display: none; }
 
-  /* Breaker - Full Width Technical Shot */
-  .breaker{
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      justify-content:间-between;
+    }
+
+    .nav-list { list-style: none; overflow-y: auto; padding-right: 10px; }
+    .nav-item {
+      padding: 4px 0;
+      cursor: pointer;
+      transition: color 0.1s;
+      white-space: nowrap;
+    }
+    .nav-item:hover { color: var(--active); }
+    .nav-item.active { color: var(--active); }
+
+    .main-view {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #050505;
+    }
+    .main-view img {
+      max-height: 85vh;
+      max-width: 100%;
+      object-fit: contain;
+    }
+  }
+
+  /* MOBILE LAYOUT */
+  #mobile-ui {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-item {
     width: 100%;
-    height: 80vh;
-    padding: 40px;
+    margin-bottom: 2px; /* Minimalistisk separation */
+    background: #050505;
+  }
+
+  .mobile-item img {
+    width: 100%;
+    display: block;
+    filter: brightness(0.9);
+  }
+
+  .mobile-label {
+    padding: 15px 20px;
+    font-size: 9px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Header */
+  header {
+    padding: 20px;
+    position: sticky;
+    top: 0;
     background: var(--bg);
-  }
-  .breaker-inner{
-    width: 100%; height: 100%;
-    position: relative;
-    overflow: hidden;
-  }
-  .breaker img{ width: 100%; height: 100%; object-fit: cover; }
-
-  /* Typography Clean up */
-  .idx{ font-family: var(--mono); font-size: 10px; margin-bottom: 5px; display: block; opacity: 0.5;}
-
-  /* Lightbox - Precision View */
-  .lightbox{
-    position:fixed;inset:0;background:var(--bg);
-    z-index:900;display:flex;align-items:center;justify-content:center;
-    opacity:0;pointer-events:none;transition:opacity .3s ease;
-  }
-  .lightbox.active{opacity:1;pointer-events:auto}
-  .lightbox img{max-width:80vw; max-height:80vh; object-fit:contain; box-shadow: 0 30px 60px rgba(0,0,0,0.5);}
-
-  /* Porsche-style scrollbar indicator */
-  .scroll-progress{
-    position: fixed; bottom: 0; left: 0; height: 2px;
-    background: var(--accent); z-index: 700; transition: width 0.1s;
+    z-index: 100;
+    border-bottom: 1px solid #111;
   }
 
-  /* Reveal animation */
-  .reveal{opacity:0;transform:translateY(30px);transition:all .8s cubic-bezier(0.16, 1, 0.3, 1)}
-  .reveal.in{opacity:1;transform:translateY(0)}
+  .logo { color: var(--active); font-weight: 600; text-decoration: none; }
 
 </style>
 </head>
 <body>
 
-<div class="scroll-progress" id="scrollBar"></div>
-
-<svg style="position:absolute;width:0;height:0">
-  <filter id="grain">
-    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch" result="n"/>
-    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.15 0"/>
-  </filter>
-</svg>
-<div class="grain"></div>
-
-<header>
-  <a href="#top" class="mark">SBJ<span>.</span></a>
-  <div style="display:flex;gap:10px">
-    <button class="toggle" id="themeToggle">MODE</button>
-    <button class="toggle" id="menuTrigger">INDEX</button>
+<!-- DESKTOP STRUCTURE -->
+<div id="desktop-ui">
+  <div class="sidebar">
+    <a href="#" class="logo">SBJ</a>
+    <ul class="nav-list" id="desktopNav">
+      <!-- JS laddar in -->
+    </ul>
+    <div class="footer-info">
+      ARCHIVE-01<br>
+      SWEDEN
+    </div>
   </div>
-</header>
-
-<div class="rail" id="rail"></div>
-
-<section id="top" class="hero">
-  <img id="heroImg" alt="">
-  <div class="plate-count">
-    <span class="mono">TYPE / SERIES</span>
-    <b id="plateNum">911</b>
+  <div class="main-view">
+    <img src="" id="mainImg" alt="">
   </div>
-</section>
+</div>
 
-<div id="reelWrap"></div>
-
-<section class="contact" style="padding: 100px 40px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: flex-end;">
-  <div>
-    <h2 style="font-size: clamp(40px, 8vw, 120px); font-weight: 900; line-height: 0.9; letter-spacing: -0.05em; text-transform: uppercase;">Stay<br>Driven.</h2>
+<!-- MOBILE STRUCTURE -->
+<div id="mobile-ui">
+  <header>
+    <a href="#" class="logo">SBJ / INDEX</a>
+  </header>
+  <div id="mobileGrid">
+    <!-- JS laddar in -->
   </div>
-  <div style="text-align: right; font-family: var(--mono); font-size: 12px;">
-    <a href="https://instagram.com/shot_by_julian_" target="_blank" style="text-decoration: none; display: block; margin-bottom: 10px;">INSTAGRAM ↗</a>
-    <a href="mailto:hello@sbj.com" style="text-decoration: none; display: block;">CONTACT ↗</a>
-  </div>
-</section>
-
-<div class="lightbox" id="lightbox">
-  <img id="lbImg" alt="">
-  <div style="position: absolute; bottom: 40px; left: 40px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em;" id="lbMeta">CLOSE [X]</div>
 </div>
 
 <script>
-  // Samma bilddata som tidigare
+  // Nischade namn, tekniska referenser
   const IMAGES = [
-    { n:"1", w:"AMICUS", a:"VROOM", top:true }, { n:"2", w:"EQUUS", a:"VROOM" },
-    { n:"3", w:"SPIRITUS", a:"VROOM" }, { n:"4", w:"AURUM", a:"VROOM" },
-    { n:"5", w:"FERRUM", a:"VROOM", top:true }, { n:"6", w:"VELOX", a:"VROOM" },
-    { n:"14", w:"TAURO", a:"VROOM", top:true }, { n:"15", w:"ALBUS", a:"VROOM" },
-    { n:"16", w:"MACHINA", a:"VROOM" }, { n:"17", w:"ITER", a:"VROOM", top:true },
-    { n:"44", file:"IMG_9227.jpeg", w:"ALPEN01", a:"AUSTRIA", top:true },
-    { n:"45", file:"IMG_9228.jpeg", w:"ALPEN02", a:"AUSTRIA" },
-    { n:"46", file:"IMG_9229.jpeg", w:"ALPEN03", a:"AUSTRIA" },
-    { n:"52", file:"IMG_9394.jpeg", w:"ITALIA01", a:"ITALY", top:true },
-    { n:"53", file:"IMG_9392.jpeg", w:"ITALIA02", a:"ITALY" },
-    { n:"63", file:"IMG_9346.jpeg", w:"ITALIA12", a:"ITALY", top:true }
+    { n:"1", name: "CORE.01 / STUTTGART" },
+    { n:"5", name: "OXIDE.GREY / 911" },
+    { n:"14", name: "TAURO.RAW" },
+    { n:"17", name: "ITER.STATIC" },
+    { n:"22", name: "IGNIS.LUME" },
+    { n:"23", name: "KOMOREBI.VOID" },
+    { n:"32", name: "NOIR.ARCHIVE" },
+    { n:"35", name: "SPIRIT.MONO" },
+    { n:"44", file:"IMG_9227.jpeg", name: "ALPEN.TRACE" },
+    { n:"50", file:"IMG_9233.jpeg", name: "ALPEN.ELEVATION" },
+    { n:"52", file:"IMG_9394.jpeg", name: "ITALIA.GRAIN" },
+    { n:"63", file:"IMG_9346.jpeg", name: "FLORENCE.NULL" }
   ];
-  
-  const CATS = ["VROOM", "AUSTRIA", "ITALY"];
+
   const imgSrc = i => i.file ? `images/${i.file}` : `images/bild (${i.n}).jpg`;
 
-  // Scroll Progress
-  window.onscroll = () => {
-    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    let scrolled = (winScroll / height) * 100;
-    document.getElementById("scrollBar").style.width = scrolled + "%";
-  };
+  // Desktop Logic
+  const nav = document.getElementById('desktopNav');
+  const mainImg = document.getElementById('mainImg');
 
-  // Hero slideshow
-  const heroPool = IMAGES.filter(i => i.top);
-  let hIdx = 0;
-  function nextHero() {
-    hIdx = (hIdx + 1) % heroPool.length;
-    const img = document.getElementById('heroImg');
-    img.src = imgSrc(heroPool[hIdx]);
-    document.getElementById('plateNum').textContent = String(heroPool[hIdx].n).padStart(3, '0');
-  }
-  document.getElementById('heroImg').src = imgSrc(heroPool[0]);
-  setInterval(nextHero, 4000);
+  IMAGES.forEach((img, idx) => {
+    // Desktop list
+    const li = document.createElement('li');
+    li.className = 'nav-item';
+    if(idx === 0) li.classList.add('active');
+    li.textContent = img.name;
+    li.onmouseover = () => {
+      mainImg.src = imgSrc(img);
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      li.classList.add('active');
+    };
+    nav.appendChild(li);
 
-  // Build Reels
-  const reelWrap = document.getElementById('reelWrap');
-  CATS.forEach(cat => {
-    const list = IMAGES.filter(i => i.a === cat);
-    const section = document.createElement('section');
-    section.className = 'reel-section';
-    section.id = 'cat-' + cat;
-    section.innerHTML = `
-      <div class="section-label">${cat} SERIES</div>
-      <div class="sprockets"></div>
-      <div class="reel">
-        ${list.map(img => `
-          <div class="frame reveal" onclick="openLb('${imgSrc(img)}')">
-            <span class="idx">${String(img.n).padStart(2,'0')}</span>
-            <img src="${imgSrc(img)}" loading="lazy">
-          </div>
-        `).join('')}
+    // Mobile list
+    const mDiv = document.createElement('div');
+    mDiv.className = 'mobile-item';
+    mDiv.innerHTML = `
+      <img src="${imgSrc(img)}" loading="lazy">
+      <div class="mobile-label">
+        <span>${img.name}</span>
+        <span>${String(idx + 1).padStart(2, '0')}</span>
       </div>
     `;
-    reelWrap.appendChild(section);
-
-    // Add to Rail
-    const railBtn = document.createElement('button');
-    railBtn.textContent = cat;
-    railBtn.onclick = () => document.getElementById('cat-'+cat).scrollIntoView();
-    document.getElementById('rail').appendChild(railBtn);
+    document.getElementById('mobileGrid').appendChild(mDiv);
   });
 
-  // Lightbox logic
-  function openLb(src) {
-    document.getElementById('lbImg').src = src;
-    document.getElementById('lightbox').classList.add('active');
-  }
-  document.getElementById('lightbox').onclick = () => document.getElementById('lightbox').classList.remove('active');
+  // Set initial image for desktop
+  if(IMAGES.length > 0) mainImg.src = imgSrc(IMAGES[0]);
 
-  // Reveal Observer
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
-
-  // Theme Toggle
-  document.getElementById('themeToggle').onclick = () => {
-    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', theme);
-  };
 </script>
 </body>
 </html>
