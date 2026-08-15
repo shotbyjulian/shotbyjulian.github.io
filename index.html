@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SBJ / ARCHIVE</title>
+<title>SBJ | ARCHIVE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #000000;
-    --fg: #333333; /* Inaktiv text - mörkgrå */
-    --active: #d1d1d1; /* Aktiv text - ljusgrå */
+    --fg: #333333; /* Inaktiv / Subtil */
+    --active: #cccccc; /* Aktiv / Synlig */
     --sans: 'Inter', sans-serif;
   }
 
@@ -22,108 +22,93 @@
     color: var(--fg);
     font-family: var(--sans);
     font-size: 10px;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     text-transform: uppercase;
-    overflow-x: hidden;
+    overflow: hidden; /* Förhindrar all scroll på desktop-body */
   }
 
-  /* --- DESKTOP OPTIMIZATION --- */
-  #desktop-ui { display: none; }
-  
+  /* --- DESKTOP LOOKBOOK (NO SCROLL) --- */
+  #desktop-ui {
+    display: none;
+    grid-template-columns: 280px 1fr;
+    height: 100vh;
+    width: 100vw;
+  }
+
   @media (min-width: 1024px) {
-    #desktop-ui {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      height: 100vh;
-      overflow: hidden;
-    }
+    #desktop-ui { display: grid; }
     #mobile-ui { display: none; }
-
-    .sidebar {
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid #111;
-      height: 100vh;
-    }
-
-    .logo { color: var(--active); font-weight: 700; margin-bottom: 40px; text-decoration: none; }
-
-    .nav-list { 
-      list-style: none; 
-      overflow-y: auto; 
-      flex-grow: 1;
-      padding-bottom: 100px;
-      scrollbar-width: none;
-    }
-    .nav-list::-webkit-scrollbar { display: none; }
-
-    .nav-item {
-      padding: 3px 0;
-      cursor: pointer;
-      transition: color 0.05s ease;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .nav-item:hover, .nav-item.active { color: var(--active); }
-
-    .main-view {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      background: #000;
-    }
-
-    .main-view img {
-      max-height: 100%; /* Garanterar att bilden får plats på höjden */
-      max-width: 100%;  /* Garanterar att bilden får plats på bredden */
-      object-fit: contain; /* Ser till att hela bilden syns utan beskärning */
-    }
   }
 
-  /* --- MOBILE OPTIMIZATION --- */
-  #mobile-ui {
+  .sidebar {
+    padding: 40px;
     display: flex;
     flex-direction: column;
+    border-right: 1px solid #111;
+    height: 100vh;
+    z-index: 10;
   }
 
-  .mobile-header {
-    padding: 20px;
-    position: sticky;
-    top: 0;
-    background: rgba(0,0,0,0.9);
-    z-index: 100;
-    border-bottom: 1px solid #111;
+  .logo { color: var(--active); font-weight: 600; margin-bottom: 30px; text-decoration: none; display: block; }
+
+  .nav-list { 
+    list-style: none; 
+    overflow-y: auto; 
+    flex-grow: 1;
+    scrollbar-width: none;
   }
+  .nav-list::-webkit-scrollbar { display: none; }
 
-  .mobile-grid { padding: 0; }
+  .nav-item {
+    padding: 2px 0;
+    cursor: pointer;
+    transition: color 0.1s;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .nav-item:hover, .nav-item.active { color: var(--active); }
 
-  .mobile-item {
+  /* Bildskärmen - Låst till skärmen */
+  .display-area {
+    height: 100vh;
     width: 100%;
-    background: #000;
-    margin-bottom: 1px;
-    padding-bottom: 20px;
-  }
-
-  .mobile-item img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  .mobile-label {
-    padding: 12px 20px 0;
-    font-size: 9px;
-    color: #444;
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+    padding: 60px; /* Ger bilden lite luft från kanterna */
+    background: #000;
+    position: relative;
+    cursor: n-resize; /* Yeezy lookbook-känsla */
   }
 
-  /* Footer Tech Info */
-  .footer-tech { font-size: 8px; margin-top: 20px; color: #222; }
+  .display-area img {
+    max-height: 100%; /* VIKTIGT: Hela bilden får plats på höjden */
+    max-width: 100%;  /* VIKTIGT: Hela bilden får plats på bredden */
+    object-fit: contain; /* Garanterar att bilden inte beskärs */
+    user-select: none;
+  }
+
+  .img-meta {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    text-align: right;
+    color: #222;
+  }
+
+  /* --- MOBILE (SCROLLABLE STREAM) --- */
+  #mobile-ui {
+    display: block;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  @media (min-width: 1024px) { #mobile-ui { display: none; } }
+
+  header { padding: 20px; position: sticky; top: 0; background: var(--bg); z-index: 100; }
+
+  .mobile-item { width: 100%; background: #000; margin-bottom: 10px; }
+  .mobile-item img { width: 100%; display: block; }
+  .mobile-label { padding: 10px 20px; font-size: 9px; color: #444; display: flex; justify-content: space-between; }
 
 </style>
 </head>
@@ -132,87 +117,101 @@
 <!-- DESKTOP -->
 <div id="desktop-ui">
   <div class="sidebar">
-    <a href="#" class="logo">SBJ / INDEX</a>
+    <a href="#" class="logo">SBJ</a>
     <ul class="nav-list" id="desktopNav"></ul>
-    <div class="footer-tech">REF. 491-00-SBJ<br>ALL RIGHTS RESERVED</div>
+    <div style="color:#222; font-size:9px; margin-top:20px;">INDEX_ARCHIVE</div>
   </div>
-  <div class="main-view">
+  <div class="display-area" onclick="nextImg()">
     <img src="" id="mainImg" alt="">
+    <div class="img-meta" id="imgMeta">REF: NULL</div>
   </div>
 </div>
 
 <!-- MOBILE -->
 <div id="mobile-ui">
-  <div class="mobile-header">
-    <a href="#" class="logo">SBJ</a>
-  </div>
-  <div class="mobile-grid" id="mobileGrid"></div>
+  <header><a href="#" class="logo">SBJ</a></header>
+  <div id="mobileGrid"></div>
 </div>
 
 <script>
-  // Alla filer samlade i en lista
-  const FILES = [
+  const IMAGES = [
     { f: "IMG_9227.jpeg", n: "ALPEN.01" }, { f: "IMG_9228.jpeg", n: "ALPEN.02" },
     { f: "IMG_9229.jpeg", n: "ALPEN.03" }, { f: "IMG_9230.jpeg", n: "ALPEN.04" },
     { f: "IMG_9231.jpeg", n: "ALPEN.05" }, { f: "IMG_9232.jpeg", n: "ALPEN.06" },
     { f: "IMG_9233.jpeg", n: "ALPEN.07" }, { f: "IMG_9234.jpeg", n: "BASE.01" },
     { f: "IMG_9235.jpeg", n: "BASE.02" }, { f: "IMG_9236.jpeg", n: "BASE.03" },
     { f: "IMG_9237.jpeg", n: "BASE.04" }, { f: "IMG_9238.jpeg", n: "BASE.05" },
-    { f: "IMG_9239.jpeg", n: "BASE.06" }, { f: "IMG_9346.jpeg", n: "ITALIA.CORE" },
-    { f: "IMG_9358.jpeg", n: "ITALIA.REF" }, { f: "IMG_9364.jpeg", n: "ITALIA.VOID" },
-    { f: "IMG_9367.jpeg", n: "ITALIA.NULL" }, { f: "IMG_9368.jpeg", n: "ITALIA.STAT" },
+    { f: "IMG_9239.jpeg", n: "BASE.06" }, { f: "IMG_9346.jpeg", n: "CORE.REF" },
+    { f: "IMG_9358.jpeg", n: "CORE.VOID" }, { f: "IMG_9364.jpeg", n: "CORE.NULL" },
+    { f: "IMG_9367.jpeg", n: "ITALIA.01" }, { f: "IMG_9368.jpeg", n: "ITALIA.02" },
     { f: "IMG_9378.jpeg", n: "TOSCANA.01" }, { f: "IMG_9379.jpeg", n: "TOSCANA.02" },
     { f: "IMG_9381.jpeg", n: "TOSCANA.03" }, { f: "IMG_9383.jpeg", n: "TOSCANA.04" },
     { f: "IMG_9387.jpeg", n: "TOSCANA.05" }, { f: "IMG_9392.jpeg", n: "TOSCANA.06" },
     { f: "IMG_9394.jpeg", n: "TOSCANA.07" },
-    // "bild (x).jpg" listan
     { b: 1, n: "RAW.01" }, { b: 2, n: "RAW.02" }, { b: 3, n: "RAW.03" }, { b: 4, n: "RAW.04" },
-    { b: 5, n: "CORE.01" }, { b: 6, n: "CORE.02" }, { b: 7, n: "CORE.03" }, { b: 8, n: "CORE.04" },
-    { b: 9, n: "CORE.05" }, { b: 10, n: "AXIS.01" }, { b: 11, n: "AXIS.02" }, { b: 12, n: "AXIS.03" },
+    { b: 5, n: "STUTTGART" }, { b: 6, n: "GT3.RS" }, { b: 7, n: "OXIDE.01" }, { b: 8, n: "OXIDE.02" },
+    { b: 9, n: "OXIDE.03" }, { b: 10, n: "AXIS.01" }, { b: 11, n: "AXIS.02" }, { b: 12, n: "AXIS.03" },
     { b: 13, n: "AXIS.04" }, { b: 14, n: "AXIS.05" }, { b: 15, n: "TRACE.01" }, { b: 16, n: "TRACE.02" },
     { b: 17, n: "TRACE.03" }, { b: 18, n: "TRACE.04" }, { b: 19, n: "TRACE.05" }, { b: 20, n: "VOID.01" },
     { b: 21, n: "VOID.02" }, { b: 22, n: "VOID.03" }, { b: 23, n: "KOMOREBI" }, { b: 24, n: "SILVA" },
     { b: 25, n: "FOLIUM" }, { b: 26, n: "VIRID" }, { b: 27, n: "VORS" }, { b: 28, n: "CANUS" },
-    { b: 29, n: "URBS" }, { b: 30, n: "SILENT" }, { b: 31, n: "VESPER" }, { b: 32, n: "NOIR.A" },
+    { b: 29, n: "URBS" }, { b: 30, n: "SILENT" }, { b: 31, n: "VESPER" }, { b: 32, n: "NOIR" },
     { b: 33, n: "UMBRA" }, { b: 34, n: "LUX" }, { b: 35, n: "SOUL" }, { b: 36, n: "ARBOR" },
     { b: 37, n: "AETHER" }
   ];
 
   const getPath = i => i.f ? `images/${i.f}` : `images/bild (${i.b}).jpg`;
+  let currentIdx = 0;
 
-  const desktopNav = document.getElementById('desktopNav');
+  const nav = document.getElementById('desktopNav');
   const mobileGrid = document.getElementById('mobileGrid');
   const mainImg = document.getElementById('mainImg');
+  const imgMeta = document.getElementById('imgMeta');
 
-  FILES.forEach((img, idx) => {
+  function updateMainImg(idx) {
+    currentIdx = idx;
+    const img = IMAGES[idx];
+    mainImg.src = getPath(img);
+    imgMeta.textContent = `REF: ${img.n} // ${idx + 1}`;
+    
+    document.querySelectorAll('.nav-item').forEach((el, i) => {
+      el.classList.toggle('active', i === idx);
+    });
+  }
+
+  function nextImg() {
+    currentIdx = (currentIdx + 1) % IMAGES.length;
+    updateMainImg(currentIdx);
+  }
+
+  IMAGES.forEach((img, idx) => {
     const path = getPath(img);
 
-    // Desktop: Skapa listan till vänster
+    // Desktop Nav
     const li = document.createElement('li');
     li.className = 'nav-item';
     li.textContent = img.n;
-    li.onmouseover = () => {
-      mainImg.src = path;
-      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-      li.classList.add('active');
-    };
-    desktopNav.appendChild(li);
+    li.onmouseover = () => updateMainImg(idx);
+    nav.appendChild(li);
 
-    // Mobile: Skapa den vertikala strömmen
+    // Mobile Stream
     const mDiv = document.createElement('div');
     mDiv.className = 'mobile-item';
-    mDiv.innerHTML = `
-      <img src="${path}" loading="lazy">
-      <div class="mobile-label">
-        <span>${img.n}</span>
-        <span>${String(idx + 1).padStart(2, '0')}</span>
-      </div>
-    `;
+    mDiv.innerHTML = `<img src="${path}" loading="lazy"><div class="mobile-label"><span>${img.n}</span><span>${idx+1}</span></div>`;
     mobileGrid.appendChild(mDiv);
   });
 
-  // Startbild för desktop
-  if(FILES.length > 0) mainImg.src = getPath(FILES[0]);
+  // Init
+  updateMainImg(0);
+
+  // Keyboard support for true Lookbook feel
+  window.addEventListener('keydown', e => {
+    if(e.key === "ArrowDown" || e.key === "ArrowRight") nextImg();
+    if(e.key === "ArrowUp" || e.key === "ArrowLeft") {
+      currentIdx = (currentIdx - 1 + IMAGES.length) % IMAGES.length;
+      updateMainImg(currentIdx);
+    }
+  });
 </script>
 
 </body>
