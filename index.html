@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SBJ</title>
+<title>SBJ / ARCHIVE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #000000;
-    --fg: #444444; /* Väldigt mörk text, Yeezy-style */
-    --active: #cccccc;
+    --fg: #333333; /* Inaktiv text - mörkgrå */
+    --active: #d1d1d1; /* Aktiv text - ljusgrå */
     --sans: 'Inter', sans-serif;
   }
 
@@ -22,174 +22,198 @@
     color: var(--fg);
     font-family: var(--sans);
     font-size: 10px;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
     text-transform: uppercase;
     overflow-x: hidden;
   }
 
-  /* DESKTOP LAYOUT (Default) */
+  /* --- DESKTOP OPTIMIZATION --- */
   #desktop-ui { display: none; }
   
   @media (min-width: 1024px) {
     #desktop-ui {
       display: grid;
-      grid-template-columns: 250px 1fr;
+      grid-template-columns: 320px 1fr;
       height: 100vh;
-      padding: 40px;
-      gap: 40px;
+      overflow: hidden;
     }
     #mobile-ui { display: none; }
 
     .sidebar {
+      padding: 40px;
       display: flex;
       flex-direction: column;
-      justify-content:间-between;
+      border-right: 1px solid #111;
+      height: 100vh;
     }
 
-    .nav-list { list-style: none; overflow-y: auto; padding-right: 10px; }
-    .nav-item {
-      padding: 4px 0;
-      cursor: pointer;
-      transition: color 0.1s;
-      white-space: nowrap;
+    .logo { color: var(--active); font-weight: 700; margin-bottom: 40px; text-decoration: none; }
+
+    .nav-list { 
+      list-style: none; 
+      overflow-y: auto; 
+      flex-grow: 1;
+      padding-bottom: 100px;
+      scrollbar-width: none;
     }
-    .nav-item:hover { color: var(--active); }
-    .nav-item.active { color: var(--active); }
+    .nav-list::-webkit-scrollbar { display: none; }
+
+    .nav-item {
+      padding: 3px 0;
+      cursor: pointer;
+      transition: color 0.05s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .nav-item:hover, .nav-item.active { color: var(--active); }
 
     .main-view {
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #050505;
+      padding: 40px;
+      background: #000;
     }
+
     .main-view img {
-      max-height: 85vh;
-      max-width: 100%;
-      object-fit: contain;
+      max-height: 100%; /* Garanterar att bilden får plats på höjden */
+      max-width: 100%;  /* Garanterar att bilden får plats på bredden */
+      object-fit: contain; /* Ser till att hela bilden syns utan beskärning */
     }
   }
 
-  /* MOBILE LAYOUT */
+  /* --- MOBILE OPTIMIZATION --- */
   #mobile-ui {
     display: flex;
     flex-direction: column;
   }
 
-  .mobile-item {
-    width: 100%;
-    margin-bottom: 2px; /* Minimalistisk separation */
-    background: #050505;
-  }
-
-  .mobile-item img {
-    width: 100%;
-    display: block;
-    filter: brightness(0.9);
-  }
-
-  .mobile-label {
-    padding: 15px 20px;
-    font-size: 9px;
-    color: #333;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  /* Header */
-  header {
+  .mobile-header {
     padding: 20px;
     position: sticky;
     top: 0;
-    background: var(--bg);
+    background: rgba(0,0,0,0.9);
     z-index: 100;
     border-bottom: 1px solid #111;
   }
 
-  .logo { color: var(--active); font-weight: 600; text-decoration: none; }
+  .mobile-grid { padding: 0; }
+
+  .mobile-item {
+    width: 100%;
+    background: #000;
+    margin-bottom: 1px;
+    padding-bottom: 20px;
+  }
+
+  .mobile-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .mobile-label {
+    padding: 12px 20px 0;
+    font-size: 9px;
+    color: #444;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Footer Tech Info */
+  .footer-tech { font-size: 8px; margin-top: 20px; color: #222; }
 
 </style>
 </head>
 <body>
 
-<!-- DESKTOP STRUCTURE -->
+<!-- DESKTOP -->
 <div id="desktop-ui">
   <div class="sidebar">
-    <a href="#" class="logo">SBJ</a>
-    <ul class="nav-list" id="desktopNav">
-      <!-- JS laddar in -->
-    </ul>
-    <div class="footer-info">
-      ARCHIVE-01<br>
-      SWEDEN
-    </div>
+    <a href="#" class="logo">SBJ / INDEX</a>
+    <ul class="nav-list" id="desktopNav"></ul>
+    <div class="footer-tech">REF. 491-00-SBJ<br>ALL RIGHTS RESERVED</div>
   </div>
   <div class="main-view">
     <img src="" id="mainImg" alt="">
   </div>
 </div>
 
-<!-- MOBILE STRUCTURE -->
+<!-- MOBILE -->
 <div id="mobile-ui">
-  <header>
-    <a href="#" class="logo">SBJ / INDEX</a>
-  </header>
-  <div id="mobileGrid">
-    <!-- JS laddar in -->
+  <div class="mobile-header">
+    <a href="#" class="logo">SBJ</a>
   </div>
+  <div class="mobile-grid" id="mobileGrid"></div>
 </div>
 
 <script>
-  // Nischade namn, tekniska referenser
-  const IMAGES = [
-    { n:"1", name: "CORE.01 / STUTTGART" },
-    { n:"5", name: "OXIDE.GREY / 911" },
-    { n:"14", name: "TAURO.RAW" },
-    { n:"17", name: "ITER.STATIC" },
-    { n:"22", name: "IGNIS.LUME" },
-    { n:"23", name: "KOMOREBI.VOID" },
-    { n:"32", name: "NOIR.ARCHIVE" },
-    { n:"35", name: "SPIRIT.MONO" },
-    { n:"44", file:"IMG_9227.jpeg", name: "ALPEN.TRACE" },
-    { n:"50", file:"IMG_9233.jpeg", name: "ALPEN.ELEVATION" },
-    { n:"52", file:"IMG_9394.jpeg", name: "ITALIA.GRAIN" },
-    { n:"63", file:"IMG_9346.jpeg", name: "FLORENCE.NULL" }
+  // Alla filer samlade i en lista
+  const FILES = [
+    { f: "IMG_9227.jpeg", n: "ALPEN.01" }, { f: "IMG_9228.jpeg", n: "ALPEN.02" },
+    { f: "IMG_9229.jpeg", n: "ALPEN.03" }, { f: "IMG_9230.jpeg", n: "ALPEN.04" },
+    { f: "IMG_9231.jpeg", n: "ALPEN.05" }, { f: "IMG_9232.jpeg", n: "ALPEN.06" },
+    { f: "IMG_9233.jpeg", n: "ALPEN.07" }, { f: "IMG_9234.jpeg", n: "BASE.01" },
+    { f: "IMG_9235.jpeg", n: "BASE.02" }, { f: "IMG_9236.jpeg", n: "BASE.03" },
+    { f: "IMG_9237.jpeg", n: "BASE.04" }, { f: "IMG_9238.jpeg", n: "BASE.05" },
+    { f: "IMG_9239.jpeg", n: "BASE.06" }, { f: "IMG_9346.jpeg", n: "ITALIA.CORE" },
+    { f: "IMG_9358.jpeg", n: "ITALIA.REF" }, { f: "IMG_9364.jpeg", n: "ITALIA.VOID" },
+    { f: "IMG_9367.jpeg", n: "ITALIA.NULL" }, { f: "IMG_9368.jpeg", n: "ITALIA.STAT" },
+    { f: "IMG_9378.jpeg", n: "TOSCANA.01" }, { f: "IMG_9379.jpeg", n: "TOSCANA.02" },
+    { f: "IMG_9381.jpeg", n: "TOSCANA.03" }, { f: "IMG_9383.jpeg", n: "TOSCANA.04" },
+    { f: "IMG_9387.jpeg", n: "TOSCANA.05" }, { f: "IMG_9392.jpeg", n: "TOSCANA.06" },
+    { f: "IMG_9394.jpeg", n: "TOSCANA.07" },
+    // "bild (x).jpg" listan
+    { b: 1, n: "RAW.01" }, { b: 2, n: "RAW.02" }, { b: 3, n: "RAW.03" }, { b: 4, n: "RAW.04" },
+    { b: 5, n: "CORE.01" }, { b: 6, n: "CORE.02" }, { b: 7, n: "CORE.03" }, { b: 8, n: "CORE.04" },
+    { b: 9, n: "CORE.05" }, { b: 10, n: "AXIS.01" }, { b: 11, n: "AXIS.02" }, { b: 12, n: "AXIS.03" },
+    { b: 13, n: "AXIS.04" }, { b: 14, n: "AXIS.05" }, { b: 15, n: "TRACE.01" }, { b: 16, n: "TRACE.02" },
+    { b: 17, n: "TRACE.03" }, { b: 18, n: "TRACE.04" }, { b: 19, n: "TRACE.05" }, { b: 20, n: "VOID.01" },
+    { b: 21, n: "VOID.02" }, { b: 22, n: "VOID.03" }, { b: 23, n: "KOMOREBI" }, { b: 24, n: "SILVA" },
+    { b: 25, n: "FOLIUM" }, { b: 26, n: "VIRID" }, { b: 27, n: "VORS" }, { b: 28, n: "CANUS" },
+    { b: 29, n: "URBS" }, { b: 30, n: "SILENT" }, { b: 31, n: "VESPER" }, { b: 32, n: "NOIR.A" },
+    { b: 33, n: "UMBRA" }, { b: 34, n: "LUX" }, { b: 35, n: "SOUL" }, { b: 36, n: "ARBOR" },
+    { b: 37, n: "AETHER" }
   ];
 
-  const imgSrc = i => i.file ? `images/${i.file}` : `images/bild (${i.n}).jpg`;
+  const getPath = i => i.f ? `images/${i.f}` : `images/bild (${i.b}).jpg`;
 
-  // Desktop Logic
-  const nav = document.getElementById('desktopNav');
+  const desktopNav = document.getElementById('desktopNav');
+  const mobileGrid = document.getElementById('mobileGrid');
   const mainImg = document.getElementById('mainImg');
 
-  IMAGES.forEach((img, idx) => {
-    // Desktop list
+  FILES.forEach((img, idx) => {
+    const path = getPath(img);
+
+    // Desktop: Skapa listan till vänster
     const li = document.createElement('li');
     li.className = 'nav-item';
-    if(idx === 0) li.classList.add('active');
-    li.textContent = img.name;
+    li.textContent = img.n;
     li.onmouseover = () => {
-      mainImg.src = imgSrc(img);
+      mainImg.src = path;
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
       li.classList.add('active');
     };
-    nav.appendChild(li);
+    desktopNav.appendChild(li);
 
-    // Mobile list
+    // Mobile: Skapa den vertikala strömmen
     const mDiv = document.createElement('div');
     mDiv.className = 'mobile-item';
     mDiv.innerHTML = `
-      <img src="${imgSrc(img)}" loading="lazy">
+      <img src="${path}" loading="lazy">
       <div class="mobile-label">
-        <span>${img.name}</span>
+        <span>${img.n}</span>
         <span>${String(idx + 1).padStart(2, '0')}</span>
       </div>
     `;
-    document.getElementById('mobileGrid').appendChild(mDiv);
+    mobileGrid.appendChild(mDiv);
   });
 
-  // Set initial image for desktop
-  if(IMAGES.length > 0) mainImg.src = imgSrc(IMAGES[0]);
-
+  // Startbild för desktop
+  if(FILES.length > 0) mainImg.src = getPath(FILES[0]);
 </script>
+
 </body>
 </html>
