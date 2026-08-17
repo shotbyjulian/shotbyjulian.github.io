@@ -3,101 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SBJ / ARCHIVE</title>
+<title>SBJ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #000000;
-    --sans: 'Inter', sans-serif;
-  }
+  :root { --bg: #000000; --sans: 'Inter', sans-serif; }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   
-  body {
-    background-color: var(--bg);
-    font-family: var(--sans);
-    overflow-x: hidden;
-  }
+  body { background-color: var(--bg); font-family: var(--sans); overflow-x: hidden; }
 
   /* HEADER */
   header {
-    position: fixed;
-    top: 0; left: 0; width: 100%;
-    padding: 20px;
-    z-index: 100;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    justify-content: center;
+    position: fixed; top: 0; left: 0; width: 100%;
+    padding: 24px; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
   }
-  .logo { color: #555; font-size: 10px; font-weight: 600; text-decoration: none; letter-spacing: 0.1em; }
+  .logo { color: #333; font-size: 10px; font-weight: 600; text-decoration: none; letter-spacing: 0.2em; }
+  
+  .setup-btn {
+    font-size: 10px; background: none; border: none;
+    color: #333; cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em;
+  }
 
-  /* RUTNÄT (YEEZY STYLE) */
+  /* MAIN ARCHIVE GRID */
   .archive-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Mobil: 3 kolumner */
+    grid-template-columns: repeat(3, 1fr);
     gap: 2px;
-    padding-top: 60px; /* Plats för header */
+    padding-top: 80px;
   }
-
   @media (min-width: 1024px) {
-    .archive-grid {
-      grid-template-columns: repeat(6, 1fr); /* Desktop: 6 kolumner */
-      gap: 4px;
-    }
+    .archive-grid { grid-template-columns: repeat(6, 1fr); gap: 4px; }
   }
 
-  .item {
-    aspect-ratio: 1; /* Perfekta kvadrater i rutnätet */
-    background: #0a0a0a;
-    cursor: pointer;
-    overflow: hidden;
-  }
+  .item { aspect-ratio: 1; background: #050505; cursor: pointer; }
+  .item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
 
-  .item img {
+  /* LIGHTBOX (FOR MAIN IMAGES) */
+  #lightbox {
+    position: fixed; inset: 0; background: #000; z-index: 1000;
+    display: none; align-items: center; justify-content: center; padding: 5vh;
+  }
+  #lightbox.active { display: flex; }
+  #lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+  /* SETUP MODAL (VERTICAL LOOKBOOK) */
+  #setup-modal {
+    position: fixed; inset: 0; background: #000; z-index: 1100;
+    display: none; flex-direction: column; overflow-y: auto;
+    scrollbar-width: none;
+  }
+  #setup-modal::-webkit-scrollbar { display: none; }
+  #setup-modal.active { display: flex; }
+
+  .setup-content img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
+    height: auto;
+    display: block;
+    margin-bottom: 2px; /* Yeezy gap */
   }
 
-  .item:hover img {
-    opacity: 1;
-  }
-
-  /* DETALJVY (NÄR MAN TRYCKER) */
-  #detail-view {
-    position: fixed;
-    inset: 0;
-    background: #000;
-    z-index: 1000;
-    display: none; /* Dold som standard */
-    align-items: center;
-    justify-content: center;
-    padding: 8vh 8vw; /* Skapar ramen så bilden inte blir "för stor" */
-    cursor: zoom-out;
-  }
-
-  #detail-view.active {
-    display: flex;
-  }
-
-  #detail-view img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* Garanterar att hela bilden syns */
-    box-shadow: 0 0 50px rgba(0,0,0,0.5);
-  }
-
-  /* Stäng-knapp (valfri, man kan också bara klicka var som helst) */
-  .close-hint {
-    position: absolute;
-    bottom: 20px;
-    color: #333;
-    font-size: 9px;
-    text-transform: uppercase;
+  .close-setup {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    color: #fff; font-size: 10px; letter-spacing: 0.2em; cursor: pointer;
+    background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 20px;
+    backdrop-filter: blur(10px);
   }
 
 </style>
@@ -105,67 +77,67 @@
 <body>
 
 <header>
-  <a href="#" class="logo">SBJ / ARCHIVE</a>
+  <a href="#" class="logo">SBJ</a>
+  <button class="setup-btn" onclick="toggleSetup(true)">Setup</button>
 </header>
 
-<main class="archive-grid" id="grid">
-  <!-- Bilder laddas här -->
-</main>
+<!-- Huvudarkiv (Dina vanliga bilder) -->
+<main class="archive-grid" id="grid"></main>
 
-<div id="detail-view" onclick="closeDetail()">
-  <img src="" id="detailImg">
-  <div class="close-hint">Close</div>
+<!-- Lightbox för vanliga bilder -->
+<div id="lightbox" onclick="this.classList.remove('active')">
+  <img src="" id="lbImg">
+</div>
+
+<!-- Setup Modal (Instruktionsbilderna visas bara här) -->
+<div id="setup-modal">
+  <div class="setup-content">
+    <img src="IMG_9775.jpeg">
+    <img src="IMG_9776.jpeg">
+    <img src="IMG_9777.jpeg">
+    <img src="IMG_9778.jpeg">
+    <img src="IMG_9779.jpeg">
+    <img src="IMG_9780.jpeg">
+  </div>
+  <div class="close-setup" onclick="toggleSetup(false)">CLOSE</div>
 </div>
 
 <script>
-  const FILES = [
-    { f: "IMG_9227.jpeg" }, { f: "IMG_9228.jpeg" }, { f: "IMG_9229.jpeg" }, 
-    { f: "IMG_9230.jpeg" }, { f: "IMG_9231.jpeg" }, { f: "IMG_9232.jpeg" }, 
-    { f: "IMG_9233.jpeg" }, { f: "IMG_9234.jpeg" }, { f: "IMG_9235.jpeg" }, 
-    { f: "IMG_9236.jpeg" }, { f: "IMG_9237.jpeg" }, { f: "IMG_9238.jpeg" }, 
-    { f: "IMG_9239.jpeg" }, { f: "IMG_9346.jpeg" }, { f: "IMG_9358.jpeg" }, 
-    { f: "IMG_9364.jpeg" }, { f: "IMG_9367.jpeg" }, { f: "IMG_9368.jpeg" }, 
-    { f: "IMG_9378.jpeg" }, { f: "IMG_9379.jpeg" }, { f: "IMG_9381.jpeg" }, 
-    { f: "IMG_9383.jpeg" }, { f: "IMG_9387.jpeg" }, { f: "IMG_9392.jpeg" }, 
-    { f: "IMG_9394.jpeg" },
-    { b: 1 }, { b: 2 }, { b: 3 }, { b: 4 }, { b: 5 }, { b: 6 }, { b: 7 }, 
-    { b: 8 }, { b: 9 }, { b: 10 }, { b: 11 }, { b: 12 }, { b: 13 }, { b: 14 }, 
-    { b: 15 }, { b: 16 }, { b: 17 }, { b: 18 }, { b: 19 }, { b: 20 }, { b: 21 }, 
-    { b: 22 }, { b: 23 }, { b: 24 }, { b: 25 }, { b: 26 }, { b: 27 }, { b: 28 }, 
-    { b: 29 }, { b: 30 }, { b: 31 }, { b: 32 }, { b: 33 }, { b: 34 }, { b: 35 }, 
-    { b: 36 }, { b: 37 }
+  // Ditt bildarkiv (Lägg till alla dina vanliga bilder här)
+  const ARCHIVE_FILES = [
+    { f: "IMG_9227.jpeg" }, { f: "IMG_9228.jpeg" }, { f: "IMG_9229.jpeg" },
+    { b: 1 }, { b: 2 }, { b: 3 }, { b: 4 }, { b: 5 } // osv...
   ];
 
-  const getPath = i => i.f ? `images/${i.f}` : `images/bild (${i.b}).jpg`;
+  const getPath = i => i.f ? i.f : `bild (${i.b}).jpg`;
   const grid = document.getElementById('grid');
-  const detailView = document.getElementById('detail-view');
-  const detailImg = document.getElementById('detailImg');
 
-  // Skapa rutnätet
-  FILES.forEach(img => {
+  // Bygg huvudarkivet
+  ARCHIVE_FILES.forEach(img => {
     const path = getPath(img);
     const div = document.createElement('div');
     div.className = 'item';
     div.innerHTML = `<img src="${path}" loading="lazy">`;
-    div.onclick = () => openDetail(path);
+    div.onclick = () => {
+        document.getElementById('lbImg').src = path;
+        document.getElementById('lightbox').classList.add('active');
+    };
     grid.appendChild(div);
   });
 
-  function openDetail(path) {
-    detailImg.src = path;
-    detailView.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Stoppa scroll bakom
+  function toggleSetup(show) {
+    const modal = document.getElementById('setup-modal');
+    modal.classList.toggle('active', show);
+    document.body.style.overflow = show ? 'hidden' : 'auto';
+    if(show) modal.scrollTop = 0;
   }
 
-  function closeDetail() {
-    detailView.classList.remove('active');
-    document.body.style.overflow = 'auto'; // Tillåt scroll igen
-    detailImg.src = ''; 
-  }
-
-  // Stäng med ESC-knappen
+  // ESC för att stänga allt
   window.addEventListener('keydown', e => {
-    if(e.key === "Escape") closeDetail();
+    if(e.key === "Escape") {
+      toggleSetup(false);
+      document.getElementById('lightbox').classList.remove('active');
+    }
   });
 </script>
 
