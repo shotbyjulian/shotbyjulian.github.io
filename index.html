@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -109,36 +108,35 @@
   <div class="setup-container">
     <div class="step-block">
       <span class="step-label">STEP 01</span>
-      <img src="IMG_9775.jpeg">
+      <img src="images/IMG_9775.jpeg">
     </div>
     <div class="step-block">
       <span class="step-label">STEP 02</span>
-      <img src="IMG_9776.jpeg">
+      <img src="images/IMG_9776.jpeg">
     </div>
     <div class="step-block">
       <span class="step-label">STEP 03</span>
-      <img src="IMG_9777.jpeg">
+      <img src="images/IMG_9777.jpeg">
     </div>
     <div class="step-block">
       <span class="step-label">STEP 04</span>
-      <img src="IMG_9778.jpeg">
+      <img src="images/IMG_9778.jpeg">
     </div>
     <div class="step-block">
       <span class="step-label">STEP 05</span>
-      <img src="IMG_9779.jpeg">
+      <img src="images/IMG_9779.jpeg">
     </div>
     <div class="step-block">
       <span class="step-label">STEP 06</span>
-      <img src="IMG_9780.jpeg">
+      <img src="images/IMG_9780.jpeg">
     </div>
   </div>
   <div class="close-setup" onclick="toggleSetup(false)">CLOSE</div>
 </div>
 
 <script>
-  // EXAKT LISTA BASERAT PÅ DINA FILNAMN
+  // Listan pekar nu på bilderna inuti "images/" mappen
   const FILES = [
-    // IMG-SERIEN
     "IMG_9227.jpeg", "IMG_9228.jpeg", "IMG_9229.jpeg", "IMG_9230.jpeg", 
     "IMG_9231.jpeg", "IMG_9232.jpeg", "IMG_9233.jpeg", "IMG_9234.jpeg", 
     "IMG_9235.jpeg", "IMG_9236.jpeg", "IMG_9237.jpeg", "IMG_9238.jpeg", 
@@ -146,7 +144,6 @@
     "IMG_9367.jpeg", "IMG_9368.jpeg", "IMG_9378.jpeg", "IMG_9379.jpeg", 
     "IMG_9381.jpeg", "IMG_9383.jpeg", "IMG_9387.jpeg", "IMG_9392.jpeg", 
     "IMG_9394.jpeg",
-    // BILD (X).JPG SERIEN
     "bild (1).jpg", "bild (2).jpg", "bild (3).jpg", "bild (4).jpg", 
     "bild (5).jpg", "bild (6).jpg", "bild (7).jpg", "bild (8).jpg", 
     "bild (9).jpg", "bild (10).jpg", "bild (11).jpg", "bild (12).jpg", 
@@ -161,13 +158,13 @@
 
   const grid = document.getElementById('grid');
 
-  // Skapa rutnätet
   FILES.forEach(fileName => {
+    const fullPath = `images/${fileName}`; // Lägger till images/ mappen här
     const div = document.createElement('div');
     div.className = 'item';
-    div.innerHTML = `<img src="${fileName}" loading="lazy">`;
+    div.innerHTML = `<img src="${fullPath}" loading="lazy">`;
     div.onclick = () => {
-        document.getElementById('lbImg').src = fileName;
+        document.getElementById('lbImg').src = fullPath;
         document.getElementById('lightbox').classList.add('active');
     };
     grid.appendChild(div);
