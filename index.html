@@ -6,25 +6,26 @@
 <title>SBJ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
 <style>
-  :root { --bg: #000000; --sans: 'Inter', sans-serif; }
+  :root { --bg: #000000; --fg: #444; --sans: 'Inter', sans-serif; --mono: 'JetBrains Mono', monospace; }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   
-  body { background-color: var(--bg); font-family: var(--sans); overflow-x: hidden; }
+  body { background-color: var(--bg); font-family: var(--sans); overflow-x: hidden; color: var(--fg); }
 
   /* HEADER */
   header {
     position: fixed; top: 0; left: 0; width: 100%;
-    padding: 24px; z-index: 100;
+    padding: 20px 24px; z-index: 100;
     display: flex; justify-content: space-between; align-items: center;
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
   }
-  .logo { color: #333; font-size: 10px; font-weight: 600; text-decoration: none; letter-spacing: 0.2em; }
+  .logo { color: var(--fg); font-size: 10px; font-weight: 600; text-decoration: none; letter-spacing: 0.2em; }
   
   .setup-btn {
-    font-size: 10px; background: none; border: none;
-    color: #333; cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em;
+    font-family: var(--mono); font-size: 10px; background: none; border: 1px solid #222;
+    color: var(--fg); cursor: pointer; text-transform: uppercase; padding: 4px 8px;
   }
 
   /* MAIN ARCHIVE GRID */
@@ -32,44 +33,60 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2px;
-    padding-top: 80px;
+    padding-top: 70px;
   }
   @media (min-width: 1024px) {
     .archive-grid { grid-template-columns: repeat(6, 1fr); gap: 4px; }
   }
 
-  .item { aspect-ratio: 1; background: #050505; cursor: pointer; }
-  .item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+  .item { aspect-ratio: 1; background: #050505; cursor: pointer; overflow: hidden; }
+  .item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: opacity 0.3s; }
+  .item:hover img { opacity: 1; }
 
-  /* LIGHTBOX (FOR MAIN IMAGES) */
+  /* LIGHTBOX FOR ARCHIVE */
   #lightbox {
     position: fixed; inset: 0; background: #000; z-index: 1000;
-    display: none; align-items: center; justify-content: center; padding: 5vh;
+    display: none; align-items: center; justify-content: center; padding: 40px;
   }
   #lightbox.active { display: flex; }
   #lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-  /* SETUP MODAL (VERTICAL LOOKBOOK) */
+  /* SETUP MODAL (MODIFIED) */
   #setup-modal {
     position: fixed; inset: 0; background: #000; z-index: 1100;
-    display: none; flex-direction: column; overflow-y: auto;
+    display: none; overflow-y: auto; padding: 100px 20px;
     scrollbar-width: none;
   }
   #setup-modal::-webkit-scrollbar { display: none; }
-  #setup-modal.active { display: flex; }
+  #setup-modal.active { display: block; }
 
-  .setup-content img {
+  .setup-container {
+    max-width: 300px; /* Gör instruktionsbilderna mindre (iPhone-storlek) */
+    margin: 0 auto;
+  }
+
+  .step-block { margin-bottom: 60px; text-align: left; }
+  
+  .step-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: #888;
+    margin-bottom: 15px;
+    display: block;
+    letter-spacing: 0.1em;
+  }
+
+  .setup-container img {
     width: 100%;
     height: auto;
     display: block;
-    margin-bottom: 2px; /* Yeezy gap */
+    border: 1px solid #111;
   }
 
   .close-setup {
     position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
     color: #fff; font-size: 10px; letter-spacing: 0.2em; cursor: pointer;
-    background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 20px;
-    backdrop-filter: blur(10px);
+    background: #111; padding: 10px 30px; border-radius: 2px;
   }
 
 </style>
@@ -77,43 +94,74 @@
 <body>
 
 <header>
-  <a href="#" class="logo">SBJ</a>
+  <a href="#" class="logo">SBJ / ARCHIVE</a>
   <button class="setup-btn" onclick="toggleSetup(true)">Setup</button>
 </header>
 
-<!-- Huvudarkiv (Dina vanliga bilder) -->
+<!-- Huvudarkiv med ALLA bilder -->
 <main class="archive-grid" id="grid"></main>
 
-<!-- Lightbox för vanliga bilder -->
+<!-- Lightbox -->
 <div id="lightbox" onclick="this.classList.remove('active')">
   <img src="" id="lbImg">
 </div>
 
-<!-- Setup Modal (Instruktionsbilderna visas bara här) -->
+<!-- Setup Modal (Instruktioner) -->
 <div id="setup-modal">
-  <div class="setup-content">
-    <img src="IMG_9775.jpeg">
-    <img src="IMG_9776.jpeg">
-    <img src="IMG_9777.jpeg">
-    <img src="IMG_9778.jpeg">
-    <img src="IMG_9779.jpeg">
-    <img src="IMG_9780.jpeg">
+  <div class="setup-container">
+    <div class="step-block">
+      <span class="step-label">STEP 01</span>
+      <img src="IMG_9775.jpeg">
+    </div>
+    <div class="step-block">
+      <span class="step-label">STEP 02</span>
+      <img src="IMG_9776.jpeg">
+    </div>
+    <div class="step-block">
+      <span class="step-label">STEP 03</span>
+      <img src="IMG_9777.jpeg">
+    </div>
+    <div class="step-block">
+      <span class="step-label">STEP 04</span>
+      <img src="IMG_9778.jpeg">
+    </div>
+    <div class="step-block">
+      <span class="step-label">STEP 05</span>
+      <img src="IMG_9779.jpeg">
+    </div>
+    <div class="step-block">
+      <span class="step-label">STEP 06</span>
+      <img src="IMG_9780.jpeg">
+    </div>
   </div>
   <div class="close-setup" onclick="toggleSetup(false)">CLOSE</div>
 </div>
 
 <script>
-  // Ditt bildarkiv (Lägg till alla dina vanliga bilder här)
-  const ARCHIVE_FILES = [
-    { f: "IMG_9227.jpeg" }, { f: "IMG_9228.jpeg" }, { f: "IMG_9229.jpeg" },
-    { b: 1 }, { b: 2 }, { b: 3 }, { b: 4 }, { b: 5 } // osv...
+  // Den kompletta listan med alla dina arkivbilder
+  const FILES = [
+    { f: "IMG_9227.jpeg" }, { f: "IMG_9228.jpeg" }, { f: "IMG_9229.jpeg" }, 
+    { f: "IMG_9230.jpeg" }, { f: "IMG_9231.jpeg" }, { f: "IMG_9232.jpeg" }, 
+    { f: "IMG_9233.jpeg" }, { f: "IMG_9234.jpeg" }, { f: "IMG_9235.jpeg" }, 
+    { f: "IMG_9236.jpeg" }, { f: "IMG_9237.jpeg" }, { f: "IMG_9238.jpeg" }, 
+    { f: "IMG_9239.jpeg" }, { f: "IMG_9346.jpeg" }, { f: "IMG_9358.jpeg" }, 
+    { f: "IMG_9364.jpeg" }, { f: "IMG_9367.jpeg" }, { f: "IMG_9368.jpeg" }, 
+    { f: "IMG_9378.jpeg" }, { f: "IMG_9379.jpeg" }, { f: "IMG_9381.jpeg" }, 
+    { f: "IMG_9383.jpeg" }, { f: "IMG_9387.jpeg" }, { f: "IMG_9392.jpeg" }, 
+    { f: "IMG_9394.jpeg" },
+    { b: 1 }, { b: 2 }, { b: 3 }, { b: 4 }, { b: 5 }, { b: 6 }, { b: 7 }, 
+    { b: 8 }, { b: 9 }, { b: 10 }, { b: 11 }, { b: 12 }, { b: 13 }, { b: 14 }, 
+    { b: 15 }, { b: 16 }, { b: 17 }, { b: 18 }, { b: 19 }, { b: 20 }, { b: 21 }, 
+    { b: 22 }, { b: 23 }, { b: 24 }, { b: 25 }, { b: 26 }, { b: 27 }, { b: 28 }, 
+    { b: 29 }, { b: 30 }, { b: 31 }, { b: 32 }, { b: 33 }, { b: 34 }, { b: 35 }, 
+    { b: 36 }, { b: 37 }
   ];
 
   const getPath = i => i.f ? i.f : `bild (${i.b}).jpg`;
   const grid = document.getElementById('grid');
 
-  // Bygg huvudarkivet
-  ARCHIVE_FILES.forEach(img => {
+  // Skapa arkiv-rutnätet
+  FILES.forEach(img => {
     const path = getPath(img);
     const div = document.createElement('div');
     div.className = 'item';
@@ -132,7 +180,6 @@
     if(show) modal.scrollTop = 0;
   }
 
-  // ESC för att stänga allt
   window.addEventListener('keydown', e => {
     if(e.key === "Escape") {
       toggleSetup(false);
