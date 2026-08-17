@@ -3,15 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SBJ | ARCHIVE</title>
+<title>SBJ / ARCHIVE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #000000;
-    --fg: #333333; /* Inaktiv / Subtil */
-    --active: #cccccc; /* Aktiv / Synlig */
     --sans: 'Inter', sans-serif;
   }
 
@@ -19,198 +17,155 @@
   
   body {
     background-color: var(--bg);
-    color: var(--fg);
     font-family: var(--sans);
-    font-size: 10px;
-    letter-spacing: -0.01em;
-    text-transform: uppercase;
-    overflow: hidden; /* Förhindrar all scroll på desktop-body */
+    overflow-x: hidden;
   }
 
-  /* --- DESKTOP LOOKBOOK (NO SCROLL) --- */
-  #desktop-ui {
-    display: none;
-    grid-template-columns: 280px 1fr;
-    height: 100vh;
-    width: 100vw;
+  /* HEADER */
+  header {
+    position: fixed;
+    top: 0; left: 0; width: 100%;
+    padding: 20px;
+    z-index: 100;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+  }
+  .logo { color: #555; font-size: 10px; font-weight: 600; text-decoration: none; letter-spacing: 0.1em; }
+
+  /* RUTNÄT (YEEZY STYLE) */
+  .archive-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Mobil: 3 kolumner */
+    gap: 2px;
+    padding-top: 60px; /* Plats för header */
   }
 
   @media (min-width: 1024px) {
-    #desktop-ui { display: grid; }
-    #mobile-ui { display: none; }
+    .archive-grid {
+      grid-template-columns: repeat(6, 1fr); /* Desktop: 6 kolumner */
+      gap: 4px;
+    }
   }
 
-  .sidebar {
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid #111;
-    height: 100vh;
-    z-index: 10;
-  }
-
-  .logo { color: var(--active); font-weight: 600; margin-bottom: 30px; text-decoration: none; display: block; }
-
-  .nav-list { 
-    list-style: none; 
-    overflow-y: auto; 
-    flex-grow: 1;
-    scrollbar-width: none;
-  }
-  .nav-list::-webkit-scrollbar { display: none; }
-
-  .nav-item {
-    padding: 2px 0;
+  .item {
+    aspect-ratio: 1; /* Perfekta kvadrater i rutnätet */
+    background: #0a0a0a;
     cursor: pointer;
-    transition: color 0.1s;
-    white-space: nowrap;
     overflow: hidden;
   }
-  .nav-item:hover, .nav-item.active { color: var(--active); }
 
-  /* Bildskärmen - Låst till skärmen */
-  .display-area {
-    height: 100vh;
+  .item img {
     width: 100%;
-    display: flex;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+  }
+
+  .item:hover img {
+    opacity: 1;
+  }
+
+  /* DETALJVY (NÄR MAN TRYCKER) */
+  #detail-view {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 1000;
+    display: none; /* Dold som standard */
     align-items: center;
     justify-content: center;
-    padding: 60px; /* Ger bilden lite luft från kanterna */
-    background: #000;
-    position: relative;
-    cursor: n-resize; /* Yeezy lookbook-känsla */
+    padding: 8vh 8vw; /* Skapar ramen så bilden inte blir "för stor" */
+    cursor: zoom-out;
   }
 
-  .display-area img {
-    max-height: 100%; /* VIKTIGT: Hela bilden får plats på höjden */
-    max-width: 100%;  /* VIKTIGT: Hela bilden får plats på bredden */
-    object-fit: contain; /* Garanterar att bilden inte beskärs */
-    user-select: none;
+  #detail-view.active {
+    display: flex;
   }
 
-  .img-meta {
+  #detail-view img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Garanterar att hela bilden syns */
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+  }
+
+  /* Stäng-knapp (valfri, man kan också bara klicka var som helst) */
+  .close-hint {
     position: absolute;
-    bottom: 40px;
-    right: 40px;
-    text-align: right;
-    color: #222;
+    bottom: 20px;
+    color: #333;
+    font-size: 9px;
+    text-transform: uppercase;
   }
-
-  /* --- MOBILE (SCROLLABLE STREAM) --- */
-  #mobile-ui {
-    display: block;
-    height: 100vh;
-    overflow-y: auto;
-  }
-  @media (min-width: 1024px) { #mobile-ui { display: none; } }
-
-  header { padding: 20px; position: sticky; top: 0; background: var(--bg); z-index: 100; }
-
-  .mobile-item { width: 100%; background: #000; margin-bottom: 10px; }
-  .mobile-item img { width: 100%; display: block; }
-  .mobile-label { padding: 10px 20px; font-size: 9px; color: #444; display: flex; justify-content: space-between; }
 
 </style>
 </head>
 <body>
 
-<!-- DESKTOP -->
-<div id="desktop-ui">
-  <div class="sidebar">
-    <a href="#" class="logo">SBJ</a>
-    <ul class="nav-list" id="desktopNav"></ul>
-    <div style="color:#222; font-size:9px; margin-top:20px;">INDEX_ARCHIVE</div>
-  </div>
-  <div class="display-area" onclick="nextImg()">
-    <img src="" id="mainImg" alt="">
-    <div class="img-meta" id="imgMeta">REF: NULL</div>
-  </div>
-</div>
+<header>
+  <a href="#" class="logo">SBJ / ARCHIVE</a>
+</header>
 
-<!-- MOBILE -->
-<div id="mobile-ui">
-  <header><a href="#" class="logo">SBJ</a></header>
-  <div id="mobileGrid"></div>
+<main class="archive-grid" id="grid">
+  <!-- Bilder laddas här -->
+</main>
+
+<div id="detail-view" onclick="closeDetail()">
+  <img src="" id="detailImg">
+  <div class="close-hint">Close</div>
 </div>
 
 <script>
-  const IMAGES = [
-    { f: "IMG_9227.jpeg", n: "ALPEN.01" }, { f: "IMG_9228.jpeg", n: "ALPEN.02" },
-    { f: "IMG_9229.jpeg", n: "ALPEN.03" }, { f: "IMG_9230.jpeg", n: "ALPEN.04" },
-    { f: "IMG_9231.jpeg", n: "ALPEN.05" }, { f: "IMG_9232.jpeg", n: "ALPEN.06" },
-    { f: "IMG_9233.jpeg", n: "ALPEN.07" }, { f: "IMG_9234.jpeg", n: "BASE.01" },
-    { f: "IMG_9235.jpeg", n: "BASE.02" }, { f: "IMG_9236.jpeg", n: "BASE.03" },
-    { f: "IMG_9237.jpeg", n: "BASE.04" }, { f: "IMG_9238.jpeg", n: "BASE.05" },
-    { f: "IMG_9239.jpeg", n: "BASE.06" }, { f: "IMG_9346.jpeg", n: "CORE.REF" },
-    { f: "IMG_9358.jpeg", n: "CORE.VOID" }, { f: "IMG_9364.jpeg", n: "CORE.NULL" },
-    { f: "IMG_9367.jpeg", n: "ITALIA.01" }, { f: "IMG_9368.jpeg", n: "ITALIA.02" },
-    { f: "IMG_9378.jpeg", n: "TOSCANA.01" }, { f: "IMG_9379.jpeg", n: "TOSCANA.02" },
-    { f: "IMG_9381.jpeg", n: "TOSCANA.03" }, { f: "IMG_9383.jpeg", n: "TOSCANA.04" },
-    { f: "IMG_9387.jpeg", n: "TOSCANA.05" }, { f: "IMG_9392.jpeg", n: "TOSCANA.06" },
-    { f: "IMG_9394.jpeg", n: "TOSCANA.07" },
-    { b: 1, n: "RAW.01" }, { b: 2, n: "RAW.02" }, { b: 3, n: "RAW.03" }, { b: 4, n: "RAW.04" },
-    { b: 5, n: "STUTTGART" }, { b: 6, n: "GT3.RS" }, { b: 7, n: "OXIDE.01" }, { b: 8, n: "OXIDE.02" },
-    { b: 9, n: "OXIDE.03" }, { b: 10, n: "AXIS.01" }, { b: 11, n: "AXIS.02" }, { b: 12, n: "AXIS.03" },
-    { b: 13, n: "AXIS.04" }, { b: 14, n: "AXIS.05" }, { b: 15, n: "TRACE.01" }, { b: 16, n: "TRACE.02" },
-    { b: 17, n: "TRACE.03" }, { b: 18, n: "TRACE.04" }, { b: 19, n: "TRACE.05" }, { b: 20, n: "VOID.01" },
-    { b: 21, n: "VOID.02" }, { b: 22, n: "VOID.03" }, { b: 23, n: "KOMOREBI" }, { b: 24, n: "SILVA" },
-    { b: 25, n: "FOLIUM" }, { b: 26, n: "VIRID" }, { b: 27, n: "VORS" }, { b: 28, n: "CANUS" },
-    { b: 29, n: "URBS" }, { b: 30, n: "SILENT" }, { b: 31, n: "VESPER" }, { b: 32, n: "NOIR" },
-    { b: 33, n: "UMBRA" }, { b: 34, n: "LUX" }, { b: 35, n: "SOUL" }, { b: 36, n: "ARBOR" },
-    { b: 37, n: "AETHER" }
+  const FILES = [
+    { f: "IMG_9227.jpeg" }, { f: "IMG_9228.jpeg" }, { f: "IMG_9229.jpeg" }, 
+    { f: "IMG_9230.jpeg" }, { f: "IMG_9231.jpeg" }, { f: "IMG_9232.jpeg" }, 
+    { f: "IMG_9233.jpeg" }, { f: "IMG_9234.jpeg" }, { f: "IMG_9235.jpeg" }, 
+    { f: "IMG_9236.jpeg" }, { f: "IMG_9237.jpeg" }, { f: "IMG_9238.jpeg" }, 
+    { f: "IMG_9239.jpeg" }, { f: "IMG_9346.jpeg" }, { f: "IMG_9358.jpeg" }, 
+    { f: "IMG_9364.jpeg" }, { f: "IMG_9367.jpeg" }, { f: "IMG_9368.jpeg" }, 
+    { f: "IMG_9378.jpeg" }, { f: "IMG_9379.jpeg" }, { f: "IMG_9381.jpeg" }, 
+    { f: "IMG_9383.jpeg" }, { f: "IMG_9387.jpeg" }, { f: "IMG_9392.jpeg" }, 
+    { f: "IMG_9394.jpeg" },
+    { b: 1 }, { b: 2 }, { b: 3 }, { b: 4 }, { b: 5 }, { b: 6 }, { b: 7 }, 
+    { b: 8 }, { b: 9 }, { b: 10 }, { b: 11 }, { b: 12 }, { b: 13 }, { b: 14 }, 
+    { b: 15 }, { b: 16 }, { b: 17 }, { b: 18 }, { b: 19 }, { b: 20 }, { b: 21 }, 
+    { b: 22 }, { b: 23 }, { b: 24 }, { b: 25 }, { b: 26 }, { b: 27 }, { b: 28 }, 
+    { b: 29 }, { b: 30 }, { b: 31 }, { b: 32 }, { b: 33 }, { b: 34 }, { b: 35 }, 
+    { b: 36 }, { b: 37 }
   ];
 
   const getPath = i => i.f ? `images/${i.f}` : `images/bild (${i.b}).jpg`;
-  let currentIdx = 0;
+  const grid = document.getElementById('grid');
+  const detailView = document.getElementById('detail-view');
+  const detailImg = document.getElementById('detailImg');
 
-  const nav = document.getElementById('desktopNav');
-  const mobileGrid = document.getElementById('mobileGrid');
-  const mainImg = document.getElementById('mainImg');
-  const imgMeta = document.getElementById('imgMeta');
-
-  function updateMainImg(idx) {
-    currentIdx = idx;
-    const img = IMAGES[idx];
-    mainImg.src = getPath(img);
-    imgMeta.textContent = `REF: ${img.n} // ${idx + 1}`;
-    
-    document.querySelectorAll('.nav-item').forEach((el, i) => {
-      el.classList.toggle('active', i === idx);
-    });
-  }
-
-  function nextImg() {
-    currentIdx = (currentIdx + 1) % IMAGES.length;
-    updateMainImg(currentIdx);
-  }
-
-  IMAGES.forEach((img, idx) => {
+  // Skapa rutnätet
+  FILES.forEach(img => {
     const path = getPath(img);
-
-    // Desktop Nav
-    const li = document.createElement('li');
-    li.className = 'nav-item';
-    li.textContent = img.n;
-    li.onmouseover = () => updateMainImg(idx);
-    nav.appendChild(li);
-
-    // Mobile Stream
-    const mDiv = document.createElement('div');
-    mDiv.className = 'mobile-item';
-    mDiv.innerHTML = `<img src="${path}" loading="lazy"><div class="mobile-label"><span>${img.n}</span><span>${idx+1}</span></div>`;
-    mobileGrid.appendChild(mDiv);
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.innerHTML = `<img src="${path}" loading="lazy">`;
+    div.onclick = () => openDetail(path);
+    grid.appendChild(div);
   });
 
-  // Init
-  updateMainImg(0);
+  function openDetail(path) {
+    detailImg.src = path;
+    detailView.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Stoppa scroll bakom
+  }
 
-  // Keyboard support for true Lookbook feel
+  function closeDetail() {
+    detailView.classList.remove('active');
+    document.body.style.overflow = 'auto'; // Tillåt scroll igen
+    detailImg.src = ''; 
+  }
+
+  // Stäng med ESC-knappen
   window.addEventListener('keydown', e => {
-    if(e.key === "ArrowDown" || e.key === "ArrowRight") nextImg();
-    if(e.key === "ArrowUp" || e.key === "ArrowLeft") {
-      currentIdx = (currentIdx - 1 + IMAGES.length) % IMAGES.length;
-      updateMainImg(currentIdx);
-    }
+    if(e.key === "Escape") closeDetail();
   });
 </script>
 
